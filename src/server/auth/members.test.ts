@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test } from "vitest";
 import { buildApp } from "../app.js";
 import { createSession, loginWithEmail } from "./auth.js";
 import { type Db, migrate, openDatabase } from "../db/db.js";
+import { createLoginLink } from "./login-links.js";
 import { invite } from "./members.js";
 
 let db: Db;
@@ -178,7 +179,7 @@ describe("member management", () => {
   });
 });
 
-test("someone deletes their account; what they added stays without a name, and a last owner can't", async () => {
+test("someone deletes their account; what they added stays without a name, their login links go, and a last owner can't", async () => {
   db.exec(`
     INSERT INTO users (id, display_name, email, status, created_at, updated_at) VALUES
       ('ana', 'Ana', 'ana@example.com', 'active', 'x', 'x'),
@@ -189,6 +190,8 @@ test("someone deletes their account; what they added stays without a name, and a
     INSERT INTO playlists (id, community_id, title, created_at, updated_at, created_by) VALUES
       ('p', 'c', 'Duminică', '2026-10-04T08:00:00.000Z', '2026-10-04T08:00:00.000Z', 'ion');
   `);
+  createLoginLink(db, "ion@example.com", "/");
+  createLoginLink(db, "ana@example.com", "/");
   const app = buildApp({ db, logger: false });
   const remove = (userId: string) =>
     app.inject({
@@ -217,6 +220,9 @@ test("someone deletes their account; what they added stays without a name, and a
   expect(db.prepare("SELECT created_by FROM playlists").pluck().get()).toBe(
     "ion",
   );
+  expect(db.prepare("SELECT email FROM login_links").pluck().all()).toEqual([
+    "ana@example.com",
+  ]);
   expect(
     (await app.inject({ method: "DELETE", url: "/api/me" })).statusCode,
   ).toBe(401);

@@ -125,8 +125,8 @@ export type MemberChange = "ok" | "not-found" | "last-owner";
 
 /**
  * Someone deletes their own account: their name, email and preferences go, with their
- * memberships and sessions; what they added and their usage events stay, without them. A community's last
- * owner has to hand it over first.
+ * memberships, sessions and login links; what they added, their recordings and their usage
+ * events stay, without them. A community's last owner has to hand it over first.
  */
 export function deleteAccount(
   db: Db,
@@ -142,6 +142,10 @@ export function deleteAccount(
       .all(userId) as { id: string; communityId: string }[];
     if (memberships.some((m) => isLastOwner(db, m.communityId, m.id)))
       return "last-owner";
+    // The login links sent to their address go before the address does.
+    db.prepare(
+      "DELETE FROM login_links WHERE email = (SELECT email FROM users WHERE id = ?)",
+    ).run(userId);
     db.prepare(
       "UPDATE members SET status = 'removed', roles = '[]', updated_at = ?, updated_by = ? WHERE user_id = ? AND status <> 'removed'",
     ).run(at, userId, userId);
@@ -184,6 +188,14 @@ export function deleteAccount(
       ).run(at, at, device);
       db.prepare("DELETE FROM sessions WHERE user_id = ?").run(device);
     }
+    // Their recordings stay for the team, with nothing linking them to them; their
+    // requests to hear others' go.
+    db.prepare("DELETE FROM recording_access WHERE user_id = ?").run(userId);
+    for (const column of ["owner_id", "created_by", "updated_by"])
+      for (const id of [userId, ...devices])
+        db.prepare(
+          `UPDATE recordings SET ${column} = NULL WHERE ${column} = ?`,
+        ).run(id);
     // How they used the app is kept, without them.
     db.prepare("UPDATE usage_events SET user_id = NULL WHERE user_id = ?").run(
       userId,

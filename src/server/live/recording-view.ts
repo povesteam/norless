@@ -42,7 +42,8 @@ export function recordingFor(
   db: Db,
   row: {
     id: string;
-    owner_id: string;
+    /** Empty once its maker deleted their account. */
+    owner_id: string | null;
     created_by: string | null;
     mode: "service" | "rehearsal";
     status: Recording["status"];
@@ -60,14 +61,17 @@ export function recordingFor(
           .get(id) as string | null) ?? null)
       : null;
   const own = row.owner_id === viewer;
+  // Nobody is left to ask once its maker deleted their account: it stays for the team.
   const access = own
     ? "own"
-    : ((db
-        .prepare(
-          "SELECT status FROM recording_access WHERE recording_id = ? AND user_id = ?",
-        )
-        .pluck()
-        .get(row.id, viewer) as Recording["access"] | undefined) ?? null);
+    : row.owner_id === null
+      ? "granted"
+      : ((db
+          .prepare(
+            "SELECT status FROM recording_access WHERE recording_id = ? AND user_id = ?",
+          )
+          .pluck()
+          .get(row.id, viewer) as Recording["access"] | undefined) ?? null);
   const marks = db
     .prepare(
       "SELECT at_ms, entry_id, slide FROM recording_marks WHERE recording_id = ? ORDER BY at_ms, rowid",

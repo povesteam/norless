@@ -11,6 +11,7 @@ import {
 } from "vitest";
 import { buildApp } from "../app.js";
 import { createSession } from "../auth/auth.js";
+import { deleteAccount } from "../auth/members.js";
 import { type Db, migrate, openDatabase } from "../db/db.js";
 import { type Recording } from "./recording-view.js";
 import { cut, stretches } from "./recording-finish.js";
@@ -317,6 +318,50 @@ describe("recording", () => {
       (await call("mihai", "GET", `/recordings/${id}`)).json(),
     ).toMatchObject({ status: "ready", parts: [{ startMs: 0 }] });
     expect(readdirSync(join(dir, id))).toEqual(["01.m4a"]);
+  });
+
+  test("a deleted member's recording stays for the team without their name; an owner can delete it", async () => {
+    const { id } = (
+      await call("vlad", "POST", "/recordings", { mime: "audio/webm" })
+    ).json<{ id: string }>();
+    await call("vlad", "POST", `/recordings/${id}/pieces?piece=0`, tone());
+    const { parts } = (
+      await call("vlad", "POST", `/recordings/${id}/stop`)
+    ).json<Recording>();
+    const { id: dans } = (
+      await call("dan", "POST", "/recordings", { mime: "audio/webm" })
+    ).json<{ id: string }>();
+    await call("mihai", "POST", `/recordings/${dans}/access`);
+
+    expect(deleteAccount(db, "mihai")).toBe("ok");
+    expect(
+      db
+        .prepare(
+          "SELECT owner_id, created_by, updated_by FROM recordings WHERE id = ?",
+        )
+        .get(id),
+    ).toEqual({ owner_id: null, created_by: null, updated_by: null });
+    expect(
+      db.prepare("SELECT count(*) FROM recording_access").pluck().get(),
+    ).toBe(0);
+    expect(
+      (await call("dan", "GET", `/recordings/${id}`)).json(),
+    ).toMatchObject({ by: null, device: null, access: "granted" });
+    expect(
+      (
+        await call(
+          "dan",
+          "GET",
+          `/recordings/${id}/parts/${parts[0]?.id}/audio`,
+        )
+      ).statusCode,
+    ).toBe(200);
+    expect((await call("dan", "DELETE", `/recordings/${id}`)).statusCode).toBe(
+      403,
+    );
+    expect((await call("ana", "DELETE", `/recordings/${id}`)).statusCode).toBe(
+      204,
+    );
   });
 
   test("a guest's recording belongs to the member who let the guest in", async () => {

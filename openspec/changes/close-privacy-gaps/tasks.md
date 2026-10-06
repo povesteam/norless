@@ -2,9 +2,9 @@
 
 ## 1. Account deletion
 
-- [ ] 1.1 Add `migrations/008-unowned-recordings.sql`, rebuilding `recordings` with `owner_id` nullable
-- [ ] 1.2 In `deleteAccount`, empty `owner_id`, `created_by` and `updated_by` of the person's recordings (and their devices'), delete their access requests, and delete the login links sent to their address. Verify with `src/server/auth/members.test.ts`
-- [ ] 1.3 In `recordingFor`, a recording nobody owns is granted to every viewer (the routes already limit them to owners and the team). Verify with `src/server/live/recordings.test.ts`: the team plays a deleted member's recording without asking, it has no name, and an owner deletes it
+- [x] 1.1 Add `migrations/008-unowned-recordings.sql`, rebuilding `recordings` with `owner_id` nullable
+- [x] 1.2 In `deleteAccount`, empty `owner_id`, `created_by` and `updated_by` of the person's recordings (and their devices'), delete their access requests, and delete the login links sent to their address. Verify with `src/server/auth/members.test.ts`
+- [x] 1.3 In `recordingFor`, a recording nobody owns is granted to every viewer (the routes already limit them to owners and the team). Verify with `src/server/live/recordings.test.ts`: the team plays a deleted member's recording without asking, it has no name, and an owner deletes it
 
 ## 2. Privacy notice
 
