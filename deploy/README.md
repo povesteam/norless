@@ -115,23 +115,24 @@ wakes), over SSH, with a key that can only run `pull-backup.sh`; each pull is no
 `/data/backups/pulled-at`. In the Mac's crontab, with `$HOME` standing for the folder
 `setup.sh` asks for (a synced one, such as Dropbox or iCloud Drive, keeps the copies
 off-site too), where `IdentitiesOnly` offers this key alone (ssh would offer the agent's
-keys first, and the deploy user would run `deploy.sh` for one it knows):
+keys first, and the deploy user would run `deploy.sh` for one it knows). Each run notes
+its time and what it brought in `norless-backup.log`, beside the copies:
 
 ```
-0 * * * * f="$HOME/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "$HOME/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
+0 * * * * (date "+\%F \%T database"; f="$HOME/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "$HOME/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f" && echo "pulled $f"; }) >> "$HOME/norless-backup.log" 2>&1
 ```
 
 The same key copies the recordings the Mac doesn't have yet (`/data/recordings`, a
 file per song once a recording is finished, about 25 MB an hour), beside the backups:
 
 ```
-30 * * * * mkdir -p "$HOME/norless-recordings" && cd "$HOME/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
+30 * * * * (date "+\%F \%T recordings"; mkdir -p "$HOME/norless-recordings" && cd "$HOME/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -xv) >> "$HOME/norless-backup.log" 2>&1
 ```
 
 Slides from files (`/data/slides`: each uploaded file and its pages) the same way:
 
 ```
-40 * * * * mkdir -p "$HOME/norless-slides" && cd "$HOME/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
+40 * * * * (date "+\%F \%T slides"; mkdir -p "$HOME/norless-slides" && cd "$HOME/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -xv) >> "$HOME/norless-backup.log" 2>&1
 ```
 
 To restore, stop the app, put the copy in the volume as `/data/norless.db` (removing

@@ -361,9 +361,9 @@ step_backups() {
       {
         crontab -l 2>/dev/null || true
         sed "s|BASE|$base|g" <<'CRON'
-0 * * * * f="BASE/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "BASE/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
-30 * * * * mkdir -p "BASE/norless-recordings" && cd "BASE/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
-40 * * * * mkdir -p "BASE/norless-slides" && cd "BASE/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
+0 * * * * (date "+\%F \%T database"; f="BASE/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "BASE/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f" && echo "pulled $f"; }) >> "BASE/norless-backup.log" 2>&1
+30 * * * * (date "+\%F \%T recordings"; mkdir -p "BASE/norless-recordings" && cd "BASE/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -xv) >> "BASE/norless-backup.log" 2>&1
+40 * * * * (date "+\%F \%T slides"; mkdir -p "BASE/norless-slides" && cd "BASE/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -xv) >> "BASE/norless-backup.log" 2>&1
 CRON
       } | crontab -
     fi
