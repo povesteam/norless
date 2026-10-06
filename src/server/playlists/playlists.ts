@@ -289,8 +289,8 @@ export function leaderOf(
   return leadsOf(db, communityId, service).lead?.id ?? null;
 }
 
-/** The services that haven't ended by `now`, the one under way first, within 60 days. */
-function* servicesFrom(db: Db, communityId: string, now: Date) {
+/** The community's time zone and schedule, to work out its services. */
+function scheduleOf(db: Db, communityId: string) {
   const { timeZone } = db
     .prepare("SELECT time_zone AS timeZone FROM communities WHERE id = ?")
     .get(communityId) as { timeZone: string };
@@ -299,6 +299,12 @@ function* servicesFrom(db: Db, communityId: string, now: Date) {
       "SELECT * FROM schedule_events WHERE community_id = ? AND deleted_at IS NULL",
     )
     .all(communityId) as ScheduleEvent[];
+  return { timeZone, events };
+}
+
+/** The services that haven't ended by `now`, the one under way first, within 60 days. */
+function* servicesFrom(db: Db, communityId: string, now: Date) {
+  const { timeZone, events } = scheduleOf(db, communityId);
   const today = localTime(now, timeZone).date;
   for (let day = 0; day < 60; day++) {
     const date = addDays(today, day);
@@ -335,7 +341,37 @@ export function nextServicePlaylist(
   now = new Date(),
 ): string | null {
   const next = servicesFrom(db, communityId, now).next().value;
-  if (!next) return null;
+  return next ? playlistOf(db, communityId, next) : null;
+}
+
+/**
+ * The playlist of the service under way or, between services, of the last one held,
+ * within 60 days: visitors open the app on it (playlists spec), while the team
+ * prepares the next one.
+ */
+export function heldServicePlaylist(
+  db: Db,
+  communityId: string,
+  now = new Date(),
+): string | null {
+  const { timeZone, events } = scheduleOf(db, communityId);
+  const today = localTime(now, timeZone).date;
+  for (let day = 0; day > -60; day--) {
+    const date = addDays(today, day);
+    const started = eventsOn(date, events, timeZone).filter(
+      (event) =>
+        event.type === "service" && event.start.getTime() <= now.getTime(),
+    );
+    for (const event of started.reverse()) {
+      const id = playlistOf(db, communityId, { eventId: event.id, date });
+      if (id) return id;
+    }
+  }
+  return null;
+}
+
+/** The playlist planning a service, the newest if several do. */
+function playlistOf(db: Db, communityId: string, service: Service) {
   const id = db
     .prepare(
       `SELECT id FROM playlists WHERE community_id = ? AND service_event_id = ?
@@ -343,7 +379,7 @@ export function nextServicePlaylist(
        ORDER BY created_at DESC LIMIT 1`,
     )
     .pluck()
-    .get(communityId, next.eventId, next.date) as string | undefined;
+    .get(communityId, service.eventId, service.date) as string | undefined;
   return id ?? null;
 }
 

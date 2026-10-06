@@ -331,7 +331,11 @@ function CommunityHome() {
   const [, navigate] = useLocation();
   const { slug } = useCommunity();
   const roles = useRoles(slug);
-  const newest = useJson<{ playlists: PlaylistSummary[]; next: string | null }>(
+  const newest = useJson<{
+    playlists: PlaylistSummary[];
+    next: string | null;
+    held: string | null;
+  }>(
     `/api/communities/${slug}/playlists?limit=1`,
     useChanges(slug, "playlists"),
   );
@@ -340,9 +344,12 @@ function CommunityHome() {
     `/api/communities/${encodeURIComponent(slug)}`,
     useChanges(slug, "songs"),
   ).data;
-  const first = newest.data?.next ?? newest.data?.playlists[0]?.id;
-  // Visitors follow along while something is live, else see that playlist.
   const member = useIsMember(slug);
+  // The team opens the service it prepares; visitors the one under way or last held.
+  const first =
+    (member ? newest.data?.next : newest.data?.held) ??
+    newest.data?.playlists[0]?.id;
+  // Visitors follow along while something is live, else see that playlist.
   const shows = useShows();
   // Only once it's known who this is: an owner isn't a visitor while that loads.
   const { me } = useMe();
@@ -353,9 +360,9 @@ function CommunityHome() {
     if (visitor && following?.entryId)
       navigate(`~/${slug}/follow`, { replace: true });
     // The permalink replaces the home URL, so the address bar can be shared.
-    else if (first && !waiting)
+    else if (first && me && !waiting)
       navigate(`/playlists/${first}`, { replace: true });
-  }, [first, navigate, visitor, following, waiting, slug]);
+  }, [first, me, navigate, visitor, following, waiting, slug]);
 
   if (newest.data === undefined)
     return newest.failed ? (

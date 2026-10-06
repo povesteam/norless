@@ -1,7 +1,11 @@
 import { beforeEach, expect, test } from "vitest";
 import { type Db, migrate, openDatabase } from "../db/db.js";
 import { makeNextPlaylists } from "./next-playlist.js";
-import { createPlaylist, nextServicePlaylist } from "./playlists.js";
+import {
+  createPlaylist,
+  heldServicePlaylist,
+  nextServicePlaylist,
+} from "./playlists.js";
 
 let db: Db;
 
@@ -104,4 +108,30 @@ test("the next service's playlist: the service under way or next, not a newer pl
   expect(next("2026-10-11T12:01:00")).toBe(later);
   // A service without a playlist yet: none, and the home opens the newest.
   expect(next("2026-10-18T12:01:00")).toBeNull();
+});
+
+test("visitors' playlist: the service under way, else the last one held, not the one being prepared", () => {
+  const made = (local: string) =>
+    createPlaylist(db, null, {
+      communityId: "c",
+      userId: "ioana",
+      now: at(local),
+    }).id;
+  // Sunday 11 October's, made on Tuesday; then the Sunday after's, made on Wednesday.
+  const sunday = made("2026-10-06T13:00:00");
+  const later = made("2026-10-07T13:00:00");
+  const held = (local: string) => heldServicePlaylist(db, "c", at(local));
+
+  // Before Sunday's service, nothing held yet within 60 days.
+  expect(held("2026-10-08T15:00:00")).toBeNull();
+  expect(held("2026-10-11T09:59:00")).toBeNull();
+  // Under way, then held until the next service starts.
+  expect(held("2026-10-11T10:00:00")).toBe(sunday);
+  expect(held("2026-10-14T15:00:00")).toBe(sunday);
+  expect(held("2026-10-18T09:59:00")).toBe(sunday);
+  expect(held("2026-10-18T10:00:00")).toBe(later);
+  // Members see the one being prepared meanwhile.
+  expect(nextServicePlaylist(db, "c", at("2026-10-14T15:00:00"))).toBe(later);
+  // A service held without a playlist: the one before it.
+  expect(held("2026-10-25T11:00:00")).toBe(later);
 });

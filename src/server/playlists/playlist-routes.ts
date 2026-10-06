@@ -15,6 +15,7 @@ import {
   type EntryInput,
   getPlaylist,
   listPlaylists,
+  heldServicePlaylist,
   nextServicePlaylist,
   createPlaylist,
   changePlaylist,
@@ -135,6 +136,7 @@ export function attachPlaylists(
           archived,
         }),
         next: nextServicePlaylist(db, community.id),
+        held: heldServicePlaylist(db, community.id),
       };
     },
   );
