@@ -19,9 +19,10 @@ Why the Statistics page and a song's history count and show what they do.
 - **Misses are folded together** without case, diacritics or extra spaces, shown as the latest way typed, and drop out as soon as a song finds them, so adding the song clears the list. The window is 90 days, and a search needs 3 characters.
 - **Spam limit**: at most 30 misses an hour from one address, counted in memory; enough against a stuck client.
 - **Only editors and owners see misses**, because they are the ones who add songs; New song opens the editor with the title filled in.
-- **Each view is its own feature switch** (statistics, rotation hints, year recap, services grid, search misses), all needing the Statistics page.
+- **One switch for the statistics**: the Statistics page brings its views (the year in songs, the services grid, the rotation hint, the search misses). Nobody would switch one on without the page, and each switch costs a key, an icon, a node in the graph and strings in three languages.
 
 ## Rejected
 
 - Warning from 4 of the last 6 services: songs are rarely played twice in a month, so 2 of the last 4 is the right bar.
 - Keeping who searched for a missing song: the text and how often is all the planner needs.
+- A switch per view: five switches for one page made the graph longer without a real choice.

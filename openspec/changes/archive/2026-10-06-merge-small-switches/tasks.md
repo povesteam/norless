@@ -12,4 +12,4 @@
 ## 2. Specs and screenshots
 
 - [x] 2.1 Take the Features page's screenshots again (`npm run screenshots -- -g features`) and look at the graph with 49 nodes
-- [ ] 2.2 When archiving, update `openspec/specs/song-statistics/design.md` ("Each view is its own feature switch") and the `feature-switches` design.md with this change's decisions
+- [x] 2.2 When archiving, update `openspec/specs/song-statistics/design.md` ("Each view is its own feature switch") and the `feature-switches` design.md with this change's decisions

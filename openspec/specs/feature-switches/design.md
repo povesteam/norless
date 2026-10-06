@@ -5,6 +5,7 @@ Why a community moves from Classic to the full interface one feature at a time, 
 ## Decisions
 
 - **Switches, one per feature**: owners release features a few at a time so the team isn't hit by dozens on one Sunday. A switch is per community, not per member, so everyone sees the same app and there is one thing to teach and support.
+- **A switch is a feature as the team meets it**: its smaller parts come with it and check its key (the song history, notation and reference recordings with the Chords mode; My schedule, sign-ups, away dates and Led by with the service roles; the statistics' views with the Statistics page). A part nobody would switch on alone only costs a key, an icon, a node and strings in three languages. The circle of fifths has no switch: it shows wherever a chord played does.
 - **Storage**: `communities.switches` is one JSON object of what owners set (true or false per feature). Nothing stored means off, so a stale value or an unknown key does no harm.
 - **Classic is the app frame switched off**: there is no separate Classic flag. Classic's own features (feedback, logging a laptop in from a phone, print/save/copy of a playlist) are marked `classic` in `src/shared/features.ts`: always on, not switchable, because operators used them from the first Sunday. The imported community has only these on, so it behaves like the old Norless.
 - **Classic stays a layout choice while the frame is on**: its flow differs from the Controller's (a click only selects; in the Controller it sends live), so people who learned one aren't forced into the other.
@@ -29,6 +30,7 @@ Why a community moves from Classic to the full interface one feature at a time, 
 - A reset button ("Back to Classic", "Everything on"): owners switch features one by one, and switching off a parent already turns its children off.
 - Owners trying a feature alone before the team: plain on/off is enough, and the staging server is for trying.
 - Per-member opt-in: the team would see different apps.
+- A switch for every part: the graph had 60 features, 14 of them parts of another that nobody would switch on alone.
 - A banner for What's new: with five features it filled more than half a phone.
 - dagre for the layout: it packs unconnected features into one wide row and routes lines itself. A force layout can't promise no crossings.
 - Branch columns by step tiers with a trunk bar: lines ran behind nodes and across columns, and the last column was cut off on a laptop.
