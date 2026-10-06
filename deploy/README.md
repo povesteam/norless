@@ -21,10 +21,10 @@ It builds the app's image, runs it on a copy of that backup, and checks that it 
 database passes SQLite's integrity check; the copy is deleted afterwards.
 
 Then a maintainer deploys by hand: Actions → Deploy → Run workflow, choosing the branch
-or tag (`.github/workflows/deploy.yml`). The workflow runs CI, builds the images for the
-VM's architecture (the repository variable `IMAGE_RUNNER` is `ubuntu-24.04-arm` for an
-Arm VM) and pushes them to ghcr.io, then over SSH, with a key that can only run
-`deploy.sh`:
+or tag (`.github/workflows/deploy.yml`). The workflow runs CI, unless it already passed
+on that commit when it was pushed to main, builds the images for the VM's architecture
+(the repository variable `IMAGE_RUNNER` is `ubuntu-24.04-arm` for an Arm VM) and pushes
+them to ghcr.io, then over SSH, with a key that can only run `deploy.sh`:
 
 1. backs up the database, updates the converter (a converter that isn't
    healthy within a minute goes back to its old version, and the deploy fails), and

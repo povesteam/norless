@@ -14,13 +14,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # CI ran on this very commit when it was pushed to main: no need to run it again.
+  passed:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      ci: ${{ steps.ci.outputs.passed }}
+    steps:
+      - id: ci
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          runs=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ci.yml --event push \
+            --commit "$GITHUB_SHA" --status success --json databaseId --jq length)
+          echo "passed=$([ "$runs" -gt 0 ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+
   ci:
+    needs: passed
+    if: needs.passed.outputs.ci != 'yes'
     uses: ./.github/workflows/ci.yml
 
   # Built on the VM's architecture: the repository variable IMAGE_RUNNER is
   # ubuntu-24.04-arm for an Arm VM (deploy/setup.sh sets it).
+  # The jobs below say when they run: a skipped job before them (CI that already
+  # passed) would otherwise skip them too.
   image:
-    needs: ci
+    needs: [passed, ci]
+    if: ${{ !cancelled() && needs.passed.result == 'success' && (needs.ci.result == 'success' || needs.ci.result == 'skipped') }}
     runs-on: ${{ vars.IMAGE_RUNNER || 'ubuntu-latest' }}
     permissions:
       contents: read
@@ -54,6 +75,7 @@ jobs:
   # The new version starts beside the running one, which keeps serving.
   deploy:
     needs: image
+    if: ${{ !cancelled() && needs.image.result == 'success' }}
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -72,6 +94,7 @@ jobs:
   # Waits for a maintainer to confirm: the environment's required reviewers.
   switch:
     needs: [image, deploy]
+    if: ${{ !cancelled() && needs.deploy.result == 'success' }}
     runs-on: ubuntu-latest
     environment: production-switch
     steps:
