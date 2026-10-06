@@ -12,19 +12,21 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "vitest";
 
-test("the Mac pulls the database once a day, and the recordings and slides every hour", () => {
+test("the Mac pulls the database once a day, and new recordings and slides every hour", () => {
   const dir = mkdtempSync(join(tmpdir(), "norless-pull-"));
   const bin = join(dir, "bin");
   mkdirSync(bin);
   mkdirSync(join(dir, "server"));
   writeFileSync(join(dir, "server", "new.webm"), "sound");
-  // An ssh that logs what it's asked: the database without a command, else a folder's tar.
+  // An ssh that logs what it's asked: the database without a command, a recording, and
+  // no new slides (nothing at all).
   writeFileSync(
     join(bin, "ssh"),
     `#!/usr/bin/env bash
 echo "\${@: -1}" >> "${dir}/calls"
 case "\${@: -1}" in
-  recordings|slides) cat > /dev/null; tar -c -C "${dir}/server" -f - new.webm ;;
+  recordings) cat > /dev/null; tar -c -C "${dir}/server" -f - new.webm ;;
+  slides) cat > /dev/null ;;
   *) printf "SQLite format 3" ;;
 esac
 `,
@@ -37,7 +39,9 @@ esac
       encoding: "utf8",
     });
 
-  expect(run().stdout).toContain("pulled");
+  const first = run();
+  expect(first.stdout).toContain("pulled");
+  expect(first.stderr).not.toContain("empty archive");
   expect(run().stdout).not.toContain("pulled");
 
   const calls = readFileSync(join(dir, "calls"), "utf8").trim().split("\n");
@@ -47,5 +51,5 @@ esac
     `${new Date().toLocaleDateString("sv")}-norless.db`,
   ]);
   expect(existsSync(join(copies, "norless-recordings", "new.webm"))).toBe(true);
-  expect(existsSync(join(copies, "norless-slides", "new.webm"))).toBe(true);
+  expect(readdirSync(join(copies, "norless-slides"))).toEqual([]);
 });

@@ -4,7 +4,7 @@ Read by Claude Code (through `CLAUDE.md`), Cursor and GitHub Copilot.
 
 ## Workflow
 
-- Behavior lives in `openspec/specs/<capability>/spec.md`, and why it works that way in the `design.md` beside it: the decisions in force with their reasons, and the alternatives rejected. Start behavior changes with an OpenSpec change (`/openspec-propose`); when it's archived, fold its lasting decisions into the capability's `design.md`, replacing any it overrides.
+- Behavior lives in `openspec/specs/<capability>/spec.md`, and why it works that way in the `design.md` beside it: the decisions in force with their reasons, and the alternatives rejected. Start behavior changes with an OpenSpec change (`/openspec-propose`); when it's archived, fold its lasting decisions into the capability's `design.md`, replacing any it overrides, and delete the archived folder (git history keeps it).
 - Specs, `design.md` files and code comments state the rule and its reason: no dates, no change names, no people's names. A change's own files (proposal, design, tasks) may date its decisions.
 - Before writing or starting a change, ask the maintainers every open question, round by round, until none remain, and record the answers as decisions in the change. Some changes list the questions to ask when they start.
 - Don't ask which milestone a feature belongs to: place it in PLAN.md's build order (later, unless cutover needs it).
