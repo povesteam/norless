@@ -161,6 +161,10 @@ if [ ! -f /swapfile ]; then
   swapon /swapfile
   echo '/swapfile none swap sw 0 0' >>/etc/fstab
 fi
+# Keys only: bots try passwords on port 22 all day. A low number, as sshd takes the first value.
+echo 'PasswordAuthentication no' >/etc/ssh/sshd_config.d/10-keys-only.conf
+sshd -t && systemctl reload ssh
+sshd -T | grep -x 'passwordauthentication no' >/dev/null
 ufw allow 22,80,443/tcp >/dev/null
 ufw allow 443/udp >/dev/null
 ufw --force enable >/dev/null

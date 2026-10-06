@@ -47,7 +47,8 @@ are typed into it hidden and go straight to the VM or GitHub. What it does, by h
 
 1. Debian's current release (Ubuntu LTS works too) with Docker (the official `docker-ce`
    packages and the Compose plugin), a 2 GB swap file (`/swapfile`), and a firewall that lets in only SSH, HTTP
-   and HTTPS: `ufw allow 22,80,443/tcp && ufw allow 443/udp && ufw enable`.
+   and HTTPS: `ufw allow 22,80,443/tcp && ufw allow 443/udp && ufw enable`. SSH takes keys only:
+   `PasswordAuthentication no` in `/etc/ssh/sshd_config.d/10-keys-only.conf`.
 2. DNS: `norless.com` and `www.norless.com` point to the VM. At cutover,
    `app.norless.com` and `app-ua.norless.com` too.
 3. A `deploy` user in the `docker` group, with `/opt/norless` holding `compose.yaml`,
