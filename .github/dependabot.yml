@@ -13,6 +13,9 @@ updates:
     ignore:
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # TypeScript 7 waits for typescript-eslint, whose peer range stops below it (<6.1.0 in 8.71).
+      - dependency-name: typescript
+        versions: [">=7"]
       # 6.5.0's package.json points at dist/index.js and index.d.ts, which it doesn't ship.
       - dependency-name: tonal
         versions: ["6.5.0"]
