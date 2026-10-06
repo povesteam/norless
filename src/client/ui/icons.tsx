@@ -184,6 +184,16 @@ const flags: Record<string, React.ReactNode> = {
       <rect y="1" width="3" height="1" fill="#ffd700" />
     </>
   ),
+  // English: the United Kingdom's, simplified for its size.
+  en: (
+    <>
+      <rect width="3" height="2" fill="#012169" />
+      <path d="M0 0L3 2M3 0L0 2" stroke="#fff" strokeWidth="0.4" />
+      <path d="M0 0L3 2M3 0L0 2" stroke="#c8102e" strokeWidth="0.15" />
+      <path d="M1.5 0V2M0 1H3" stroke="#fff" strokeWidth="0.6" />
+      <path d="M1.5 0V2M0 1H3" stroke="#c8102e" strokeWidth="0.36" />
+    </>
+  ),
 };
 
 /** A language's flag, where it has one. */
