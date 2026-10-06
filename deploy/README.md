@@ -31,9 +31,24 @@ them to ghcr.io, then over SSH, with a key that can only run `deploy.sh`:
    starts the new version beside the running one, which keeps
    serving; a new version that isn't healthy within a minute is stopped, and the deploy
    fails;
-2. waits for a maintainer to confirm (Review deployments, on the run's page);
-3. confirmed, restarts the service on the new version while the new one answers in its
-   place, so nobody sees it restart. Not confirmed, the new version is stopped.
+2. restarts the service on the new version while the new one answers in its place, so
+   nobody sees it restart. If the switch fails or the run is cancelled, the new version
+   is stopped.
+
+Ticking "Skip CI" deploys without running CI first, for a commit whose `npm run check`
+passed on the Mac; the e2e tests don't run then.
+
+To try a change on norless.com within minutes, without GitHub's pipeline, deploy the
+commit checked out on the Mac:
+
+```
+deploy/quick.sh
+```
+
+It runs `npm run check`, builds both images on the Mac for the VM's architecture, pushes
+them to ghcr.io (only the layers that changed) and runs the same two steps of
+`deploy.sh` with the root key. Push the commit soon after, so the source of what runs is
+public. Once, before the first: `gh auth refresh -s write:packages`.
 
 While both run, the old version works on the database the new one may have migrated:
 migrations only add (tables, columns), and a later release drops what's no longer used.
@@ -100,8 +115,7 @@ when it's back.
 
 - Repository secrets `DEPLOY_HOST` (the VM), `DEPLOY_KEY` (the private deploy key) and
   `DEPLOY_KNOWN_HOSTS` (`ssh-keyscan <host>`).
-- Environments `production`, and `production-switch` with the maintainers as required
-  reviewers: they confirm each switch.
+- The environment `production`.
 - For an Arm VM, the repository variable `IMAGE_RUNNER=ubuntu-24.04-arm`.
 - The images on ghcr.io (the app's and the converter's) are public, so the VM pulls them
   without logging in.

@@ -283,15 +283,13 @@ step_deploy_key() {
 }
 
 step_environments() {
-  local repo id env
+  local repo
   repo=$(get repo)
-  id=$(gh api user -q .id) || return 1
   gh api -X PUT "repos/$repo/environments/production" >/dev/null || return 1
-  # Each switch waits for the maintainer's confirmation.
-  printf '{"reviewers":[{"type":"User","id":%s}]}' "$id" |
-    gh api -X PUT "repos/$repo/environments/production-switch" --input - >/dev/null || return 1
+  # The switch no longer waits for a confirmation: the environment for it goes.
+  gh api -X DELETE "repos/$repo/environments/production-switch" >/dev/null 2>&1 || true
   [ "$(gh api "repos/$repo/environments" -q '[.environments[].name] | sort | join(",")')" = \
-    "production,production-switch" ]
+    production ]
 }
 
 step_caddy() {
@@ -408,7 +406,7 @@ env_google|The Google login client
 env_vapid|Push keys (VAPID), generated
 env_youtube|The YouTube Data API key
 deploy_key|The deploy key: on the VM, in GitHub, checked
-environments|The environments, the switch waiting for a maintainer
+environments|The production environment
 caddy|Caddy, with HTTPS
 images|The first images, public on ghcr.io
 production|norless.com runs

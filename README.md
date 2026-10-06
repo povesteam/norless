@@ -15,6 +15,8 @@ npm run dev:server   # API on http://127.0.0.1:3000, restarts on changes
 npm run dev:client   # app on http://127.0.0.1:5173, proxies /api to the server
 ```
 
+To try it on a phone: `./run-phone.sh [backup.db]` serves the same to this Mac's tailnet over HTTPS (Tailscale), on a copy of the backup when one is given, and prints the address to open.
+
 `run-dev.sh` reads a git-ignored `.env` if there is one (see `.env.example`), e.g. `DATABASE_PATH=/path/to/norless.db`; the environment wins over it.
 
 To see the loading and error states as on a real network: `SLOW=1` holds back every API answer and live update by 300 to 1500 ms, and `FLAKY=1` fails about 1 in 10 API calls and drops the live connection every minute or two. Both are ignored when `NODE_ENV=production`.

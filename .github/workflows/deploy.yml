@@ -5,6 +5,11 @@ name: Deploy
 # deploy/rehearse.sh. See deploy/README.md.
 on:
   workflow_dispatch:
+    inputs:
+      skip_ci:
+        description: Skip CI (npm run check passed on the Mac; the e2e tests don't run)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -14,7 +19,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # CI ran on this very commit when it was pushed to main: no need to run it again.
+  # CI ran on this very commit when it was pushed to main, or the maintainer chose to
+  # skip it: no need to run it again.
   passed:
     runs-on: ubuntu-latest
     permissions:
@@ -25,10 +31,12 @@ jobs:
       - id: ci
         env:
           GH_TOKEN: ${{ github.token }}
+          SKIP: ${{ inputs.skip_ci }}
         run: |
           runs=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ci.yml --event push \
             --commit "$GITHUB_SHA" --status success --json databaseId --jq length)
-          echo "passed=$([ "$runs" -gt 0 ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+          if [ "$runs" -gt 0 ] || [ "$SKIP" = true ]; then passed=yes; else passed=no; fi
+          echo "passed=$passed" >> "$GITHUB_OUTPUT"
 
   ci:
     needs: passed
@@ -91,12 +99,11 @@ jobs:
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh -i ~/.ssh/deploy "deploy@$HOST" "$REQUEST"
 
-  # Waits for a maintainer to confirm: the environment's required reviewers.
+  # Once the new version is healthy beside the running one, without waiting for anyone.
   switch:
     needs: [image, deploy]
     if: ${{ !cancelled() && needs.deploy.result == 'success' }}
     runs-on: ubuntu-latest
-    environment: production-switch
     steps:
       - name: Switch to the new version
         env:
@@ -110,7 +117,7 @@ jobs:
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh -i ~/.ssh/deploy "deploy@$HOST" "$REQUEST"
 
-  # Not confirmed, or the switch failed: the new version goes, the old one goes on.
+  # The switch failed or was cancelled: the new version goes, the old one goes on.
   drop:
     needs: [image, deploy, switch]
     if: always() && needs.deploy.result == 'success' && needs.switch.result != 'success'
