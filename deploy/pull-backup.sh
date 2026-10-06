@@ -14,11 +14,12 @@ if [ "$folder" = "recordings" ] || [ "$folder" = "slides" ]; then
   docker compose exec -T -e FOLDER="$folder" norless sh -c '
     mkdir -p "/data/$FOLDER" && cd "/data/$FOLDER"
     have=$(mktemp)
-    cat > "$have"
+    sort > "$have"
     # Finished files only: an upload in progress is cut later.
-    find . -type f ! -name "upload.*" | sort | comm -23 - "$(sort "$have" -o "$have" && echo "$have")" |
-      tar -c -T - -f -
-    rm -f "$have"'
+    new=$(find . -type f ! -name "upload.*" | sort | comm -23 - "$have")
+    rm -f "$have"
+    # Nothing new sends nothing, where tar would say "empty archive" in the log each hour.
+    [ -z "$new" ] || printf "%s\n" "$new" | tar -c -T - -f -'
   exit 0
 fi
 docker compose exec -T norless sh -c \

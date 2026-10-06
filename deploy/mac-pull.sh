@@ -18,9 +18,5 @@ fi
 
 for folder in recordings slides; do
   mkdir -p "$base/norless-$folder"
-  new=$(mktemp)
-  (cd "$base/norless-$folder" && find . -type f) | pull "$folder" > "$new"
-  # Nothing new comes as nothing at all, which tar would call an empty archive.
-  [ -s "$new" ] && tar -xvf "$new" -C "$base/norless-$folder"
-  rm -f "$new"
+  (cd "$base/norless-$folder" && find . -type f | pull "$folder" | tar -xv)
 done
