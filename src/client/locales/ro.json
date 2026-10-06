@@ -626,7 +626,9 @@
     "newSong": "Cântare nouă",
     "more": "Altele",
     "back": "Înapoi la listă",
-    "goLive": "Proiectează"
+    "goLive": "Proiectează",
+    "noProjector": "Niciun proiector nu e conectat la acest laptop. Conectează-l, apoi apasă din nou.",
+    "openAnyway": "Deschide oricum"
   },
   "feedback": {
     "open": "Idei și păreri",

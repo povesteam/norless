@@ -626,7 +626,9 @@
     "newSong": "Create new song",
     "more": "More",
     "back": "Back to the playlist",
-    "goLive": "Go live"
+    "goLive": "Go live",
+    "noProjector": "No projector is attached to this laptop. Connect it, then press again.",
+    "openAnyway": "Open anyway"
   },
   "feedback": {
     "open": "Ideas and feedback",

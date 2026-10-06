@@ -52,11 +52,23 @@ const remember = (screenId: string, label: string) => {
 /** The windows opened from this page, by key, so opening one again brings it forward. */
 const opened = new Map<string, Window>();
 
+/** Whether a window opened for `key` from this page is still open. */
+export const isOpen = (key: string) => {
+  const win = opened.get(key);
+  return !!win && !win.closed;
+};
+
+/** Whether the browser knows this device has only its own display (Chromium); elsewhere it can't tell. */
+export const oneDisplay = () =>
+  (window.screen as typeof window.screen & { isExtended?: boolean })
+    .isExtended === false;
+
 /**
  * Opens a page full screen on a display, where the browser lets pages choose one
  * (Chromium): on `display`, else on the one chosen before for `key` on this device, else
- * on the first that isn't the laptop's own. Elsewhere it opens in a new window, which
- * has a fullscreen button. A window already open for `key` comes forward instead, so a
+ * on the first that isn't the laptop's own. Without one, or elsewhere, it opens in a new
+ * window, which has a fullscreen button: full screen on the laptop's own display would
+ * cover the controller. A window already open for `key` comes forward instead, so a
  * second click doesn't make a second projector; choosing a display moves it there.
  */
 export async function openOnDisplay(
@@ -76,8 +88,7 @@ export async function openOnDisplay(
   const label = display ?? remembered(key);
   const target =
     displays.find((d) => d.label === label) ??
-    displays.find((d) => !d.isPrimary) ??
-    displays[0];
+    displays.find((d) => !d.isPrimary);
   if (target) remember(key, target.label);
   // Named, so even after this page reloads the same window is reused.
   const win = window.open(

@@ -22,7 +22,7 @@ import { LocalProjection, type ProjectHere } from "./LocalProjection";
 import { Pages } from "./Pages";
 import { sendLive, useLocal } from "../data/room";
 import { useHintAnchor } from "./hints";
-import { openFullScreen } from "./windows";
+import { isOpen, oneDisplay, openFullScreen } from "./windows";
 
 /**
  * At the bottom, for the team: each projector by its name, the Pages menu, and while an
@@ -72,19 +72,21 @@ export function ClassicBottomBar({
           name: screen.name,
           languages: screen.languages,
           flag: null,
-          open: () => void openFullScreen(`/s/${screen.secret}`, screen.id),
+          url: `/s/${screen.secret}`,
+          window: screen.id,
         }))
       : community.languages.map((language) => ({
           key: language,
           name: t("controller.preview", { language: languageCode(language) }),
           languages: [language],
           flag: <LanguageFlag language={language} />,
-          open: () =>
-            void openFullScreen(
-              `/${community.slug}/projector/${language}`,
-              `projector-${language}`,
-            ),
+          url: `/${community.slug}/projector/${language}`,
+          window: `projector-${language}`,
         }));
+  // The projector pressed on a laptop without a second display: it says so first.
+  const [alone, setAlone] = useState<string | null>(null);
+  const open = (output: (typeof outputs)[number]) =>
+    void openFullScreen(output.url, output.window);
   const others = (
     <>
       {!local &&
@@ -107,17 +109,45 @@ export function ClassicBottomBar({
               {output.name}
             </Button>
           ) : (
-            <Button
+            <Popover
               key={output.key}
-              ref={i === 0 ? projectHint : undefined}
-              size="sm"
-              variant="tertiary"
-              onPress={output.open}
+              isOpen={alone === output.key}
+              onOpenChange={(pressed) => {
+                if (!pressed) setAlone(null);
+                else if (oneDisplay() && !isOpen(output.window))
+                  setAlone(output.key);
+                else open(output);
+              }}
             >
-              <Projector />
-              {output.name}
-              {output.flag}
-            </Button>
+              <Button
+                ref={i === 0 ? projectHint : undefined}
+                size="sm"
+                variant="tertiary"
+              >
+                <Projector />
+                {output.name}
+                {output.flag}
+              </Button>
+              <Popover.Content placement="top start" className="max-w-xs">
+                <Popover.Dialog
+                  aria-label={output.name}
+                  className="flex flex-col items-start gap-2"
+                >
+                  <p>{t("classic.noProjector")}</p>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onPress={() => {
+                      setAlone(null);
+                      open(output);
+                    }}
+                  >
+                    <Projector />
+                    {t("classic.openAnyway")}
+                  </Button>
+                </Popover.Dialog>
+              </Popover.Content>
+            </Popover>
           ),
         )}
       {!local && <Pages live={view?.page?.id ?? null} narrow={narrow} />}
