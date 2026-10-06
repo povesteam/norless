@@ -198,7 +198,7 @@ test("light and dark follow the system, Classic included", async ({
   expect(r + g + b).toBeLessThan(200);
 });
 
-test("in Classic a song's page has no history; it comes with its switch", async ({
+test("in Classic a song's page has no history; it comes with the Chords mode", async ({
   browser,
 }) => {
   const team = await as(browser, "ioana@example.com");
@@ -210,7 +210,7 @@ test("in Classic a song's page has no history; it comes with its switch", async 
   expect(song).toBeTruthy();
   await team.goto(`/functii/songs/${song}`);
   await expect(team.getByRole("heading", { level: 2 })).toBeVisible();
-  // History is in the song's ⋯ menu only where its feature is on.
+  // History is in the song's ⋯ menu only where the Chords mode is on.
   const more = team.getByRole("button", { name: "More actions" });
   if (await more.count()) {
     await more.click();

@@ -1300,7 +1300,7 @@
     },
     "appFrame": {
       "name": "App menu",
-      "adds": "The app's header and menu: the list of playlists, the search box and song pages."
+      "adds": "The app's header and menu: the list of playlists, the search box, song pages and the list of keyboard shortcuts."
     },
     "layouts": {
       "name": "Laptop layouts",
@@ -1324,7 +1324,7 @@
     },
     "presence": {
       "name": "Who's here",
-      "adds": "Who has a playlist open, and who is moving an entry."
+      "adds": "Who has a playlist open, who is moving an entry, and who changed the slide."
     },
     "mediaKeys": {
       "name": "Media keys",
@@ -1333,10 +1333,6 @@
     "stageViews": {
       "name": "Stage and musicians",
       "adds": "The stage monitor with messages and a countdown, and views for musicians and vocalists."
-    },
-    "liveNotice": {
-      "name": "Who changed the slide",
-      "adds": "A notice of who changed the slide, and the last live change."
     },
     "screenMenu": {
       "name": "Screens menu",
@@ -1348,15 +1344,7 @@
     },
     "chords": {
       "name": "Chords mode",
-      "adds": "Musicians add chords, notes and the tempo to songs."
-    },
-    "history": {
-      "name": "Song history",
-      "adds": "Each save of a song, who made it, and going back to an earlier one."
-    },
-    "notation": {
-      "name": "Notation",
-      "adds": "An intro, a riff or a groove written as notes, which can be played."
+      "adds": "Musicians add chords, notes and the tempo to songs, with notation, reference recordings and each song's history."
     },
     "instruments": {
       "name": "Instrument layouts",
@@ -1398,17 +1386,9 @@
       "name": "Community colors",
       "adds": "The community's colors and font in the app."
     },
-    "shortcuts": {
-      "name": "Keyboard shortcuts",
-      "adds": "The list of keyboard shortcuts."
-    },
     "songFeedback": {
       "name": "Likes",
       "adds": "Members like and dislike songs; owners can exclude one."
-    },
-    "referenceLink": {
-      "name": "Reference recordings",
-      "adds": "Recordings to learn a song from, linked on its page."
     },
     "credits": {
       "name": "Authors and copyright",
@@ -1416,23 +1396,7 @@
     },
     "statistics": {
       "name": "Statistics",
-      "adds": "The most sung songs, and the services each song was sung in."
-    },
-    "rotation": {
-      "name": "Rotation",
-      "adds": "A hint on songs sung in most of the last services."
-    },
-    "yearRecap": {
-      "name": "Year in songs",
-      "adds": "A year's songs at a glance."
-    },
-    "servicesGrid": {
-      "name": "Services grid",
-      "adds": "The last 12 services as a grid."
-    },
-    "searchMisses": {
-      "name": "Searches with no results",
-      "adds": "What editors and owners searched for and didn't find."
+      "adds": "The most sung songs, the services each song was sung in, the year in songs, the last 12 services as a grid, songs sung too often lately, and searches that found nothing."
     },
     "chapters": {
       "name": "YouTube chapters",
@@ -1462,13 +1426,9 @@
       "name": "Chords by ear",
       "adds": "Norless listens through a microphone or the mixer and names the chord."
     },
-    "chordWheel": {
-      "name": "Chord wheel",
-      "adds": "A circle of fifths that shows which chord is playing."
-    },
     "liveChord": {
       "name": "Live chord",
-      "adds": "Musicians see the chord the pianist plays, as it's played."
+      "adds": "Musicians see the chord the pianist plays, as it's played, on a circle of fifths."
     },
     "chordHelper": {
       "name": "Chord helper",
@@ -1492,27 +1452,11 @@
     },
     "serviceRoles": {
       "name": "Service roles",
-      "adds": "Who plays, sings and serves in each service, from a template per weekly event."
-    },
-    "signUps": {
-      "name": "Sign-ups",
-      "adds": "Members sign up for open places in the schedule."
-    },
-    "blockouts": {
-      "name": "Away dates",
-      "adds": "Members mark the dates they're away."
+      "adds": "Who plays, sings and serves in each service, from a template per weekly event: each member's own schedule, sign-ups for open places, away dates, and who leads each song."
     },
     "pushNotifications": {
       "name": "Notifications",
       "adds": "Notifications on phones: when you're scheduled, reminders and open places."
-    },
-    "mySchedule": {
-      "name": "My schedule",
-      "adds": "Each member's own services and roles."
-    },
-    "ledBy": {
-      "name": "Led by",
-      "adds": "Who leads each song: the service's worship lead, or a vocalist the team chose, on the playlist and the stage views."
     },
     "churchCalendar": {
       "name": "Church calendar",

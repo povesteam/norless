@@ -37,7 +37,6 @@ function musiciansVersion(song: Song, languages: string[]) {
 
 export function Song({
   slug,
-  wheel = false,
   leader: showsLeader = false,
   profile,
   view,
@@ -48,7 +47,6 @@ export function Song({
   chordsLink,
 }: {
   slug: string;
-  wheel?: boolean;
   leader?: boolean;
   profile: Profile;
   view: LiveView;
@@ -96,7 +94,7 @@ export function Song({
     return (
       <div className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">{title}</h2>
-        <LiveChordView slug={slug} songKey={key} wheel={wheel} />
+        <LiveChordView slug={slug} songKey={key} />
       </div>
     );
 

@@ -134,7 +134,7 @@ function useBarGroups(): BarGroup[] {
           t("team.title"),
         ),
         ...item(
-          isMember && shows("mySchedule"),
+          isMember && shows("serviceRoles"),
           "/my-schedule",
           <CalendarDays />,
           t("team.mine"),

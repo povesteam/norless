@@ -8,7 +8,7 @@ A feature's key lives in four places that must agree: `features` (`src/shared/fe
 
 **Goals:**
 - Every check of a removed key checks the parent's key, so the part shows exactly when its parent does.
-- The feature graph, the What's new dialog and the feature requests know only the 49 remaining features.
+- The feature graph, the What's new dialog and the feature requests know only the 46 remaining features.
 
 **Non-Goals:**
 - Merging other switches (the operator's small ones, such as times and problems, stay as they are).

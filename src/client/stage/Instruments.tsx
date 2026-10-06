@@ -136,7 +136,7 @@ export function InstrumentLayout({
   // Notation blocks of the live and next parts, for keys and drums.
   const shows = useShows();
   const notating =
-    (instrument === "keys" || instrument === "drums") && shows("notation");
+    (instrument === "keys" || instrument === "drums") && shows("chords");
   const blocks = (i: number) =>
     notating && (i === live || i === live + 1) ? (
       <PartBlocks

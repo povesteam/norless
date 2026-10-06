@@ -113,7 +113,7 @@ db.exec(`
 db.exec(`
   INSERT INTO communities (id, slug, name, languages, time_zone, switches, created_at, updated_at) VALUES
     ('c-detect', 'acorduri', 'Acorduri', '["ro"]', 'Europe/Bucharest',
-     '{"midiChords":true,"audioChords":true,"chordWheel":true,"liveChord":true}', '2026-01-01', '2026-01-01');
+     '{"midiChords":true,"audioChords":true,"liveChord":true}', '2026-01-01', '2026-01-01');
   INSERT INTO members (id, community_id, user_id, roles, status, created_at, updated_at) VALUES
     ('m-ana-detect', 'c-detect', 'ana', '["owner"]', 'active', '2026-01-01', '2026-01-01'),
     ('m-ioana-detect', 'c-detect', 'ioana', '["team"]', 'active', '2026-01-01', '2026-01-01'),
@@ -134,7 +134,7 @@ Cântați Domnului', '2026-01-01', '2026-01-01');
 db.exec(`
   INSERT INTO communities (id, slug, name, languages, time_zone, switches, created_at, updated_at) VALUES
     ('c-team', 'echipa', 'Echipa', '["ro"]', 'Europe/Bucharest',
-     '{"serviceRoles":true,"mySchedule":true,"signUps":true,"blockouts":true,"pushNotifications":true,"ledBy":true,"churchCalendar":true,"playlistNews":true}', '2026-01-01', '2026-01-01');
+     '{"serviceRoles":true,"pushNotifications":true,"churchCalendar":true,"playlistNews":true}', '2026-01-01', '2026-01-01');
   INSERT INTO members (id, community_id, user_id, roles, status, created_at, updated_at) VALUES
     ('m-ana-team', 'c-team', 'ana', '["owner"]', 'active', '2026-01-01', '2026-01-01'),
     ('m-ioana-team', 'c-team', 'ioana', '["team"]', 'active', '2026-01-01', '2026-01-01'),

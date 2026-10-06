@@ -231,7 +231,7 @@ export function App() {
       </div>
       <ConnectionStatus />
       <InPageProjector />
-      <Shown feature="shortcuts">
+      <Shown feature="appFrame">
         <Shortcuts />
       </Shown>
     </>
@@ -313,7 +313,7 @@ function MyLine() {
   const { slug } = useCommunity();
   const [location] = useLocation();
   return useIsMember(slug) &&
-    shows("mySchedule") &&
+    shows("serviceRoles") &&
     location !== "/my-schedule" ? (
     <MyNextLine />
   ) : null;

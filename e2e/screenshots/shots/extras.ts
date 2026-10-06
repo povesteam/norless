@@ -493,7 +493,6 @@ export const extras: View[] = [
           ...switchesOf(5),
           midiChords: true,
           audioChords: true,
-          chordWheel: true,
           liveChord: true,
         },
       });

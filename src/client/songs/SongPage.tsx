@@ -162,7 +162,7 @@ export function SongPage({ id }: { id: string }) {
         label: t("keys.change"),
       },
     isMember &&
-      shows("history") && {
+      shows("chords") && {
         id: "history",
         icon: <History />,
         label: t("history.title"),
@@ -304,7 +304,7 @@ export function SongPage({ id }: { id: string }) {
           </Chip>
         ))}
       </div>
-      {song.referenceLinks.length > 0 && shows("referenceLink") && (
+      {song.referenceLinks.length > 0 && shows("chords") && (
         <ReferenceLinkList links={song.referenceLinks} />
       )}
       {shows("songFeedback") && <SongOpinions song={song} onChanged={reload} />}
@@ -395,7 +395,7 @@ export function SongPage({ id }: { id: string }) {
           onClose={() => setChangingKey(false)}
         />
       )}
-      {history && isMember && shows("history") && (
+      {history && isMember && shows("chords") && (
         <SongHistory
           slug={community.slug}
           song={song}

@@ -2,7 +2,7 @@
 
 ## Why
 
-There are 63 feature switches, and each costs a key, an icon, a branch in the graph, a name and a description in three languages, and a check in the interface. Fourteen of them are parts nobody would switch on alone (the year in songs without the Statistics page, the song history without the Chords mode), so they make the graph longer and the code heavier without giving owners a real choice. Decided with the maintainer on 2026-10-06.
+There are 60 features to switch (and 3 planned ones in the graph), and each costs a key, an icon, a branch in the graph, a name and a description in three languages, and a check in the interface. Fourteen of them are parts nobody would switch on alone (the year in songs without the Statistics page, the song history without the Chords mode), so they make the graph longer and the code heavier without giving owners a real choice. Decided with the maintainer on 2026-10-06.
 
 ## What Changes
 
@@ -10,7 +10,7 @@ There are 63 feature switches, and each costs a key, an icon, a branch in the gr
 - The Chords mode brings the song history, notation and reference recordings (`history`, `notation`, `referenceLink` go).
 - The service roles bring My schedule, sign-ups, away dates and Led by (`mySchedule`, `signUps`, `blockouts`, `ledBy` go); notifications by push and playlist news then need the service roles.
 - The app menu brings the keyboard shortcuts list (`shortcuts` goes), Who's here brings the notice of who changed the slide (`liveNotice` goes), and the circle of fifths comes with what shows a chord played: playing chords in and listening in the Chords mode, the live chord on the musicians view (`chordWheel` goes).
-- 63 switches become 49. A stored switch for a removed key is ignored, as unknown features already are; there is no migration, since nothing is in production yet.
+- 60 features become 46, and the graph's 63 nodes 49. A stored switch for a removed key is ignored, as unknown features already are; there is no migration, since nothing is in production yet.
 
 ## Capabilities
 

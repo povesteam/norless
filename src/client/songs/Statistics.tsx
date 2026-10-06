@@ -130,7 +130,7 @@ export function StatisticsPage() {
             ]}
           />
         </div>
-        {data.recap && data.recap.services > 0 && shows("yearRecap") && (
+        {data.recap && data.recap.services > 0 && (
           <Recap year={period} recap={data.recap} />
         )}
         <SongList
@@ -149,24 +149,20 @@ export function StatisticsPage() {
           emptyHelp={t("statistics.noneForgottenHelp")}
         />
       </section>
-      {shows("servicesGrid") && (
-        <section className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">{t("grid.title")}</h3>
-          <Grid grid={data.grid} />
-        </section>
-      )}
-      {shows("rotation") && (
-        <section className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">{t("rotation.title")}</h3>
-          <p className="text-sm text-muted">{t("rotation.help")}</p>
-          <SongList
-            songs={data.sungLately}
-            empty={t("rotation.none")}
-            emptyHelp={t("rotation.noneHelp")}
-          />
-        </section>
-      )}
-      {shows("searchMisses") && hasRole(roles, "editor") && <Misses />}
+      <section className="flex flex-col gap-3">
+        <h3 className="text-lg font-semibold">{t("grid.title")}</h3>
+        <Grid grid={data.grid} />
+      </section>
+      <section className="flex flex-col gap-3">
+        <h3 className="text-lg font-semibold">{t("rotation.title")}</h3>
+        <p className="text-sm text-muted">{t("rotation.help")}</p>
+        <SongList
+          songs={data.sungLately}
+          empty={t("rotation.none")}
+          emptyHelp={t("rotation.noneHelp")}
+        />
+      </section>
+      {hasRole(roles, "editor") && <Misses />}
     </div>
   );
 }

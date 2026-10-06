@@ -179,7 +179,7 @@ export function EntryList({
             },
           ]
         : []),
-      ...(song && !song.deleted && shows("ledBy")
+      ...(song && !song.deleted && shows("serviceRoles")
         ? [
             {
               id: "led-by",
@@ -429,7 +429,9 @@ export function EntryList({
                 <EntryRow
                   entry={entry}
                   ledBy={
-                    entry.song && shows("ledBy") ? leaderOf(entry, leads) : null
+                    entry.song && shows("serviceRoles")
+                      ? leaderOf(entry, leads)
+                      : null
                   }
                   keyBefore={keyBefore(entry)}
                   problems={problems.filter(

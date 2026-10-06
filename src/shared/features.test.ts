@@ -25,12 +25,21 @@ test("only Classic's features are on until an owner switches others on", () => {
 test("a feature switched on shows; switched off, it doesn't, and what needs it neither", () => {
   const set = { appFrame: true, stageViews: true, chords: true } as const;
   expect(shows(switchesOn(set), "chords")).toBe(true);
-  expect(shows(switchesOn({ ...set, history: true }), "history")).toBe(true);
-  expect(shows(switchesOn({ ...set, history: false }), "history")).toBe(false);
+  expect(shows(switchesOn({ ...set, chordColors: true }), "chordColors")).toBe(
+    true,
+  );
+  expect(shows(switchesOn({ ...set, chordColors: false }), "chordColors")).toBe(
+    false,
+  );
   // The stage views need the app's frame.
   expect(shows(switchesOn({ ...set, appFrame: false }), "stageViews")).toBe(
     false,
   );
+});
+
+test("a feature's parts come with it, without switches of their own", () => {
+  for (const part of ["yearRecap", "servicesGrid", "history", "mySchedule"])
+    expect(Object.keys(features)).not.toContain(part);
 });
 
 test("a feature is off while what it needs is off, and switching it on unlocks the path", () => {

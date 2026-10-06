@@ -191,7 +191,7 @@ test("owners switch features on and off; nobody else can", async () => {
       switches: unknown;
     }>().switches;
 
-  const set = { practiceRooms: true, history: false, host: false };
+  const set = { practiceRooms: true, chordColors: false, host: false };
   expect((await put("step-owner", set)).statusCode).toBe(204);
   expect(await switches()).toEqual(set);
   // Unknown switches are dropped, other values refused.

@@ -9,8 +9,8 @@ and tempo.
 
 The pencil on a song (or **Edit song** on its page) opens the editor: the title and
 text per language, the key, the time signature and the tags. **Save** keeps it;
-**Close** asks first when something isn't saved. Once switched on, the song's history
-lists every save, and editors can restore an older one.
+**Close** asks first when something isn't saved. With the Chords mode switched on, the
+song's history lists every save, and editors can restore an older one.
 
 ![The song editor](../screenshots/laptop-song-editor.png)
 

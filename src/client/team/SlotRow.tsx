@@ -15,7 +15,6 @@ export function SlotRow({
   schedule,
   team,
   me,
-  signUps,
   act,
 }: {
   date: ScheduleDate;
@@ -24,7 +23,6 @@ export function SlotRow({
   schedule: TeamSchedule;
   team: boolean;
   me: string | null;
-  signUps: boolean;
   act: (
     url: string,
     body?: object,
@@ -98,7 +96,7 @@ export function SlotRow({
           </Button>
         </>
       )}
-      {signUps && slot.status === "open" && me && (
+      {slot.status === "open" && me && (
         <Button
           size="sm"
           variant="secondary"

@@ -1300,7 +1300,7 @@
     },
     "appFrame": {
       "name": "Meniul aplicației",
-      "adds": "Antetul și meniul aplicației: listele, căutarea și paginile cântărilor."
+      "adds": "Antetul și meniul aplicației: listele, căutarea, paginile cântărilor și lista scurtăturilor de tastatură."
     },
     "layouts": {
       "name": "Aspecte pe laptop",
@@ -1324,7 +1324,7 @@
     },
     "presence": {
       "name": "Cine e aici",
-      "adds": "Cine are o listă deschisă și cine mută un punct."
+      "adds": "Cine are o listă deschisă, cine mută un punct și cine a schimbat slide-ul."
     },
     "mediaKeys": {
       "name": "Taste media",
@@ -1333,10 +1333,6 @@
     "stageViews": {
       "name": "Scenă și muzicieni",
       "adds": "Monitorul de scenă cu mesaje și numărătoare inversă, și pagini pentru muzicieni și voci."
-    },
-    "liveNotice": {
-      "name": "Cine a schimbat slide-ul",
-      "adds": "Cine a schimbat slide-ul și ultima schimbare live."
     },
     "screenMenu": {
       "name": "Meniul de ecrane",
@@ -1348,15 +1344,7 @@
     },
     "chords": {
       "name": "Modul Acorduri",
-      "adds": "Muzicienii adaugă cântărilor acorduri, note și tempoul."
-    },
-    "history": {
-      "name": "Istoricul cântării",
-      "adds": "Fiecare salvare a unei cântări, cine a făcut-o, și revenirea la una anterioară."
-    },
-    "notation": {
-      "name": "Notație",
-      "adds": "Un intro, un riff sau un ritm scris în note, care se poate asculta."
+      "adds": "Muzicienii adaugă cântărilor acorduri, note și tempoul, cu notație, înregistrări de referință și istoricul fiecărei cântări."
     },
     "instruments": {
       "name": "Aspecte pe instrument",
@@ -1398,17 +1386,9 @@
       "name": "Culorile comunității",
       "adds": "Culorile și fontul comunității în aplicație."
     },
-    "shortcuts": {
-      "name": "Scurtături de tastatură",
-      "adds": "Lista scurtăturilor de tastatură."
-    },
     "songFeedback": {
       "name": "Aprecieri",
       "adds": "Membrii apreciază sau nu cântările; proprietarii pot exclude una."
-    },
-    "referenceLink": {
-      "name": "Înregistrări de referință",
-      "adds": "Înregistrări după care se învață o cântare, cu link pe pagina ei."
     },
     "credits": {
       "name": "Autori și drepturi",
@@ -1416,23 +1396,7 @@
     },
     "statistics": {
       "name": "Statistici",
-      "adds": "Cele mai cântate cântări și serviciile în care s-a cântat fiecare."
-    },
-    "rotation": {
-      "name": "Rotație",
-      "adds": "Un semn pe cântările cântate în majoritatea ultimelor servicii."
-    },
-    "yearRecap": {
-      "name": "Anul în cântări",
-      "adds": "Cântările unui an dintr-o privire."
-    },
-    "servicesGrid": {
-      "name": "Grila serviciilor",
-      "adds": "Ultimele 12 servicii ca grilă."
-    },
-    "searchMisses": {
-      "name": "Căutări fără rezultat",
-      "adds": "Ce au căutat editorii și proprietarii și n-au găsit."
+      "adds": "Cele mai cântate cântări, serviciile în care s-a cântat fiecare, anul în cântări, ultimele 12 servicii ca grilă, cântările cântate prea des în ultima vreme și căutările fără rezultat."
     },
     "chapters": {
       "name": "Capitole YouTube",
@@ -1462,13 +1426,9 @@
       "name": "Acorduri după ureche",
       "adds": "Norless ascultă prin microfon sau mixer și numește acordul."
     },
-    "chordWheel": {
-      "name": "Roata acordurilor",
-      "adds": "Un cerc al cvintelor care arată ce acord se cântă."
-    },
     "liveChord": {
       "name": "Acordul live",
-      "adds": "Muzicienii văd acordul pe care îl cântă pianistul, chiar atunci."
+      "adds": "Muzicienii văd acordul pe care îl cântă pianistul, chiar atunci, pe un cerc al cvintelor."
     },
     "chordHelper": {
       "name": "Ajutor la acorduri",
@@ -1492,27 +1452,11 @@
     },
     "serviceRoles": {
       "name": "Roluri în serviciu",
-      "adds": "Cine cântă, la ce instrument și cine slujește în fiecare serviciu, după un șablon pe eveniment săptămânal."
-    },
-    "signUps": {
-      "name": "Înscrieri",
-      "adds": "Membrii se înscriu pe locurile libere din program."
-    },
-    "blockouts": {
-      "name": "Zile indisponibile",
-      "adds": "Membrii marchează zilele în care lipsesc."
+      "adds": "Cine cântă, la ce instrument și cine slujește în fiecare serviciu, după un șablon pe eveniment săptămânal: programul fiecărui membru, înscrieri pe locurile libere, zilele indisponibile și cine conduce fiecare cântare."
     },
     "pushNotifications": {
       "name": "Notificări",
       "adds": "Notificări pe telefon: când ești programat, mementouri și locuri libere."
-    },
-    "mySchedule": {
-      "name": "Programul meu",
-      "adds": "Serviciile și rolurile fiecărui membru."
-    },
-    "ledBy": {
-      "name": "Condus de",
-      "adds": "Cine conduce fiecare cântare: liderul de laudă al serviciului sau o voce aleasă de echipă, în listă și pe ecranele de scenă."
     },
     "churchCalendar": {
       "name": "Calendarul bisericii",

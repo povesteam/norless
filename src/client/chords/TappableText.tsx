@@ -35,8 +35,8 @@ export function TappableText({
   perBar: number;
   /** A bar's chords given their beats: the line's row, the bar, a length per chord. */
   onBeats: (row: number, bar: number, beats: number[]) => void;
-  /** Notation blocks to see, change and add, from the step that shows them. */
-  notation?: {
+  /** Notation blocks to see, change and add. */
+  notation: {
     bpm: number | null;
     onEdit: (section: number, block: number | null) => void;
   };
@@ -121,7 +121,7 @@ export function TappableText({
               ),
             )
           )}
-          {notation && section.repeatOf === null && (
+          {section.repeatOf === null && (
             <>
               {section.blocks.map((block, j) => (
                 <div

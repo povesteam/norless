@@ -88,7 +88,6 @@ export function PlayPanel({
   songKey,
   piano: canPiano,
   listen: canListen,
-  wheel,
   onPlayed,
   onHeard,
   onTake,
@@ -96,7 +95,6 @@ export function PlayPanel({
   songKey: Key | null;
   piano: boolean;
   listen: boolean;
-  wheel: boolean;
   onPlayed: (chord: string) => void;
   /** Gets a way to take the chord held on the piano now, which then isn't played on letting go. */
   onTake?: (take: (() => string | null) | null) => void;
@@ -186,14 +184,12 @@ export function PlayPanel({
           {chord ?? "–"}
         </p>
       </div>
-      {wheel && (
-        <ChordWheel
-          songKey={songKey}
-          chord={chord}
-          scores={piano.chord ? undefined : heard?.scores}
-          className="w-48"
-        />
-      )}
+      <ChordWheel
+        songKey={songKey}
+        chord={chord}
+        scores={piano.chord ? undefined : heard?.scores}
+        className="w-48"
+      />
       {choice.choosing && (
         <InputDialog
           initial={choice.remembered}
@@ -361,11 +357,9 @@ export function ShareChords({
 export function LiveChordView({
   slug,
   songKey,
-  wheel,
 }: {
   slug: string;
   songKey: Key | null;
-  wheel: boolean;
 }) {
   const { t } = useTranslation();
   const chord = useLiveChord(slug);
@@ -393,13 +387,11 @@ export function LiveChordView({
       ) : (
         <p className="max-w-md text-center text-muted">{t("detect.nobody")}</p>
       )}
-      {wheel && (
-        <ChordWheel
-          songKey={songKey}
-          chord={chord?.chord ?? null}
-          className="w-72 max-w-full"
-        />
-      )}
+      <ChordWheel
+        songKey={songKey}
+        chord={chord?.chord ?? null}
+        className="w-72 max-w-full"
+      />
     </div>
   );
 }

@@ -122,7 +122,7 @@ export function LiveBar({
   const [seen, setSeen] = useState(changedAt);
   if (changedAt !== seen) {
     setSeen(changedAt);
-    if (by && by.userId !== me && shows("liveNotice"))
+    if (by && by.userId !== me && shows("presence"))
       setNotice(t("live.changedBy", { name: by.name, part: where }));
   }
   useEffect(() => {
@@ -230,7 +230,7 @@ export function LiveBar({
           {project && <LocalProjection {...project} narrow />}
           {!local && shows("screenMenu") && <ScreenLauncher />}
         </div>
-        {by && view.changedAt && shows("liveNotice") && (
+        {by && view.changedAt && shows("presence") && (
           <span className="text-xs text-muted">
             {t("live.lastChange", {
               name: by.name,

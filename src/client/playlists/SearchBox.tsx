@@ -497,7 +497,7 @@ function SongOption({ song, title }: { song: SongResult; title: string }) {
           t("search.lastPlayed", {
             when: relativeTime(song.lastPlayedAt, new Date(), i18n.language),
           })}
-        {song.recent && shows("rotation") && (
+        {song.recent && shows("statistics") && (
           <span className="font-medium text-warning-soft-foreground">
             {t("rotation.hint", {
               count: song.recent.services,

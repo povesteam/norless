@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import type { Role } from "../../server/schedule/team-data";
 import type { TeamSchedule } from "../../server/schedule/team-schedule";
 import { instruments } from "../../shared/preferences";
-import { Shown, useCommunity } from "../data/community";
+import { useCommunity } from "../data/community";
 import { send, useJson } from "../data/fetch";
 import {
   ActionButton,
@@ -117,20 +117,18 @@ function RolesForm({ slug, roles }: { slug: string; roles: Role[] }) {
               </Select.Popover>
             </Select>
             {/* Its people lead the songs of their services. */}
-            <Shown feature="ledBy">
-              <Checkbox
-                isSelected={r.leads}
-                onChange={(leads) => change(i, { leads })}
-                className="self-center"
-              >
-                <Checkbox.Content>
-                  <Checkbox.Control>
-                    <Checkbox.Indicator />
-                  </Checkbox.Control>
-                  {t("team.leadsSongs")}
-                </Checkbox.Content>
-              </Checkbox>
-            </Shown>
+            <Checkbox
+              isSelected={r.leads}
+              onChange={(leads) => change(i, { leads })}
+              className="self-center"
+            >
+              <Checkbox.Content>
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                {t("team.leadsSongs")}
+              </Checkbox.Content>
+            </Checkbox>
             <Button
               variant="ghost"
               isIconOnly

@@ -133,7 +133,7 @@ export function MusiciansPage({ slug }: { slug: string }) {
           <ArrowLeft />
         </Link>
         <RoomChip slug={slug} />
-        {me?.user && switches && shows(switches, "mySchedule") && (
+        {me?.user && switches && shows(switches, "serviceRoles") && (
           <TodayBadge slug={slug} />
         )}
         {/* Many layouts: a menu, with those for this device type; its icon opens
@@ -226,8 +226,7 @@ export function MusiciansPage({ slug }: { slug: string }) {
           canEdit={hasRole(roles, "team") || hasRole(roles, "editor")}
           profile={profile}
           lookAhead
-          wheel={!!community && shows(switchesOf(community), "chordWheel")}
-          leader={!!community && shows(switchesOf(community), "ledBy")}
+          leader={!!community && shows(switchesOf(community), "serviceRoles")}
         />
       </div>
     </div>

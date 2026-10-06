@@ -40,7 +40,7 @@ export function OnlineMembers() {
       className="flex min-h-8 flex-wrap items-center gap-1.5"
     >
       {online.map((person) => {
-        const last = person.userId === lastChange && shows("liveNotice");
+        const last = person.userId === lastChange && shows("presence");
         // Avatars only; devices and the last change in the tooltip.
         const label = [
           person.name,

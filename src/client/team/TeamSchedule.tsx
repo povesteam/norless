@@ -21,7 +21,7 @@ import { Link } from "wouter";
 import type { Role, ScheduleDate } from "../../server/schedule/team-data";
 import type { TeamSchedule } from "../../server/schedule/team-schedule";
 import { useChanges } from "../data/changes";
-import { useCommunity, useShows } from "../data/community";
+import { useCommunity } from "../data/community";
 import { send, useJson } from "../data/fetch";
 import { hasRole, useMe, useRoles } from "../data/me";
 import {
@@ -44,7 +44,6 @@ export function TeamSchedulePage() {
   const { slug } = useCommunity();
   const roles = useRoles(slug);
   const team = hasRole(roles, "team");
-  const shows = useShows();
   const { me } = useMe();
   const { data, failed, retry } = useJson<TeamSchedule>(
     `/api/communities/${slug}/team-schedule`,
@@ -83,7 +82,6 @@ export function TeamSchedulePage() {
             schedule={data}
             team={team}
             me={me?.user?.id ?? null}
-            signUps={shows("signUps")}
           />
         ))
       )}
@@ -101,13 +99,11 @@ function DateCard({
   schedule,
   team,
   me,
-  signUps,
 }: {
   date: ScheduleDate;
   schedule: TeamSchedule;
   team: boolean;
   me: string | null;
-  signUps: boolean;
 }) {
   const { t } = useTranslation();
   const { slug } = useCommunity();
@@ -156,7 +152,6 @@ function DateCard({
               schedule={schedule}
               team={team}
               me={me}
-              signUps={signUps}
               act={act}
             />
           ))}

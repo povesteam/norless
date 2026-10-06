@@ -92,7 +92,7 @@ export function VocalistsPage({ slug }: { slug: string }) {
         <RoomChip slug={slug} />
         {me?.user &&
           community &&
-          shows(switchesOf(community), "mySchedule") && (
+          shows(switchesOf(community), "serviceRoles") && (
             <TodayBadge slug={slug} />
           )}
         {languages.length > 1 && (
@@ -157,7 +157,7 @@ export function VocalistsPage({ slug }: { slug: string }) {
           layout={layout?.id ?? "whole"}
           canControl={canControl}
           lookAhead
-          leader={!!community && shows(switchesOf(community), "ledBy")}
+          leader={!!community && shows(switchesOf(community), "serviceRoles")}
         />
       </div>
     </div>
@@ -181,7 +181,7 @@ export function Vocalists({
   languages: string[];
   layout: VocalistsLayout;
   canControl: boolean;
-  /** Who leads the song, when Led by is switched on. */
+  /** Who leads the song, when the service roles are switched on. */
   leader?: boolean;
   /** On a member's own device: earlier and later songs, privately. */
   lookAhead?: boolean;

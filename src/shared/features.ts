@@ -20,7 +20,8 @@ export const features = {
   // Print, save and copy a playlist's lyrics, which singers do today with the extension.
   export: { classic: true },
   // Operator
-  // The app's frame: header, menu, list of playlists, search box and song pages.
+  // The app's frame: header, menu, list of playlists, search box, song pages and the
+  // list of keyboard shortcuts.
   appFrame: {},
   // Controller, Running order and Big on laptops, with screen previews, part buttons
   // and the service/rehearsal status.
@@ -29,24 +30,20 @@ export const features = {
   times: {},
   problems: {},
   commands: {},
+  // Who has a playlist open, and the notice of who changed the slide.
   presence: {},
   // Media keys move the slides, with the live bar's next and previous.
   mediaKeys: {},
   // Stage
   // The stage monitor and the musicians and vocalists views.
   stageViews: { needs: "appFrame" },
-  // The notice of who changed the slide, in the live bar.
-  liveNotice: { needs: "layouts" },
   // The Screens menu: a screen on a display, pairing a TV.
   screenMenu: { needs: "layouts" },
   // The tablet and phone controller layouts.
   touchLayouts: { needs: "layouts" },
-  // Adding chords, notes and tempo, which the stage views show.
+  // Adding chords, notes and tempo, which the stage views show, with the song's
+  // history, notation blocks and reference recordings.
   chords: {},
-  // The song's history, which came with the Chords mode.
-  history: { needs: "chords" },
-  // Notation blocks: written in the Chords mode, shown on keys and drums layouts.
-  notation: { needs: "chords" },
   // Musician profiles, instrument layouts and keys for a service.
   instruments: { needs: "stageViews" },
   // Recording rehearsals and services, from the musicians view.
@@ -63,23 +60,13 @@ export const features = {
   sideBySide: {},
   install: {},
   theme: {},
-  shortcuts: { needs: "appFrame" },
   // Liking and disliking songs, liked songs first in the search box, excluding songs.
   songFeedback: {},
-  // A song's reference recording, set in the Chords mode, a link on its page.
-  referenceLink: { needs: "chords" },
   // A song's authors, copyright and source, in the editor and on its page.
   credits: {},
-  // The Statistics page and a song's services on its page.
+  // The Statistics page, with the year in songs, the last services as a grid and the
+  // searches that found nothing; a song's services on its page; the rotation hint.
   statistics: { needs: "appFrame" },
-  // The hint on songs sung in most of the last services, and their list.
-  rotation: { needs: "statistics" },
-  // The year in songs, on the Statistics page when a year is picked.
-  yearRecap: { needs: "statistics" },
-  // The last 12 services as a grid on the Statistics page.
-  servicesGrid: { needs: "statistics" },
-  // Searches that found nothing, for editors and owners on the Statistics page.
-  searchMisses: { needs: "statistics" },
   // A playlist's YouTube chapters, from when its entries went live in the service.
   chapters: {},
   // Chords colored by their degree in the key, a switch on My account.
@@ -95,29 +82,21 @@ export const features = {
   midiChords: { needs: "chords", added: "2026-10-04" },
   // Chords heard through a microphone or the mixer, in the Chords mode.
   audioChords: { needs: "chords", added: "2026-10-04" },
-  // The circle of fifths showing the chord played.
-  chordWheel: { needs: "chords", added: "2026-10-04" },
-  // The chord played live, shared from the team's devices to the musicians view.
+  // The chord played live, shared from the team's devices to the musicians view, on
+  // the circle of fifths.
   liveChord: { needs: "stageViews", added: "2026-10-04" },
   // Team, added later too.
-  // The roles, each date's slots from a template, and the team schedule page.
+  // The roles, each date's slots from a template, the team schedule page, My schedule,
+  // sign-ups, away dates, and who leads each song.
   serviceRoles: { needs: "appFrame", added: "2026-10-04" },
-  // Each person's own: My schedule, the line at the top, the badge on stage views.
-  mySchedule: { needs: "serviceRoles", added: "2026-10-04" },
-  // Taking open slots, or offering to.
-  signUps: { needs: "serviceRoles", added: "2026-10-04" },
-  // Days a member is away.
-  blockouts: { needs: "mySchedule", added: "2026-10-04" },
   // Notifications on phones, by push.
-  pushNotifications: { needs: "mySchedule", added: "2026-10-04" },
-  // Who leads each song: the service's worship lead, or a vocalist the team chose.
-  ledBy: { needs: "serviceRoles", added: "2026-10-04" },
+  pushNotifications: { needs: "serviceRoles", added: "2026-10-04" },
   // What's coming in the church's calendar, read from its iCal address.
   churchCalendar: { needs: "serviceRoles", added: "2026-10-04" },
   // Extras: songs kept on a device, to project without internet.
   offline: { needs: "appFrame", added: "2026-10-04" },
   // Telling a service's people its playlist is ready, and its musicians what changed.
-  playlistNews: { needs: "mySchedule", added: "2026-10-04" },
+  playlistNews: { needs: "serviceRoles", added: "2026-10-04" },
   // Each song's moments in the services' YouTube streams.
   replays: { added: "2026-10-05" },
   // PDFs and pictures as playlist entries.

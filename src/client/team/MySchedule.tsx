@@ -150,7 +150,7 @@ export function MySchedulePage() {
         )}
       </section>
       <ChurchCalendar />
-      {shows("signUps") && data.open.length > 0 && (
+      {data.open.length > 0 && (
         <section aria-labelledby="open-title" className="flex flex-col gap-2">
           <h3 id="open-title" className="text-xl font-semibold">
             {t("team.openForYou")}
@@ -178,7 +178,7 @@ export function MySchedulePage() {
           </ul>
         </section>
       )}
-      {shows("blockouts") && <AwayDates slug={slug} away={data.away} />}
+      <AwayDates slug={slug} away={data.away} />
       {shows("pushNotifications") && <PushSwitch />}
       <section aria-labelledby="told-title" className="flex flex-col gap-2">
         <h3 id="told-title" className="text-xl font-semibold">

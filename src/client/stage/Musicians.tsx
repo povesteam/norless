@@ -28,15 +28,12 @@ export function Musicians({
     colors: false,
   },
   lookAhead = false,
-  wheel = false,
   leader = false,
 }: {
   slug: string;
   languages: string[];
   layout: string;
-  /** The circle of fifths with the live chord, when it's switched on. */
-  wheel?: boolean;
-  /** Who leads the song, when Led by is switched on. */
+  /** Who leads the song, when the service roles are switched on. */
   leader?: boolean;
   canControl: boolean;
   canEdit?: boolean;
@@ -63,7 +60,6 @@ export function Musicians({
         ) : view?.song ? (
           <Song
             slug={slug}
-            wheel={wheel}
             leader={leader}
             profile={profile}
             view={view}

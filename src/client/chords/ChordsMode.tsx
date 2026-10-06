@@ -297,7 +297,6 @@ function ChordsEditor({
             songKey={key}
             piano={shows("midiChords")}
             listen={shows("audioChords")}
-            wheel={shows("chordWheel")}
             // Played on the piano: over the letter tapped, once the keys are let go.
             onPlayed={(chord) => pick(chord)}
             onTake={(take) => {
@@ -325,18 +324,12 @@ function ChordsEditor({
           }}
           perBar={Number(song.timeSignature?.split("/")[0]) || 4}
           onBeats={(row, bar, beats) => edit(setBeats(text, row, bar, beats))}
-          notation={
-            shows("notation")
-              ? {
-                  bpm,
-                  onEdit: (section, block) => setNotating({ section, block }),
-                }
-              : undefined
-          }
+          notation={{
+            bpm,
+            onEdit: (section, block) => setNotating({ section, block }),
+          }}
         />
-        {shows("referenceLink") && (
-          <ReferenceLinksField slug={slug} links={links} onChange={setLinks} />
-        )}
+        <ReferenceLinksField slug={slug} links={links} onChange={setLinks} />
       </fieldset>
       {notating &&
         (() => {
