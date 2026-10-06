@@ -119,3 +119,9 @@ test("without a way to send email, there's no login by email", async () => {
     ).statusCode,
   ).toBe(404);
 });
+
+test("any address with one @ and no spaces may ask, an s in it too", async () => {
+  expect((await ask("pavel.s@example.com")).statusCode).toBe(204);
+  expect((await ask("pavel s@example.com")).statusCode).toBe(400);
+  expect((await ask("pavel@@example.com")).statusCode).toBe(400);
+});

@@ -74,7 +74,7 @@ export function attachLoginLinks(
           properties: {
             email: {
               type: "string",
-              pattern: "^[^@\\\\s]+@[^@\\\\s]+$",
+              pattern: "^[^@\\s]+@[^@\\s]+$",
               maxLength: 320,
             },
             next: { type: "string", maxLength: 500 },
