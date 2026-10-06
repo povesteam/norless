@@ -1,0 +1,4 @@
+# The manual's site, built by .github/workflows/manual.yml with GitHub Pages' Jekyll:
+# README.md is the home page, and links to .md pages become links to their pages.
+title: Norless manual
+description: How to use Norless on Sundays

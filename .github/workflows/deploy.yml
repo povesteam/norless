@@ -1,0 +1,106 @@
+name: Deploy
+
+# Deploys to production only when a maintainer runs it (Actions → Deploy → Run
+# workflow), from the chosen branch or tag; tried first on real data with
+# deploy/rehearse.sh. See deploy/README.md.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  # Built on the VM's architecture: the repository variable IMAGE_RUNNER is
+  # ubuntu-24.04-arm for an Arm VM (deploy/setup.sh sets it).
+  image:
+    needs: ci
+    runs-on: ${{ vars.IMAGE_RUNNER || 'ubuntu-latest' }}
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - id: tag
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then tag="$GITHUB_REF_NAME"; else tag="sha-${GITHUB_SHA::7}"; fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      # The app's image and its converter's, with the same tag.
+      - name: Build and push the images
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "$TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker build \
+            --build-arg SOURCE_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+            --build-arg GIT_COMMIT="$GITHUB_SHA" \
+            -t "$image:$TAG" .
+          docker build -t "$image-converter:$TAG" src/converter
+          docker push "$image:$TAG"
+          docker push "$image-converter:$TAG"
+
+  # The new version starts beside the running one, which keeps serving.
+  deploy:
+    needs: image
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Start the new version beside the running one
+        env:
+          KEY: ${{ secrets.DEPLOY_KEY }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          REQUEST: production ${{ needs.image.outputs.tag }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy "deploy@$HOST" "$REQUEST"
+
+  # Waits for a maintainer to confirm: the environment's required reviewers.
+  switch:
+    needs: [image, deploy]
+    runs-on: ubuntu-latest
+    environment: production-switch
+    steps:
+      - name: Switch to the new version
+        env:
+          KEY: ${{ secrets.DEPLOY_KEY }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          REQUEST: production ${{ needs.image.outputs.tag }} switch
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy "deploy@$HOST" "$REQUEST"
+
+  # Not confirmed, or the switch failed: the new version goes, the old one goes on.
+  drop:
+    needs: [image, deploy, switch]
+    if: always() && needs.deploy.result == 'success' && needs.switch.result != 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop the new version
+        env:
+          KEY: ${{ secrets.DEPLOY_KEY }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          REQUEST: production ${{ needs.image.outputs.tag }} stop
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy "deploy@$HOST" "$REQUEST"

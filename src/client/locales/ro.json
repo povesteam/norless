@@ -1,0 +1,1776 @@
+{
+  "connection": {
+    "reconnecting": "Se reconectează…",
+    "offline": "Fără conexiune"
+  },
+  "notFound": {
+    "message": "Această pagină nu există.",
+    "home": "Mergi la pagina de start"
+  },
+  "song": {
+    "key": "Tonalitate: {{key}}",
+    "time": "Măsură: {{time}}",
+    "language": "Limba",
+    "deleted": "Această cântare a fost ștearsă.",
+    "createdBy": "Adăugată de {{name}}",
+    "updatedBy": "Editată ultima dată de {{name}}",
+    "tempo": "Tempo: {{bpm}} BPM",
+    "references": "Înregistrări după care se învață",
+    "source": "Sursa",
+    "more": "Mai multe acțiuni"
+  },
+  "search": {
+    "placeholder": "Caută cântări",
+    "empty": "Nicio cântare găsită",
+    "lastPlayed": "ultima dată {{when}}",
+    "failed": "Căutarea nu a mers. Verifică conexiunea și încearcă din nou.",
+    "bible": "Text din Biblie",
+    "addDivider": "Adaugă „{{text}}” ca separator",
+    "newSong": "Creează cântarea „{{title}}”",
+    "command": "Comandă",
+    "bibleHint": "Scrie o referință pentru un text din Biblie, de exemplu {{example}}",
+    "lately": "Cântată recent",
+    "place": "După „{{title}}”",
+    "placeTop": "La început",
+    "cancelPlace": "Adaugă la sfârșit"
+  },
+  "language": {
+    "label": "Limba interfeței"
+  },
+  "auth": {
+    "login": "Autentificare",
+    "logout": "Ieșire",
+    "email": "Email",
+    "notInvited": "Cere comunității tale o invitație ca să poți edita sau controla.",
+    "deleteAccount": "Șterge-mi contul…",
+    "confirmDelete": "Ștergi contul? Numele și emailul tău se șterg și ești deconectat peste tot. Cântările și listele pe care le-ai adăugat rămân, fără numele tău.",
+    "lastOwner": "Ești ultimul proprietar al comunității. Fă pe altcineva proprietar mai întâi.",
+    "emailLink": "Trimite-mi un link pe email",
+    "checkEmail": "Verifică emailul: dacă {{email}} se poate autentifica, linkul e pe drum. Merge o singură dată, timp de 15 minute.",
+    "tooMany": "Tocmai s-au trimis mai multe linkuri la această adresă. Folosește-l pe ultimul sau încearcă din nou peste 15 minute.",
+    "linkHere": "Intră în Norless cu acest link. Merge o singură dată.",
+    "linkExpired": "Acest link a expirat sau a fost deja folosit.",
+    "newLink": "Cere un link nou",
+    "google": "Continuă cu Google",
+    "googleUnverified": "Google nu a verificat adresa de email a acestui cont, așa că Norless n-o poate folosi. Intră cu un link pe email.",
+    "googleFailed": "Autentificarea cu Google nu s-a încheiat. Încearcă din nou.",
+    "otherWays": "Alte moduri de a intra",
+    "devMail": "Dezvoltare: acesta e linkul pe care Norless l-ar trimite pe email.",
+    "devOpenLink": "Deschide linkul",
+    "devGoogle": "Doar pentru dezvoltare: acesta nu e Google. Conectează contul ales, fără să-l verifice.",
+    "devGoogleOff": "Această pagină ține locul lui Google doar în dezvoltare.",
+    "chooseAccount": "Alege un cont",
+    "anotherAccount": "Emailul altui cont",
+    "continue": "Continuă"
+  },
+  "editor": {
+    "editSong": "Editează cântarea",
+    "editSection": "Editează secțiunea",
+    "newSong": "Cântare nouă",
+    "save": "Salvează",
+    "saveAndAdd": "Salvează și adaugă în listă",
+    "close": "Închide",
+    "saved": "Salvat",
+    "discard": "Renunți la modificările nesalvate?",
+    "conflict": "Altcineva a modificat între timp",
+    "theirs": "Versiunea lor",
+    "mine": "Versiunea ta",
+    "keepMine": "Păstrează-o pe a mea",
+    "useTheirs": "Folosește-o pe a lor",
+    "removed": "(ștearsă)",
+    "key": "Tonalitate",
+    "time": "Măsură",
+    "tags": "Etichete",
+    "newTag": "Adaugă „{{tag}}”",
+    "title": "Titlu",
+    "text": "Text",
+    "textHelp": "Un rând gol începe un slide nou. Un rând ca R: sau [Bridge] numește partea, iar R singur o repetă. Rândurile care încep cu ! sunt notițe și nu se proiectează.",
+    "editingBy": "{{name}} editează",
+    "heldBy": "{{name}} editează cântarea",
+    "heldByHelp": "Poți doar s-o citești până o închide, sau după 5 minute în care nu scrie nimic.",
+    "notSaved": "Cântarea nu a fost salvată. Textul tău a rămas aici: verifică conexiunea și încearcă din nou.",
+    "needsTitle": "Dă cântării un titlu în cel puțin o limbă ca să o salvezi.",
+    "unclosedRepeat": "Un semn de repetare (/: … :/) nu se închide în secțiunea {{sections}}: apare așa cum e scris.",
+    "layout": "Aspectul editorului",
+    "layouts": {
+      "side-by-side": "Alăturat",
+      "one": "O limbă"
+    },
+    "titleIn": "Titlul în {{language}}",
+    "textIn": "Textul în {{language}}",
+    "secondLanguage": "Limba din dreapta",
+    "addLanguage": "Adaugă o limbă",
+    "authors": "Autori",
+    "copyright": "Drepturi de autor",
+    "source": "Sursa",
+    "sourceHelp": "Pagina https de unde a fost luată cântarea",
+    "addTag": "Adaugă o etichetă"
+  },
+  "roles": {
+    "owner": "Proprietar",
+    "editor": "Editor",
+    "team": "Echipă"
+  },
+  "members": {
+    "title": "Membri",
+    "ownersOnly": "Doar proprietarii pot gestiona membrii.",
+    "lastOwner": "Comunitatea are nevoie de un proprietar: fă-l mai întâi pe altcineva proprietar.",
+    "invited": "Invitat",
+    "roles": "Rolurile lui {{name}}",
+    "remove": "Scoate",
+    "confirmRemove": "Scoți pe {{name}} din comunitate?",
+    "imported": "Conturi din aplicația veche",
+    "importedHelp": "Invită persoanele care încă ajută, cu rolurile lor, și șterge-le pe celelalte. Ștergerea elimină numele și emailul; ce au creat rămâne fără nume.",
+    "person": "Persoană",
+    "created": "Creat",
+    "lastActive": "Ultima activitate",
+    "wasAdmin": "Era admin",
+    "invite": "Invită",
+    "inviteEmail": "Email",
+    "inviteRoles": "Roluri",
+    "delete": "Șterge",
+    "confirmDelete": "Ștergi contul lui {{name}}? Numele și emailul sunt eliminate.",
+    "noRoles": "Fără roluri (doar citește)",
+    "emailed": "Invitat: {{email}} primește un email cu un link de autentificare.",
+    "notEmailed": "Invitat. Nu s-a trimis niciun email: {{email}} poate intra pe {{login}} cu această adresă.",
+    "actions": "Acțiuni: {{name}}"
+  },
+  "presence": {
+    "online": "Online",
+    "phone": "telefon",
+    "computer": "calculator",
+    "lastChange": "ultima schimbare live"
+  },
+  "states": {
+    "loading": "Se încarcă…",
+    "tryAgain": "Încearcă din nou",
+    "loadFailed": "Nu s-a încărcat. Verifică conexiunea și încearcă din nou.",
+    "actionFailed": "Nu a mers. Verifică conexiunea și încearcă din nou."
+  },
+  "home": {
+    "empty": "Nicio cântare încă",
+    "emptyHelp": "Cântările adăugate aici se găsesc cu căutarea și se proiectează în fiecare limbă a comunității.",
+    "addFirst": "Adaugă prima cântare"
+  },
+  "playlists": {
+    "title": "Liste",
+    "all": "Toate listele",
+    "new": "Listă nouă",
+    "more": "Arată mai multe",
+    "empty": "Nicio listă încă",
+    "emptyHelp": "O listă planifică un serviciu: cântări, texte din Biblie, separatoare și anunțuri, în ordine, la fel pe fiecare dispozitiv. Repetițiile folosesc lista serviciului următor.",
+    "createFirst": "Creează prima listă",
+    "filter": "Caută o listă",
+    "noMatch": "Nicio listă nu are asta în titlu sau în dată.",
+    "showArchived": "Arată arhivate",
+    "noArchived": "Nicio listă arhivată.",
+    "nextService": "Următorul serviciu",
+    "songs": "Cântări: {{count}}",
+    "songs_one": "{{count}} cântare",
+    "created": "Creată {{date}}"
+  },
+  "playlist": {
+    "title": "Titlul listei",
+    "actions": "Acțiuni pentru listă",
+    "rename": "Redenumește",
+    "entries": "Elementele listei",
+    "empty": "Nimic în listă încă",
+    "emptyHelp": "Adaugă cântări, texte din Biblie și separatoare cu căutarea de mai sus, iar anunțuri cu „Adaugă un text”.",
+    "emptyVisitor": "Echipa n-a adăugat nimic încă.",
+    "addText": "Adaugă un text",
+    "move": "Mută",
+    "remove": "Scoate",
+    "edit": "Editează",
+    "songDeleted": "ștearsă",
+    "playedRecently": "cântată în ultima oră",
+    "minutes": "{{count}} min",
+    "onBibleCom": "bible.com",
+    "addedBy": "Adăugat de {{name}}",
+    "editDivider": "Separator",
+    "editText": "Text",
+    "heading": "Titlu",
+    "markdown": "Text (Markdown)",
+    "movingBy": "{{name}} îl mută",
+    "alsoHere": "{{name}} are lista deschisă",
+    "moveUp": "Mută mai sus",
+    "moveDown": "Mută mai jos",
+    "entryActions": "Acțiuni pentru element",
+    "removed": "Am scos „{{title}}”",
+    "undo": "Anulează",
+    "addDividerAbove": "Adaugă un separator deasupra",
+    "addDivider": "Adaugă un separator",
+    "duration": "{{hours}} h {{minutes}} min",
+    "hours": "{{hours}} h",
+    "plannedTime": "Timp planificat",
+    "plannedTimeHelp": "De exemplu 45, 1h30 sau 1:30",
+    "plannedTimeInvalid": "Până la 4 ore, de exemplu 45, 1h30 sau 1:30",
+    "archive": "Arhivează lista",
+    "archivedOn": "Arhivată pe {{date}}",
+    "restore": "Restaurează",
+    "actionsOf": "Acțiuni: {{title}}",
+    "insertHere": "Adaugă aici",
+    "songHere": "Cântare aici",
+    "dividerHere": "Separator aici",
+    "textHere": "Text aici",
+    "songAbove": "Adaugă o cântare deasupra",
+    "textAbove": "Adaugă un text deasupra"
+  },
+  "device": {
+    "title": "Acest dispozitiv e un",
+    "phone": "Telefon",
+    "tablet": "Tabletă",
+    "laptop": "Laptop"
+  },
+  "settings": {
+    "title": "Setări",
+    "ownersOnly": "Doar proprietarii pot schimba setările.",
+    "privacy": {
+      "title": "Nota de confidențialitate",
+      "help": "Cine răspunde de datele personale ale oamenilor comunității, arătat pe pagina de confidențialitate.",
+      "name": "Cine răspunde de date",
+      "address": "Adresa poștală",
+      "email": "Email pentru întrebări despre datele personale",
+      "save": "Salvează contactul"
+    }
+  },
+  "schedule": {
+    "title": "Program",
+    "help": "Din program, Norless știe dacă o cântare e cântată la un serviciu sau la o repetiție: de la începutul unui eveniment până la 30 de minute după sfârșitul lui. În afara oricărui eveniment e repetiție. Orele sunt în fusul orar al comunității.",
+    "addRecurring": "Adaugă un eveniment săptămânal",
+    "addOneOff": "Adaugă un eveniment o singură dată",
+    "cancelDay": "Anulează o zi",
+    "empty": "Niciun eveniment încă",
+    "emptyHelp": "Adaugă serviciile săptămânale, ca cântările de la ele să fie socotite cântate la serviciu.",
+    "recurring": "Săptămânal",
+    "oneOff": "O singură dată",
+    "cancelled": "Zile anulate",
+    "between": "de la {{from}} până la {{to}}",
+    "since": "din {{from}}",
+    "until": "până la {{to}}",
+    "service": "Serviciu",
+    "rehearsal": "Repetiție",
+    "confirmDelete": "Ștergi „{{name}}” din program?",
+    "invalid": "Evenimentul nu poate fi salvat: verifică dacă sfârșitul e după început, datele, și dacă ziua anulată cade în ziua evenimentului.",
+    "event": "Eveniment",
+    "name": "Nume",
+    "type": "Tip",
+    "weekday": "Ziua",
+    "date": "Data",
+    "start": "Începe",
+    "end": "Se termină",
+    "firstDate": "Din (opțional)",
+    "lastDate": "Până la (opțional)",
+    "classifyTitle": "Redările din aplicația veche",
+    "classifyHelp": "Redările importate din aplicația veche nu au un tip al lor. După ce schimbi perioade trecute din program, clasifică-le din nou: fiecare devine redare de serviciu sau de repetiție după evenimentul în care cade. Nu se șterge nimic.",
+    "classify": "Clasifică redările importate",
+    "confirmClassify": "Clasifici din nou toate redările importate după acest program?",
+    "classified": "{{service}} redări de serviciu și {{rehearsal}} de repetiție.",
+    "actions": "Acțiuni: {{name}}"
+  },
+  "live": {
+    "live": "Live",
+    "nothing": "Nimic nu e proiectat",
+    "blanked": "ecran gol",
+    "next": "Înainte",
+    "previous": "Înapoi",
+    "mediaKeys": "Taste media",
+    "blank": "Ecran gol",
+    "show": "Arată din nou",
+    "service": "Serviciu",
+    "rehearsal": "Repetiție",
+    "modeLabel": "Mod: {{mode}}, din program",
+    "lastChange": "ultima schimbare: {{name}}, {{time}}",
+    "changedBy": "{{name}} → {{part}}",
+    "parts": "Părțile cântării proiectate",
+    "slides": "Slide-uri",
+    "verse": "Strofa {{n}}",
+    "bible": "Text din Biblie",
+    "text": "Text",
+    "types": {
+      "refrain": "Refren",
+      "bridge": "Punte",
+      "pre-chorus": "Pre-refren",
+      "intro": "Intro",
+      "ending": "Final",
+      "verse": "Strofă"
+    },
+    "moreControls": "Mai multe comenzi",
+    "fewerControls": "Mai puține comenzi",
+    "thisDevice": "Acest dispozitiv"
+  },
+  "screen": {
+    "fullscreen": "Ecran complet",
+    "gone": "Linkul acestui ecran nu mai funcționează. Cere-i unui proprietar linkul nou."
+  },
+  "screens": {
+    "title": "Ecrane",
+    "help": "Fiecare ecran se deschide la linkul lui pe dispozitivul care îl arată, fără autentificare, și arată doar ce e proiectat. Dacă un link ajunge unde nu trebuie, dă-i ecranului unul nou.",
+    "add": "Adaugă un ecran",
+    "empty": "Niciun ecran încă",
+    "emptyHelp": "Adaugă câte un proiector pentru fiecare limbă, ca fiecare să arate cântările în limba lui.",
+    "open": "Deschide",
+    "copy": "Copiază linkul",
+    "newLink": "Link nou",
+    "confirmSecret": "Îi dai lui „{{name}}” un link nou? Dispozitivele cu linkul vechi nu-l mai arată.",
+    "confirmDelete": "Ștergi ecranul „{{name}}”?",
+    "language": "Limba",
+    "secondLanguage": "A doua limbă",
+    "none": "Niciuna",
+    "split": "Două limbi",
+    "rows": "Una sub alta",
+    "columns": "Una lângă alta",
+    "types": {
+      "projector": "Proiector",
+      "musicians": "Muzicieni",
+      "vocalists": "Vocaliști",
+      "stage": "Monitor de scenă",
+      "overlay": "Suprapunere pentru transmisie"
+    },
+    "overlayBackground": "Fundal",
+    "backgrounds": {
+      "transparent": "Transparent (OBS)",
+      "green": "Verde pentru cheiere",
+      "black": "Negru"
+    },
+    "look": "Aspect",
+    "background": "Fundal",
+    "textColor": "Text",
+    "font": "Font",
+    "backgroundImage": "Imagine de fundal (adresă https)",
+    "imageOpacity": "Imaginea se vede {{percent}}%",
+    "clock": "Arată ora",
+    "sections": "Secțiuni",
+    "italic": "Cursiv",
+    "bold": "Îngroșat",
+    "openNamed": "Deschide {{name}}",
+    "chooseDisplay": "Alege afișajele",
+    "display": "Afișajul {{n}}"
+  },
+  "stage": {
+    "left": "Minute rămase",
+    "next": "Urmează: {{part}}",
+    "nextSong": "Urmează: {{title}}",
+    "toStage": "Spre scenă:",
+    "message": "Mesaj…",
+    "clear": "Șterge",
+    "presets": {
+      "fiveMinutes": "5 minute",
+      "wrapUp": "Încheiem",
+      "time": "Timpul"
+    },
+    "look": "Afișare",
+    "colors": "Culori",
+    "dark": "Întunecat",
+    "light": "Luminos",
+    "system": "Ca dispozitivul",
+    "textSize": "Mărimea textului: {{percent}}%",
+    "larger": "Text mai mare",
+    "smaller": "Text mai mic"
+  },
+  "pages": {
+    "title": "Pagini",
+    "help": "Pagini web pe care echipa le proiectează cu un clic, cum ar fi o pagină de început înainte de serviciu și anunțurile la sfârșit. Proiectoarele le arată pe tot ecranul până când se proiectează altceva.",
+    "add": "Adaugă o pagină",
+    "empty": "Nicio pagină încă",
+    "emptyHelp": "Adaugă o pagină de început, de arătat înainte de serviciu.",
+    "address": "Adresa",
+    "httpsOnly": "Se pot arăta doar adrese https.",
+    "up": "Mută în sus",
+    "down": "Mută în jos",
+    "confirmDelete": "Ștergi pagina „{{name}}”?",
+    "notEmbeddable": "„{{name}}” nu se lasă arătată de alte site-uri, așa că pe proiector va apărea goală.",
+    "clear": "Scoate „{{name}}” de pe ecrane",
+    "showing": "Pagini: {{name}} pe ecrane"
+  },
+  "musicians": {
+    "title": "Muzicieni",
+    "layout": "Aranjare",
+    "layouts": {
+      "bar-grid": "Grilă de măsuri",
+      "chords": "Acorduri peste text",
+      "guitar-words": "Chitară: forme peste cuvinte",
+      "guitar-bars": "Chitară: grilă de măsuri cu forme",
+      "guitar-chart": "Chitară: partitură și diagrame",
+      "keys-concert": "Clape: tonalitatea reală",
+      "keys-numbers": "Clape: cifre",
+      "drums-parts": "Tobe: părți pe măsuri",
+      "drums-cue": "Tobe: semnal mare",
+      "bass-roots": "Bas: fundamentale",
+      "live-chord": "Acordul live"
+    },
+    "noSong": "Nicio cântare nu e proiectată.",
+    "noChords": "Cântarea asta n-are încă acorduri.",
+    "addChords": "Adaugă acorduri",
+    "structure": "Structura",
+    "back": "Înapoi"
+  },
+  "vocalists": {
+    "title": "Vocaliști",
+    "languages": "Limbi",
+    "all": "Toate",
+    "parts": "Părți",
+    "map": "Harta părților",
+    "layouts": {
+      "whole": "Toată cântarea",
+      "sideways": "Pe lat",
+      "tablet": "Tabletă"
+    }
+  },
+  "times": {
+    "approximate": "Estimat din text: cântarea n-a fost încă cântată la un serviciu",
+    "endLabel": "Sfârșitul estimat",
+    "end": "Se termină la {{time}}",
+    "endApprox": "Se termină pe la {{time}}",
+    "past": "cu {{count}} min după sfârșitul evenimentului ({{time}})",
+    "before": "cu {{count}} min înainte de sfârșitul evenimentului ({{time}})"
+  },
+  "commands": {
+    "blank": "Golește ecranele",
+    "next": "Slide-ul următor",
+    "previous": "Slide-ul anterior",
+    "part": "Mergi la {{part}}",
+    "page": "Arată pagina {{name}}",
+    "screen": "Deschide ecranul {{name}}"
+  },
+  "controller": {
+    "previews": "Ce arată proiectoarele",
+    "preview": "Proiector {{language}}",
+    "layouts": {
+      "controller": "Control",
+      "running-order": "Desfășurare",
+      "big": "Acum și urmează, mare",
+      "tablet": "Tabletă",
+      "phone": "Telefon",
+      "classic": "Clasic",
+      "big-screen": "Ecran mare"
+    },
+    "phone": {
+      "order": "Ordinea",
+      "song": "Cântarea",
+      "screens": "Ecranele"
+    }
+  },
+  "problems": {
+    "count": "{{count}} probleme",
+    "count_one": "1 problemă",
+    "screen": "{{name}} nu e conectat",
+    "translation": "Fără versiune în {{language}}",
+    "small": "Slide-urile {{slides}} prea mici de citit în {{language}}",
+    "key": "Fără tonalitate, iar formația are un ecran pentru muzicieni",
+    "smallInEditor": "Slide-urile {{slides}} sunt prea lungi de citit pe proiector: împarte-le sau scurtează-le rândurile.",
+    "excluded": "Exclusă: {{reason}}",
+    "slides": {
+      "preparing": "Slide-urile încă se pregătesc",
+      "failed": "Fișierul slide-urilor nu a putut fi deschis"
+    }
+  },
+  "local": {
+    "start": "Proiectează aici",
+    "window": "Fereastra proiectorului",
+    "stop": "Oprește proiecția",
+    "hint": "Pe un ecran conectat la acest dispozitiv, fără să schimbe ecranele bisericii",
+    "closed": "Fereastra proiectorului a fost închisă, așa că proiecția s-a oprit."
+  },
+  "pair": {
+    "title": "Asociază un dispozitiv",
+    "howTo": "Pe televizor sau dispozitiv, deschide {{host}}/pair. Scrie codul pe care îl arată și alege ce ecran să fie.",
+    "instructions": "Ca să arăți aici un ecran Norless, roagă pe cineva din echipă să asocieze dispozitivul cu acest cod.",
+    "code": "Cod de asociere",
+    "screen": "Ecran",
+    "pair": "Asociază",
+    "unknownCode": "Niciun dispozitiv nu arată acest cod. Codurile se schimbă la 5 minute.",
+    "paired": "Dispozitive asociate",
+    "pairedBy": "asociat de {{name}} pe {{date}}",
+    "unpair": "Dezasociază",
+    "menu": "Asociază un dispozitiv…",
+    "qr": "Cod QR pentru asocierea dispozitivului de pe telefon",
+    "scan": "Sau scanează-l cu telefonul cuiva din echipă.",
+    "logIn": "Intră în cont ca să asociezi dispozitivul",
+    "onlyTeam": "Doar echipa poate asocia dispozitive ca ecrane."
+  },
+  "bibleCom": {
+    "menu": "Ferestrele bible.com…",
+    "title": "Proiecție bible.com",
+    "available": "Extensia de proiecție bible.com e gata. Alege fereastra în care merge fiecare limbă pe acest dispozitiv.",
+    "unavailable": "Proiecția bible.com nu e disponibilă. Ecranele Norless merg în continuare.",
+    "none": "Niciuna",
+    "window": "Fereastra {{n}}",
+    "all": "Toate ferestrele",
+    "openWindow": "Deschide mai întâi fereastra de proiecție bible.com {{n}}",
+    "failed": "Proiecția bible.com n-a primit slide-ul (cod {{status}})",
+    "verse": "Verset de pe bible.com: {{reference}}",
+    "back": "Înapoi la listă",
+    "notConnected": "Extensia bible.com nu e conectată.",
+    "install": "Instaleaz-o",
+    "connected": "Extensia bible.com e conectată.",
+    "connectedWindows": "Extensia bible.com e conectată, ferestrele {{windows}} deschise."
+  },
+  "app": {
+    "menu": "Meniu",
+    "more": "Altele",
+    "stage": "Scenă",
+    "team": "Echipă",
+    "backTo": "Înapoi la {{name}}"
+  },
+  "shortcuts": {
+    "title": "Scurtături de tastatură",
+    "letter": "O literă",
+    "search": "Caută cântări, și comenzi pentru echipă",
+    "add": "Adaugă cântarea găsită în listă sau rulează comanda",
+    "select": "Selectează o intrare din listă",
+    "move": "Mută intrarea selectată",
+    "live": "Trimite live intrarea selectată",
+    "next": "Slide-ul următor",
+    "previous": "Slide-ul anterior",
+    "blank": "Golește ecranele",
+    "remove": "Șterge intrarea selectată",
+    "save": "Salvează cântarea în editor",
+    "this": "Această listă"
+  },
+  "share": {
+    "copy": "Copiază linkul scurt",
+    "copied": "Link copiat"
+  },
+  "account": {
+    "title": "Contul meu",
+    "deleteHelp": "Ștergerea contului îți elimină numele, emailul și poza. Cântările și listele pe care le-ai adăugat rămân, fără numele tău.",
+    "logoutTitle": "Te deconectezi de la Norless?",
+    "everywhere": "Și pe celelalte dispozitive ale mele",
+    "countUsage": "Ajută la îmbunătățirea Norless: numără cum îl folosesc",
+    "countUsageHelp": "Norless numără ce se folosește, de exemplu cum ajung cântările pe ecrane și ce aspect se vede, ca să afle ce ajută și ce nu. Datele rămân în Norless și le vede doar echipa aplicației. Dacă oprești, se păstrează fără contul tău.",
+    "photo": {
+      "none": "Inițialele tale. O logare cu Google aduce poza din contul Google, sau încarcă una.",
+      "google": "Poza din contul tău Google, actualizată la fiecare logare cu Google și în fiecare săptămână.",
+      "own": "Poza ta.",
+      "initials": "Inițialele tale: nu se păstrează nicio poză.",
+      "upload": "Încarcă o poză",
+      "useInitials": "Folosește inițialele",
+      "useGoogle": "Folosește poza din Google",
+      "failed": "Poza nu a putut fi folosită. Încearcă un JPEG sau PNG."
+    }
+  },
+  "about": {
+    "title": "Despre Norless",
+    "what": "Norless păstrează cântările și listele unei biserici și le arată pe proiectoare, pe ecranele de pe scenă și pe telefoane în timpul serviciilor.",
+    "license": "Norless este software liber, sub licența GNU Affero General Public License, versiunea 3 sau mai nouă: oricine îl poate folosi, studia, modifica și distribui, iar cine rulează o versiune modificată pentru alții trebuie să-și publice modificările.",
+    "licenseLink": "Licența (GNU AGPL 3.0)",
+    "source": "Codul sursă al versiunii care rulează aici",
+    "noSource": "Serverul acesta nu are încă linkul către codul său sursă.",
+    "sounds": "Notația se aude cu sunete din FluidR3_GM de Frank Wen, sub licența Creative Commons Attribution 3.0.",
+    "soundsLicense": "Licența sunetelor (CC BY 3.0)"
+  },
+  "theme": {
+    "title": "Temă",
+    "help": "Culorile, fontul și sigla comunității, ca aplicația să se potrivească cu celelalte materiale. Ecranele proiectoarelor își păstrează aspectul lor.",
+    "color": "Culoarea principală",
+    "tint": "Fundalul (modul luminos)",
+    "reset": "Resetează",
+    "font": "Font",
+    "logo": "Sigla (până la 200 KB)",
+    "removeLogo": "Șterge sigla",
+    "save": "Salvează tema",
+    "problems": {
+      "color": "Textul alb pe culoarea principală s-ar citi greu. Alege o culoare mai închisă.",
+      "tint": "Textul pe acest fundal s-ar citi greu. Alege un fundal mai deschis.",
+      "soft": "Textul în culoarea principală s-ar citi greu pe acest fundal.",
+      "bigLogo": "Sigla are mai mult de 200 KB.",
+      "bigFont": "Fișierul fontului are mai mult de 300 KB."
+    },
+    "fontFile": "Fișierul fontului (.woff2, până la 300 KB)",
+    "fontFileHelp": "Fără el, cine nu are fontul instalat vede fontul sistemului. Pentru Switzer, descarcă kitul de pe fontshare.com și alege fișierul .woff2 variabil.",
+    "fontFileSet": "Norless servește singur acest fișier de font."
+  },
+  "install": {
+    "title": "Instalează Norless",
+    "why": "Instalează Norless ca să aibă fereastra și iconița lui și să se deschidă și fără rețea.",
+    "install": "Instalează aplicația",
+    "notNow": "Nu acum",
+    "ok": "OK",
+    "ios": "Instalează Norless: apasă Partajează, apoi Adaugă pe ecranul principal.",
+    "macSafari": "Instalează Norless: în Safari, alege Fișier, apoi Adaugă în Dock."
+  },
+  "start": {
+    "communities": "Comunități"
+  },
+  "privacy": {
+    "title": "Confidențialitate",
+    "intro": "Norless păstrează cântările, listele și ce e live pentru biserici. Ca oamenii să poată intra în cont și lucra împreună, păstrează puține date despre ei. Pagina aceasta spune ce, de ce, cât timp și pe cine poți întreba.",
+    "responsibleTitle": "Cine răspunde de datele tale",
+    "responsible": "Fiecare comunitate răspunde de datele personale ale oamenilor ei și hotărăște la ce sunt folosite. Scrie-i pentru orice întrebare:",
+    "noContact": "contactul nu e încă setat",
+    "operator": "Serverul acesta e administrat de {{operator}}, care prelucrează datele în numele comunităților.",
+    "services": "Folosește aceste servicii:",
+    "keptTitle": "Ce păstrează Norless",
+    "kept": {
+      "account": "Contul tău: numele și adresa de email, până când tu sau un proprietar îl ștergeți.",
+      "google": "Dacă intri cu Google: doar numele, adresa de email și poza de profil pe care Google le dă lui Norless, nimic altceva din contul tău Google. Norless păstrează o copie mică a pozei ca avatar, pe care o văd membrii comunității tale, și adresa pozei, ca s-o copieze din nou în fiecare săptămână; în Contul meu poți încărca alta sau folosi inițialele. Pentru asta, pagina de autentificare încarcă autentificarea Google de la accounts.google.com, așa că Google află că pagina a fost deschisă; nicio altă pagină din Norless nu încarcă nimic de la Google.",
+      "history": "Cine ce a făcut: fiecare modificare a cântărilor, listelor, setărilor, membrilor și înregistrărilor, cu cine a făcut-o, când și ce era înainte, pe care proprietarii o pot citi; și când s-au cântat cântările. Dacă îți ștergi contul, modificările tale rămân fără numele tău.",
+      "sessions": "Autentificarea: un cod aleatoriu într-un singur cookie, timp de 30 de zile, reînnoit cât folosești Norless; deconectarea îl încheie.",
+      "links": "Linkurile de autentificare trimise pe email: merg o singură dată, 15 minute (invitațiile o săptămână), și se șterg la o zi după ce expiră.",
+      "preferences": "Preferințele tale: aspectul, culorile și mărimea textului pentru fiecare tip de dispozitiv.",
+      "usage": "Cum e folosit Norless: ce s-a folosit, când și pe ce tip de dispozitiv și aspect, cu contul tău, dacă nu oprești asta din Contul meu. Rămân în Norless pentru totdeauna; le vede doar echipa aplicației.",
+      "online": "Cât ești conectat, că ești online și pe ce tip de dispozitiv; asta nu se păstrează.",
+      "logs": "Jurnalele serverului: adresele IP și paginile cerute, păstrate câteva zile, ca să găsim probleme.",
+      "backups": "Copii de siguranță: copii ale tuturor acestora, păstrate 14 zile pe server și copiate pe calculatorul administratorului.",
+      "recordings": "Înregistrări: ce a înregistrat echipa la repetiții și servicii, cu cine a înregistrat și cine poate asculta; păstrate până le șterge cine le-a înregistrat sau un proprietar."
+    },
+    "why": "Toate acestea servesc ca să poți intra în cont, ca echipa să lucreze împreună și să vadă cine a făcut ce, și ca Norless să țină minte cum îți place.",
+    "visitors": "Dacă folosești Norless fără cont, păstrează doar jurnalele serverului și cum e folosit, fără nimic care să spună cine ești; alegerile tale rămân în browserul tău.",
+    "cookiesTitle": "Cookie-uri",
+    "cookies": "Norless setează un singur cookie, pentru autentificare, și doar când intri în cont. Fără reclame, fără urmărire, fără statistici, iar fonturile și imaginile vin chiar de la Norless, deci nu e nevoie de banner pentru cookie-uri.",
+    "rightsTitle": "Drepturile tale",
+    "rights": "Ca să vezi sau să primești o copie a datelor tale ori să le corectezi, scrie comunității tale.",
+    "delete": "Ca să-ți ștergi contul, alege „Șterge-mi contul…” din meniul contului: numele și emailul se șterg și ești deconectat peste tot. Ce ai adăugat rămâne, fără numele tău. Copiile de siguranță cu datele tale dispar în cel mult 14 zile."
+  },
+  "classic": {
+    "newSong": "Cântare nouă",
+    "more": "Altele",
+    "back": "Înapoi la listă",
+    "goLive": "Proiectează"
+  },
+  "feedback": {
+    "open": "Idei și păreri",
+    "new": "Trimite o idee",
+    "label": "Ideea ta, sau ce ar putea merge mai bine",
+    "send": "Trimite",
+    "cancel": "Renunță",
+    "close": "Închide",
+    "thanks": "Mulțumim! Proprietarii comunității o vor citi și îți pot răspunde pe email.",
+    "title": "Idei și păreri",
+    "showArchived": "Arată și arhivate",
+    "empty": "Nicio idee încă",
+    "noArchived": "Nimic arhivat",
+    "emptyHelp": "Membrii trimit idei și păreri din meniu; apar aici și pe email.",
+    "someone": "Cineva care a plecat",
+    "archive": "Arhivează",
+    "restore": "Readu",
+    "ownersOnly": "Doar proprietarii pot citi ideile și părerile.",
+    "to": "Trimite către",
+    "toOwners": "Proprietarii comunității",
+    "toApp": "Echipa aplicației Norless",
+    "thanksApp": "Mulțumim! Cei care fac Norless o vor citi și îți pot răspunde pe email.",
+    "appTitle": "Idei pentru aplicația Norless",
+    "appOnly": "Doar echipa aplicației Norless poate citi aceste idei.",
+    "appMenu": "Idei pentru aplicație"
+  },
+  "bible": {
+    "title": "Biblia",
+    "help": "Versiunea de pe bible.com la care duc referințele biblice din liste, pentru fiecare limbă.",
+    "other": "Alta…",
+    "id": "Numărul versiunii pe bible.com",
+    "idHelp": "Numărul de după /bible/ din linkul versiunii, de ex. 191 în bible.com/bible/191/JHN.3.16",
+    "save": "Salvează versiunile"
+  },
+  "usage": {
+    "title": "Utilizare",
+    "menu": "Utilizare",
+    "appOnly": "Doar echipa aplicației Norless vede utilizarea.",
+    "csv": "Descarcă CSV",
+    "unusedTitle": "Nefolosite în 30 de zile",
+    "unusedHelp": "Pentru fiecare comunitate, modurile pe care nu le-a folosit nimeni în ultimele 30 de zile, dintre cele pe care le arată funcțiile ei.",
+    "allUsed": "Totul a fost folosit.",
+    "last": "ultima dată {{date}}",
+    "never": "niciodată",
+    "timelineTitle": "În timp",
+    "feature": "Funcție",
+    "by": "Arată",
+    "byWeek": "Pe săptămână",
+    "byDay": "Pe zi",
+    "day": "Ziua",
+    "week": "Săptămâna din",
+    "total": "Total",
+    "service": "Serviciu",
+    "noEvents": "Nimic numărat încă",
+    "noEventsHelp": "Utilizările apar aici după ce oamenii folosesc Norless.",
+    "serviceTitle": "Un serviciu",
+    "noServices": "Niciun serviciu încă",
+    "noServicesHelp": "Serviciile unei comunități vin din program, în setările ei.",
+    "uncounted": "nenumărat"
+  },
+  "deviceLogin": {
+    "withPhone": "Intră cu telefonul",
+    "withPhoneHelp": "Îndreaptă camera telefonului spre acest cod, pe un telefon unde ești conectat la Norless. Nimic de scris aici.",
+    "qr": "Cod QR pentru a intra de pe telefon",
+    "code": "Cod",
+    "number": "Telefonul arată același număr:",
+    "title": "Conectează un dispozitiv",
+    "logInFirst": "Intră mai întâi pe acest telefon",
+    "checkNumber": "Acesta e numărul de pe dispozitiv?",
+    "asMe": "Conectează-l ca mine",
+    "asMeHelp": "Pentru 30 de zile, ca tine, ca orice conectare.",
+    "asLaptop": "Ca laptopul comunității",
+    "asLaptopHelp": "Doar rolul de echipă, până se închide browserul sau trec 12 ore. Modificările lui apar ca Laptop ({{name}}).",
+    "asGuest": "Ca muzician invitat",
+    "asGuestHelp": "Rolul de echipă pentru 4 ore pe telefonul invitatului, arătat ca „<nume> (invitat de {{name}})”.",
+    "guestName": "Numele invitatului",
+    "done": "Dispozitivul e conectat.",
+    "gone": "Codul a expirat sau a fost folosit. Uită-te pe dispozitiv: arată unul nou.",
+    "another": "Conectează alt dispozitiv",
+    "codeHelp": "Scrie codul pe care îl arată pagina lui de intrare.",
+    "continue": "Continuă",
+    "nearby": "Conectezi laptopul de la {{community}}?",
+    "review": "Verifică",
+    "notNow": "Nu acum",
+    "devicesTitle": "Dispozitive pe care le-ai conectat",
+    "until": "până la {{time}}",
+    "end": "Încheie",
+    "thisDevice": "Acest dispozitiv a fost conectat de pe un telefon. Conectarea se încheie singură, sau cu Ieșire.",
+    "guestTitle": "Un muzician invitat",
+    "guestHelp": "Un cod QR de arătat unui invitat: îi conectează telefonul cu rolul de echipă pentru 4 ore.",
+    "showGuestQr": "Arată un cod QR pentru invitat",
+    "guestQr": "Cod QR pentru telefonul invitatului",
+    "guestScan": "Invitatul îl scanează cu camera telefonului în 5 minute. Merge o singură dată.",
+    "guestJoin": "Intri ca {{name}} pentru 4 ore?",
+    "passGone": "Codul QR a expirat sau a fost folosit. Cere unul nou.",
+    "guestOpened": "Deschis pe un telefon. Se așteaptă ca {{name}} să intre.",
+    "guestIn": "{{name}} a intrat, până la {{time}}.",
+    "guestExpired": "Acest cod QR a expirat după 5 minute nefolosit.",
+    "guestAgain": "Cod QR nou",
+    "guestDone": "Gata",
+    "scan": "Scanează cu telefonul",
+    "cantScan": "Nu poți scana? Scrie un cod",
+    "typeCode": "Pe telefon, la Conectează alt dispozitiv din Contul meu, scrie:"
+  },
+  "hints": {
+    "label": "Sfat",
+    "goLive": "Dublu clic pe o intrare, sau selecteaz-o și apasă Proiectează, ca s-o pui pe ecran.",
+    "search": "Scrie oriunde ca să cauți o cântare; Enter o adaugă pe prima în listă.",
+    "keys": "Page Down sau → merge la slide-ul următor, Page Up sau ← înapoi, iar Esc golește ecranele. Merge și cu un clicker.",
+    "project": "Butonul unui proiector îl deschide pe tot ecranul, pe al doilea monitor.",
+    "gotIt": "Am înțeles"
+  },
+  "export": {
+    "print": "Tipărește",
+    "html": "Salvează ca HTML",
+    "copy": "Copiază ca text",
+    "language": "Limba",
+    "help": "Cântările în ordinea din listă, fără acorduri; o cântare care nu e în această limbă vine în cea pe care o are.",
+    "copied": "Copiat. Lipește-l într-un chat sau într-un document.",
+    "contents": "Cuprins",
+    "top": "Sus",
+    "theme": "Luminos sau întunecat",
+    "printFrame": "Lista de tipărit"
+  },
+  "update": {
+    "label": "Versiune nouă",
+    "ready": "O versiune nouă a Norless e gata.",
+    "reload": "Reîncarcă"
+  },
+  "chords": {
+    "title": "Acorduri: {{title}}",
+    "open": "Acorduri",
+    "addToSong": "Adaugă acorduri",
+    "hint": "Atinge o literă ca să pui un acord deasupra ei; atinge o literă cu acord ca să-l schimbi sau să-l ștergi. Nimic nu se schimbă până nu salvezi.",
+    "refused": "Aici se pot schimba doar acordurile, barele de măsură și notele. Cuvintele le schimbă editorii, în editorul de cântări.",
+    "repeat": "Repetă o parte de mai sus.",
+    "tempo": "Tempo (BPM)",
+    "tap": "Bate ritmul",
+    "over": "Acord peste „{{word}}”",
+    "change": "Schimbă {{chord}}",
+    "other": "Alt acord",
+    "otherHint": "G, F#m7, Re m…",
+    "add": "Adaugă",
+    "remove": "Șterge",
+    "reference": "Adaugă o înregistrare după care se învață",
+    "referenceHelp": "Un link https, de exemplu un video YouTube; titlul și imaginea se iau din el",
+    "linkTitle": "Titlu",
+    "removeLink": "Șterge linkul",
+    "addLink": "Adaugă",
+    "scope": {
+      "label": "Unde se aplică schimbarea",
+      "only": "Doar aici",
+      "all": {
+        "verse": "Toate strofele",
+        "refrain": "Toate refrenele",
+        "bridge": "Toate punțile",
+        "pre-chorus": "Toate prerefrenele",
+        "intro": "Toate introurile",
+        "ending": "Toate finalurile",
+        "other": "Toate părțile ca aceasta"
+      }
+    },
+    "moveLeft": "Mută acordul cu o literă la stânga",
+    "moveRight": "Mută acordul cu o literă la dreapta",
+    "beatsOf": "Timpii pentru {{chords}}",
+    "beatEnd": "Unde se termină {{chord}}"
+  },
+  "history": {
+    "title": "Istoric",
+    "empty": "Nicio schimbare salvată în Norless încă.",
+    "saved": "{{name}}, {{when}}",
+    "someone": "Cineva",
+    "restore": "Readu cum era înainte",
+    "confirmRestore": "Readuci cântarea cum era înainte de această schimbare? Versiunea de acum rămâne în istoric.",
+    "notRestored": "Cântarea nu a fost readusă. Verifică conexiunea și încearcă din nou.",
+    "key": "Tonalitate: {{from}} → {{to}}",
+    "time": "Măsură: {{from}} → {{to}}",
+    "tempo": "Tempo: {{from}} → {{to}}",
+    "tags": "Etichete: {{from}} → {{to}}",
+    "titleIn": "Titlu în {{language}}: {{from}} → {{to}}",
+    "textIn": "Textul în {{language}}",
+    "none": "(nimic)",
+    "authors": "Autori: {{from}} → {{to}}",
+    "copyright": "Drepturi de autor: {{from}} → {{to}}",
+    "source": "Sursa: {{from}} → {{to}}",
+    "links": "Înregistrări: {{from}} → {{to}}"
+  },
+  "keys": {
+    "forService": "Tonalitatea pentru acest serviciu",
+    "forThisService": "Tonalitate",
+    "songIn": "Cântarea e în {{key}}. Tonalitatea aleasă aici e doar pentru această listă.",
+    "songWithout": "Cântarea nu are încă tonalitate.",
+    "useSongKey": "Folosește tonalitatea cântării",
+    "makePermanent": "Fă-o tonalitatea cântării",
+    "notSaved": "Tonalitatea nu a fost salvată. Verifică conexiunea și încearcă din nou.",
+    "same": "aceeași tonalitate",
+    "up": "cu {{count}} semitonuri mai sus",
+    "up_one": "cu 1 semiton mai sus",
+    "down": "cu {{count}} semitonuri mai jos",
+    "down_one": "cu 1 semiton mai jos",
+    "change": "Schimbă tonalitatea",
+    "changeHelp": "Acordurile se mută odată cu tonalitatea, în toate limbile.",
+    "newKey": "Tonalitatea nouă",
+    "serviceChip": "{{key}} (cântarea: {{song}})",
+    "fromBefore": "{{from}} → {{to}}, {{change}}"
+  },
+  "instruments": {
+    "capo": "Capodastru {{fret}}",
+    "noCapo": "Fără capodastru",
+    "capoDown": "Capodastru cu o tastă mai jos",
+    "capoUp": "Capodastru cu o tastă mai sus",
+    "shapes": "forme de {{key}}",
+    "numbers": "Cifre",
+    "bass": "Bas",
+    "map": "Cântarea pe măsuri",
+    "bars": "{{count}} măsuri",
+    "bars_one": "1 măsură",
+    "energy": {
+      "calm": "Liniștit",
+      "full": "Plin",
+      "building": "Crește"
+    },
+    "ends": "{{part}} se termină pe {{chord}} → {{next}} începe pe {{first}}",
+    "nextSong": "Următoarea cântare: {{title}}",
+    "diagrams": "Formele din această cântare",
+    "ask": "La ce cânți?",
+    "profile": "Muzician",
+    "profileHelp": "Instrumentele tale aleg aranjamentele pentru muzicieni; formele de chitară preferate aleg capodastrul.",
+    "play": "Cânt la",
+    "names": {
+      "guitar": "Chitară",
+      "keys": "Clape",
+      "bass": "Bas",
+      "drums": "Tobe",
+      "vocals": "Voce",
+      "other": "Altceva"
+    },
+    "main": "Instrumentul principal",
+    "guitarShapes": "Formele de chitară preferate",
+    "noteNames": "Numele acordurilor",
+    "chordColors": "Colorează acordurile după treapta lor în tonalitate",
+    "chordColorsHelp": "Fiecare acord are culoarea relativei lui (C și Am, F și Dm, G și Em), cel minor mai pal, și fiecare treaptă își păstrează culoarea în orice tonalitate: G în D și B♭ în F sunt amândouă treapta 4. Tonica rămâne simplă, acordurile din afara tonalității sunt magenta, iar o notă de bas după bară ia culoarea treptei ei.",
+    "naming": {
+      "community": "Cum alege comunitatea",
+      "letters": "Litere: C D E",
+      "solfege": "Do-Re-Mi",
+      "numbers": "Cifre: 1 4 5"
+    },
+    "settingsTitle": "Muzică",
+    "settingsHelp": "Cum numesc aranjamentele pentru muzicieni acordurile, pentru membrii care n-au ales. Cântările își păstrează acordurile în litere.",
+    "whatIPlay": "La ce cânt",
+    "done": "Gata",
+    "degrees": "Trepte:",
+    "suffixes": "Sufixe:"
+  },
+  "follow": {
+    "language": "Limba",
+    "both": "Ambele",
+    "smaller": "Text mai mic",
+    "larger": "Text mai mare",
+    "light": "Luminos",
+    "dark": "Întunecat",
+    "nothing": "Acum nu e nimic pe ecrane. Cântările apar aici pe măsură ce sunt proiectate.",
+    "next": "Urmează: {{title}}",
+    "qr": "Cod QR: urmărește cântările pe telefon",
+    "qrOnPage": "Cod QR pentru urmărit"
+  },
+  "recordings": {
+    "title": "Înregistrări",
+    "all": "Toate înregistrările",
+    "record": "Înregistrează",
+    "chooseInput": "Alege intrarea pentru înregistrare",
+    "start": "Începe înregistrarea",
+    "stop": "Oprește",
+    "help": "Înregistrează formația cu microfonul acestui dispozitiv sau cu altă intrare, cum ar fi mixerul. Fiecare cântare are fișierul ei, marcat cu părțile ei. Înregistrarea e a ta; ceilalți din echipă îți pot cere acces.",
+    "input": "Intrare",
+    "hears": "Nivelul intrării",
+    "inputN": "Intrarea {{n}}",
+    "noMicrophone": "Browserul nu are voie să folosească microfonul. Permite-l în setările browserului pentru acest site.",
+    "on": "Se înregistrează",
+    "onBy": "Se înregistrează · {{name}}",
+    "empty": "Nicio înregistrare încă",
+    "emptyHelp": "Înregistrează o repetiție sau un serviciu din vederea pentru muzicieni sau din bara de proiecție: fiecare cântare are un fișier pe care îl poți asculta de la orice parte.",
+    "by": "de {{name}}",
+    "from": "de pe {{device}}",
+    "mode": {
+      "service": "Serviciu",
+      "rehearsal": "Repetiție"
+    },
+    "status": {
+      "recording": "Se înregistrează acum",
+      "processing": "Se împarte pe cântări",
+      "ready": "Gata",
+      "failed": "Nu s-a salvat nimic"
+    },
+    "asking": "{{count}} cer acces",
+    "asking_one": "1 cere acces",
+    "requests": "Cer acces",
+    "access": {
+      "asked": "Cere",
+      "granted": "Poate asculta",
+      "refused": "Refuzat"
+    },
+    "grant": "Lasă-l să asculte",
+    "refuse": "Refuză",
+    "withdraw": "Retrage",
+    "noAccess": "Cere-i lui {{name}} să te lase să asculți.",
+    "askedHelp": "Ai cerut acces; apare aici când e acordat.",
+    "ask": "Cere acces",
+    "delete": "Șterge înregistrarea",
+    "confirmDelete": "Ștergi definitiv această înregistrare și sunetul ei?",
+    "kinds": {
+      "bible": "Citire din Biblie",
+      "divider": "Între cântări",
+      "text": "Text proiectat",
+      "none": "Nimic proiectat",
+      "song": "Cântare"
+    },
+    "parts": "Părți",
+    "download": "Descarcă"
+  },
+  "tempo": {
+    "listen": "Ascultă tempoul",
+    "chooseInput": "Alege intrarea pentru tempo",
+    "listenInstead": "Ascultă aici în locul lui {{name}}",
+    "listeningAt": "Ascultă · {{bpm}} BPM",
+    "start": "Începe să asculți",
+    "help": "Acest dispozitiv ascultă formația prin microfon sau altă intrare, cum ar fi un semnal de la mixer, și arată pe scenă când formația se abate de la tempoul cântării. Nimic nu se înregistrează sau trimite; doar semnalul ajunge pe ecrane.",
+    "fast": "Accelerează · {{measured}} → {{target}}",
+    "slow": "Încetinește · {{measured}} → {{target}}",
+    "measured": "Măsurat: {{bpm}} BPM",
+    "accept": "Folosește-l",
+    "settingsTitle": "Verificarea tempoului",
+    "settingsHelp": "Scena arată că formația accelerează sau încetinește după ce se abate atât de mult, atât timp.",
+    "percent": "Abatere (%)",
+    "seconds": "Timp de (secunde)"
+  },
+  "notation": {
+    "title": "Notație",
+    "of": "Notație pentru {{part}}",
+    "add": "Adaugă notație",
+    "edit": "Modifică notația",
+    "remove": "Șterge",
+    "apply": "Folosește notația",
+    "notes": "Note",
+    "grid": "Grilă de tobe",
+    "text": "Notație ABC",
+    "textHint": "Câteva măsuri în ABC: literele sunt note (C D E…, iar c d e cu o octavă mai sus), cifrele sunt durate, | sunt bare de măsură. Un clic pe o notă din previzualizare pune cursorul pe ea.",
+    "preview": "Previzualizare",
+    "play": "Redă",
+    "stop": "Oprește",
+    "error": "Rândul {{line}}, coloana {{column}}: {{message}}",
+    "meter": "Măsura",
+    "bars": "Măsuri",
+    "moreDrums": "Tomuri, crash și ride",
+    "cell": "Măsura {{bar}}, timpul {{beat}}, pasul {{step}}",
+    "drums": {
+      "crash": "Crash",
+      "hihat": "Hi-hat",
+      "ride": "Ride",
+      "highTom": "Tom sus",
+      "midTom": "Tom mijloc",
+      "snare": "Toba mică",
+      "floorTom": "Floor tom",
+      "kick": "Toba mare"
+    }
+  },
+  "opinions": {
+    "title": "Păreri despre cântări",
+    "like": "Îmi place",
+    "dislike": "Nu-mi place",
+    "liked": "Îți place",
+    "likes": "{{count}} aprecieri",
+    "likes_one": "1 apreciere",
+    "dislikes": "{{count}} dezaprobări",
+    "dislikes_one": "1 dezaprobare",
+    "reasons": "De ce nu le place membrilor",
+    "reason": "{{name}}: {{reason}}",
+    "dislikeTitle": "Nu-ți place această cântare",
+    "why": "De ce? (opțional)",
+    "exclude": "Exclude",
+    "excludeTitle": "Exclude această cântare",
+    "excludeHelp": "Căutarea nu o va mai găsi, iar pagina ei va arăta tuturor motivul tău. Listele care o au o păstrează. O poți include din nou.",
+    "excludeReason": "De ce nu se cântă aici",
+    "include": "Include din nou",
+    "excluded": "Nu se cântă aici",
+    "disliked": "Cântări care nu plac",
+    "noDisliked": "Nicio cântare nu are „Nu-mi place”",
+    "noDislikedHelp": "Când membrilor nu le place o cântare, pe pagina ei, apare aici cu motivele lor.",
+    "excludedSongs": "Cântări excluse",
+    "noExcluded": "Nicio cântare exclusă",
+    "noExcludedHelp": "Exclude o cântare de pe pagina ei sau din lista de mai sus când nu ar trebui cântată aici.",
+    "excludedBy": "Exclusă de {{name}} {{when}}",
+    "excludedAt": "Exclusă {{when}}"
+  },
+  "statistics": {
+    "title": "Statistici",
+    "help": "Doar serviciile: repetițiile nu se numără.",
+    "mostSung": "Cele mai cântate",
+    "period": "Perioada",
+    "last12": "Ultimele 12 luni",
+    "all": "Dintotdeauna",
+    "season": "Anotimpul",
+    "wholeYear": "Tot anul",
+    "seasons": {
+      "winter": "Iarna (ian., feb., dec.)",
+      "spring": "Primăvara",
+      "summer": "Vara",
+      "autumn": "Toamna"
+    },
+    "services": "{{count}} servicii",
+    "services_one": "1 serviciu",
+    "noServices": "Niciun serviciu în această perioadă",
+    "noServicesHelp": "Aici apar cântările cântate la servicii, cele mai cântate primele. Alege altă perioadă.",
+    "notLately": "Necântate de mult",
+    "notLatelyHelp": "Cântate la cel puțin 3 servicii, la niciunul în ultimele 6 luni.",
+    "noneForgotten": "Nicio cântare uitată",
+    "noneForgottenHelp": "Toate cântările cântate la cel puțin 3 servicii au fost cântate în ultimele 6 luni.",
+    "songHistory": "Servicii",
+    "neverSung": "Încă necântată la un serviciu.",
+    "sungIn": "Cântată la {{count}} servicii, prima dată pe {{first}}, ultima dată {{last}}",
+    "sungIn_one": "Cântată la 1 serviciu, pe {{first}}",
+    "year": "{{year}}: {{count}}",
+    "membersOnly": "Doar membrii comunității văd statisticile."
+  },
+  "chapters": {
+    "title": "Capitole YouTube",
+    "start": "Început",
+    "firstAt": "Când începe prima intrare în video",
+    "firstAtHelp": "Cum o arată videoul, de exemplu 12:30 sau 1:02:05. Celelalte urmează la distanța lor reală.",
+    "text": "Capitole, pentru descrierea videoului",
+    "copy": "Copiază",
+    "copied": "Copiat",
+    "none": "Încă nu sunt capitole",
+    "noneHelp": "Se scriu când intrările listei sunt afișate în timpul unui serviciu.",
+    "fromStream": "Din transmisiunea live pornită la {{time}}; celelalte urmează la distanța lor reală. Schimbă dacă videoclipul a fost tăiat.",
+    "openVideo": "Deschide videoclipul",
+    "setChannel": "Setează canalul YouTube în setări, ca să se completeze din transmisiunea live"
+  },
+  "youtube": {
+    "title": "Canal YouTube",
+    "help": "Unde sunt transmise serviciile. Capitolele YouTube găsesc astfel transmisiunea live a serviciului și când începe în ea primul element.",
+    "label": "Adresa canalului sau @numele",
+    "example": "De ex. https://www.youtube.com/@biserica sau @biserica; gol pentru niciunul.",
+    "invalid": "Nu e un canal YouTube: lipește adresa lui sau @numele.",
+    "save": "Salvează canalul"
+  },
+  "rotation": {
+    "title": "Cântate des în ultima vreme",
+    "help": "Cântate la cel puțin 2 din ultimele 4 servicii.",
+    "none": "Nimic cântat prea des",
+    "noneHelp": "Nicio cântare n-a fost cântată la 2 din ultimele 4 servicii.",
+    "hint": "Cântată la {{count}} din ultimele {{of}} servicii",
+    "ofLast": "{{count}} din ultimele {{of}}"
+  },
+  "recap": {
+    "title": "{{year}} în cântări",
+    "songs": "{{count}} cântări",
+    "songs_one": "1 cântare",
+    "new": "{{count}} cântate prima dată",
+    "new_one": "1 cântată prima dată"
+  },
+  "grid": {
+    "title": "Ultimele 12 servicii",
+    "song": "Cântarea",
+    "sung": "Cântată",
+    "emptyHelp": "Când se cântă la servicii, aici apar duminicile fiecărei cântări."
+  },
+  "host": {
+    "title": "Prezentator",
+    "words": "Cuvintele prezentatorului",
+    "wordsFor": "Cuvintele prezentatorului: {{title}}",
+    "wordsHelp": "Ce spune prezentatorul în jurul acestei intrări. Le văd doar membrii, în pagina Prezentator.",
+    "wordsIn": "În {{language}}",
+    "membersOnly": "Doar membrii comunității văd cuvintele prezentatorului.",
+    "allLanguages": "Toate",
+    "now": "Acum",
+    "next": "Urmează",
+    "nothingLive": "Nimic nu e afișat",
+    "nothingLiveHelp": "Când echipa afișează o intrare, apare aici cu cuvintele prezentatorului și ce urmează."
+  },
+  "changes": {
+    "title": "Modificări",
+    "help": "Cine a modificat cântări, liste, setări, membri și înregistrări, și când, cu ce era înainte fiecare modificare. Doar proprietarii văd această pagină.",
+    "person": "Persoana",
+    "everyone": "Toată lumea",
+    "kind": "Despre",
+    "kinds": {
+      "all": "Tot",
+      "songs": "Cântări",
+      "playlists": "Liste",
+      "settings": "Setări",
+      "members": "Membri",
+      "recordings": "Înregistrări"
+    },
+    "actions": {
+      "insert": "Adăugat",
+      "update": "Modificat",
+      "remove": "Șters",
+      "restore": "Readus"
+    },
+    "norless": "Norless",
+    "deleted": "Un cont șters",
+    "moved": "mutat",
+    "edited": "modificat",
+    "on": "pornit",
+    "off": "oprit",
+    "switchedOn": "Pornite:",
+    "switchedOff": "Oprite:",
+    "older": "Modificări mai vechi",
+    "empty": "Încă nicio modificare",
+    "emptyHelp": "Modificările apar aici pe măsură ce oamenii editează cântări, liste și setări.",
+    "emptyFiltered": "Nimic nu se potrivește acestor alegeri. Alege Toată lumea sau Tot ca să vezi mai mult.",
+    "ownersOnly": "Doar proprietarii comunității îi văd modificările.",
+    "tables": {
+      "songs": "Cântare",
+      "song_versions": "Textul cântării",
+      "playlists": "Listă",
+      "entries": "Element din listă",
+      "members": "Membru",
+      "recordings": "Înregistrare",
+      "recording_access": "Acces la o înregistrare",
+      "screens": "Ecran",
+      "screen_devices": "Televizor asociat",
+      "pages": "Pagină",
+      "schedule_events": "Program",
+      "rooms": "Sală",
+      "communities": "Setările comunității"
+    },
+    "fields": {
+      "title": "Titlu",
+      "text": "Text",
+      "key_signature": "Tonalitate",
+      "time_signature": "Măsură",
+      "tags": "Etichete",
+      "bpm": "Tempo",
+      "authors": "Autori",
+      "copyright": "Drepturi de autor",
+      "source_url": "Sursa",
+      "reference_links": "Înregistrările după care se învață",
+      "excluded_reason": "Exclusă pentru că",
+      "name": "Nume",
+      "roles": "Roluri",
+      "status": "Stare",
+      "kind": "Fel",
+      "planned_minutes": "Minute planificate",
+      "host_words": "Cuvintele gazdei",
+      "url": "Adresă",
+      "show_qr": "Cod QR",
+      "type": "Tip",
+      "languages": "Limbi",
+      "layout": "Aranjare",
+      "settings": "Setări de afișare",
+      "theme": "Temă",
+      "privacy": "Nota de confidențialitate",
+      "weekday": "Ziua",
+      "start_time": "Începe",
+      "end_time": "Se termină",
+      "date": "Data",
+      "archived_at": "Arhivată",
+      "language": "Limba",
+      "mode": "Mod",
+      "switches": "Funcții",
+      "welcome": "Pagina de bun venit"
+    },
+    "reordered": "Aceleași elemente, în altă ordine"
+  },
+  "misses": {
+    "title": "Căutate, negăsite",
+    "help": "Ce au căutat oamenii în ultimele 90 de zile fără să găsească o cântare. Nu se păstrează cine a căutat.",
+    "none": "Nu lipsește nimic",
+    "noneHelp": "Căutările care nu găsesc nicio cântare apar aici, ca să poți adăuga ce caută oamenii.",
+    "times_one": "o dată, {{last}}",
+    "times_other": "de {{count}} ori, ultima dată {{last}}",
+    "newSong": "Cântare nouă"
+  },
+  "lookAhead": {
+    "earlier": "Cântarea dinainte",
+    "later": "Cântarea de după",
+    "hint": "Vezi cântările dinainte și de după, doar pe acest dispozitiv",
+    "looking": "Te uiți la {{title}}: doar pe acest dispozitiv",
+    "back": "Înapoi la ce e live"
+  },
+  "rooms": {
+    "title": "Săli",
+    "menu": "Sala: {{room}}",
+    "main": "Sala principală",
+    "mainWithOthers_one": "Sala principală · 1 sală de repetiție",
+    "mainWithOthers_other": "Sala principală · {{count}} săli de repetiție",
+    "practice": "Repetiție · {{name}}",
+    "start": "Pornește o sală de repetiție",
+    "startHelp": "O sală a ei lângă serviciu, pentru repetiția trupei sau o întâlnire a copiilor: slide-urile ei nu ating ecranele principale. Se termină când o închizi, sau după 4 ore fără schimbări.",
+    "playlist": "Lista",
+    "counts": "Contează ca",
+    "rehearsal": "Repetiție",
+    "service": "Serviciu",
+    "startButton": "Pornește",
+    "invite": "Arată linkul și codul QR",
+    "inviteHelp": "Ecranele și invitații îl deschid ca să urmărească sala.",
+    "qr": "Cod QR pentru a urmări sala de repetiție",
+    "asService": "Contează ca serviciu",
+    "asRehearsal": "Contează ca repetiție",
+    "end": "Închide sala",
+    "confirmEnd": "Închizi sala de repetiție pentru toți cei din ea?",
+    "ended": "Această sală de repetiție s-a închis",
+    "toCommunity": "La comunitate",
+    "joinTitle": "O sală de repetiție",
+    "join": "Urmărește această sală",
+    "joinedHelp": "Acest dispozitiv urmărește sala de repetiție. Deschide o vedere:",
+    "playlistLink": "Lista",
+    "following": "Sală de repetiție",
+    "leave": "Înapoi la sala principală"
+  },
+  "featureTree": {
+    "title": "Funcții",
+    "help": "Tot ce poate face Norless, fiecare funcție după cea de care are nevoie. Atinge una ca să vezi ce face și ca s-o ceri proprietarilor.",
+    "helpOwner": "Fiecare funcție, după cea de care are nevoie. Atinge o funcție ca s-o pornești sau s-o oprești pentru toți. Membrii îți pot cere una de aici.",
+    "switch": "Pornită pentru toți",
+    "path": "Dacă o pornești, pornesc și: {{names}}",
+    "note": "De ce ți-ar folosi (opțional)",
+    "ask": "Cere-le proprietarilor",
+    "askAgain": "Actualizează cererea",
+    "withdraw": "Retrage",
+    "asked": "Cereri: {{count}}",
+    "asked_one": "1 cerere",
+    "state": {
+      "planned": "Planificată",
+      "always": "Mereu pornită",
+      "on": "Pornită",
+      "off": "Oprită",
+      "locked": "Are nevoie de {{name}}",
+      "new": "Nouă, încă nepornită"
+    },
+    "membersOnly": "Arborele de funcții e pentru membrii comunității.",
+    "askedTitle": "Funcții cerute",
+    "askedNone": "Nimeni n-a cerut încă o funcție.",
+    "open": "Deschide arborele de funcții",
+    "newFeature": "{{name}}: {{adds}}",
+    "branches": {
+      "screens": "Ecrane",
+      "live": "Live",
+      "stage": "Scenă",
+      "chords": "Acorduri",
+      "songs": "Cântări",
+      "stats": "Statistici",
+      "app": "Aplicație",
+      "team": "Echipă"
+    },
+    "branchesTitle": "Ramuri",
+    "marksTitle": "Semne",
+    "marks": {
+      "locked": "Are nevoie de funcția dinainte",
+      "planned": "Plănuită",
+      "new": "Nouă"
+    },
+    "pan": "Trage ca să vezi tot graficul",
+    "onTheirOwn": "Funcții de sine stătătoare"
+  },
+  "features": {
+    "feedback": {
+      "name": "Idei și păreri",
+      "adds": "Membrii le trimit proprietarilor idei și păreri."
+    },
+    "deviceLogin": {
+      "name": "Conectare de pe telefon",
+      "adds": "Conectezi laptopul cu telefonul, prin cod QR sau un cod."
+    },
+    "export": {
+      "name": "Tipărire și copiere",
+      "adds": "Tipărești, salvezi și copiezi versurile unei liste."
+    },
+    "appFrame": {
+      "name": "Meniul aplicației",
+      "adds": "Antetul și meniul aplicației: listele, căutarea și paginile cântărilor."
+    },
+    "layouts": {
+      "name": "Aspecte pe laptop",
+      "adds": "Controller, Ordinea serviciului și Mare pe laptop, cu previzualizarea ecranelor, butoane pentru părți și starea de serviciu sau repetiție."
+    },
+    "textSlides": {
+      "name": "Slide-uri de text",
+      "adds": "Slide-uri cu textul tău într-o listă, cu minutele planificate."
+    },
+    "times": {
+      "name": "Ore",
+      "adds": "Cât a durat fiecare punct și când se termină serviciul."
+    },
+    "problems": {
+      "name": "Probleme",
+      "adds": "Avertismente despre ce poate merge prost, ca o traducere lipsă sau un ecran neconectat."
+    },
+    "commands": {
+      "name": "Comenzi de căutare",
+      "adds": "Comenzi scrise în căutare, ca o referință biblică sau un titlu."
+    },
+    "presence": {
+      "name": "Cine e aici",
+      "adds": "Cine are o listă deschisă și cine mută un punct."
+    },
+    "mediaKeys": {
+      "name": "Taste media",
+      "adds": "Tastele următor, anterior și redare ale tastaturii mută slide-urile."
+    },
+    "stageViews": {
+      "name": "Scenă și muzicieni",
+      "adds": "Monitorul de scenă cu mesaje și numărătoare inversă, și pagini pentru muzicieni și voci."
+    },
+    "liveNotice": {
+      "name": "Cine a schimbat slide-ul",
+      "adds": "Cine a schimbat slide-ul și ultima schimbare live."
+    },
+    "screenMenu": {
+      "name": "Meniul de ecrane",
+      "adds": "Deschizi un ecran pe afișajul ales sau asociezi un televizor cu un cod."
+    },
+    "touchLayouts": {
+      "name": "Aspecte pe tabletă și telefon",
+      "adds": "Controlezi serviciul de pe tabletă sau telefon."
+    },
+    "chords": {
+      "name": "Modul Acorduri",
+      "adds": "Muzicienii adaugă cântărilor acorduri, note și tempoul."
+    },
+    "history": {
+      "name": "Istoricul cântării",
+      "adds": "Fiecare salvare a unei cântări, cine a făcut-o, și revenirea la una anterioară."
+    },
+    "notation": {
+      "name": "Notație",
+      "adds": "Un intro, un riff sau un ritm scris în note, care se poate asculta."
+    },
+    "instruments": {
+      "name": "Aspecte pe instrument",
+      "adds": "Profiluri de muzician, aspecte pentru chitară, clape, bas și tobe, și tonalități pentru un serviciu."
+    },
+    "recordings": {
+      "name": "Înregistrări",
+      "adds": "Formația înregistrează repetițiile și serviciile."
+    },
+    "tempoCheck": {
+      "name": "Verificarea tempoului",
+      "adds": "Un dispozitiv ascultă formația, iar scena arată când se abate de la tempoul cântării."
+    },
+    "screens": {
+      "name": "Ecrane",
+      "adds": "Ecrane cu linkuri proprii și suprapunerea pentru transmisiune."
+    },
+    "projectHere": {
+      "name": "Proiectează aici",
+      "adds": "Proiectezi slide-urile pe acest dispozitiv."
+    },
+    "followAlong": {
+      "name": "Urmărire pe telefon",
+      "adds": "Oricine urmărește cântările pe telefon, la adresa comunității sau cu un cod QR."
+    },
+    "shortLinks": {
+      "name": "Linkuri scurte",
+      "adds": "Linkuri scurte către liste, cântări și ecrane."
+    },
+    "sideBySide": {
+      "name": "Una lângă alta",
+      "adds": "Două limbi una lângă alta în editorul de cântări."
+    },
+    "install": {
+      "name": "Instalarea aplicației",
+      "adds": "Instalezi Norless ca aplicație pe telefon și laptop."
+    },
+    "theme": {
+      "name": "Culorile comunității",
+      "adds": "Culorile și fontul comunității în aplicație."
+    },
+    "shortcuts": {
+      "name": "Scurtături de tastatură",
+      "adds": "Lista scurtăturilor de tastatură."
+    },
+    "songFeedback": {
+      "name": "Aprecieri",
+      "adds": "Membrii apreciază sau nu cântările; proprietarii pot exclude una."
+    },
+    "referenceLink": {
+      "name": "Înregistrări de referință",
+      "adds": "Înregistrări după care se învață o cântare, cu link pe pagina ei."
+    },
+    "credits": {
+      "name": "Autori și drepturi",
+      "adds": "Autorii, drepturile de autor și sursa unei cântări."
+    },
+    "statistics": {
+      "name": "Statistici",
+      "adds": "Cele mai cântate cântări și serviciile în care s-a cântat fiecare."
+    },
+    "rotation": {
+      "name": "Rotație",
+      "adds": "Un semn pe cântările cântate în majoritatea ultimelor servicii."
+    },
+    "yearRecap": {
+      "name": "Anul în cântări",
+      "adds": "Cântările unui an dintr-o privire."
+    },
+    "servicesGrid": {
+      "name": "Grila serviciilor",
+      "adds": "Ultimele 12 servicii ca grilă."
+    },
+    "searchMisses": {
+      "name": "Căutări fără rezultat",
+      "adds": "Ce au căutat editorii și proprietarii și n-au găsit."
+    },
+    "chapters": {
+      "name": "Capitole YouTube",
+      "adds": "Capitole pentru videoclipul serviciului, după momentul în care fiecare punct a intrat live."
+    },
+    "chordColors": {
+      "name": "Culorile acordurilor",
+      "adds": "Acorduri colorate după treapta lor în tonalitate."
+    },
+    "host": {
+      "name": "Vederea prezentatorului",
+      "adds": "Cuvintele prezentatorului între cântări, cu ce urmează."
+    },
+    "changes": {
+      "name": "Modificări",
+      "adds": "Cine a schimbat ce și când, pentru proprietari."
+    },
+    "practiceRooms": {
+      "name": "Săli de repetiție",
+      "adds": "Săli lângă serviciul live, pentru o repetiție a formației sau o întâlnire a copiilor."
+    },
+    "midiChords": {
+      "name": "Acorduri de la pian",
+      "adds": "Cânți un acord pe un pian MIDI sau Bluetooth, iar Norless îl scrie în cântare."
+    },
+    "audioChords": {
+      "name": "Acorduri după ureche",
+      "adds": "Norless ascultă prin microfon sau mixer și numește acordul."
+    },
+    "chordWheel": {
+      "name": "Roata acordurilor",
+      "adds": "Un cerc al cvintelor care arată ce acord se cântă."
+    },
+    "liveChord": {
+      "name": "Acordul live",
+      "adds": "Muzicienii văd acordul pe care îl cântă pianistul, chiar atunci."
+    },
+    "chordHelper": {
+      "name": "Ajutor la acorduri",
+      "adds": "Cineva urmărește versurile cât cântă pianistul, iar fiecare acord ajunge acolo."
+    },
+    "fileSlides": {
+      "name": "Slide-uri din fișiere",
+      "adds": "PDF și imagini într-o listă, o pagină pe slide, cu un fișier pe limbă și un temporizator."
+    },
+    "melodia": {
+      "name": "Cântări de pe melodia.ro",
+      "adds": "Cauți și imporți cântări de pe melodia.ro."
+    },
+    "webhooks": {
+      "name": "Webhook-uri",
+      "adds": "Alte aplicații urmăresc serviciul: când un punct intră live, când începe și când se termină."
+    },
+    "offline": {
+      "name": "Fără internet",
+      "adds": "Cântările și cele mai noi liste păstrate pe un dispozitiv, ca să proiecteze fără internet, cu liste făcute acolo căutându-le."
+    },
+    "serviceRoles": {
+      "name": "Roluri în serviciu",
+      "adds": "Cine cântă, la ce instrument și cine slujește în fiecare serviciu, după un șablon pe eveniment săptămânal."
+    },
+    "signUps": {
+      "name": "Înscrieri",
+      "adds": "Membrii se înscriu pe locurile libere din program."
+    },
+    "blockouts": {
+      "name": "Zile indisponibile",
+      "adds": "Membrii marchează zilele în care lipsesc."
+    },
+    "pushNotifications": {
+      "name": "Notificări",
+      "adds": "Notificări pe telefon: când ești programat, mementouri și locuri libere."
+    },
+    "mySchedule": {
+      "name": "Programul meu",
+      "adds": "Serviciile și rolurile fiecărui membru."
+    },
+    "ledBy": {
+      "name": "Condus de",
+      "adds": "Cine conduce fiecare cântare: liderul de laudă al serviciului sau o voce aleasă de echipă, în listă și pe ecranele de scenă."
+    },
+    "churchCalendar": {
+      "name": "Calendarul bisericii",
+      "adds": "Ce urmează în calendarul bisericii, în Programul meu și în programul echipei, citit de la adresa lui iCal."
+    },
+    "playlistNews": {
+      "name": "Vești despre listă",
+      "adds": "Echipa le spune oamenilor unui serviciu că lista e gata, iar muzicienii află de cântările schimbate după."
+    },
+    "replays": {
+      "name": "Vezi din nou",
+      "adds": "Momentele fiecărei cântări în transmisiunile YouTube ale serviciilor: pe pagina ei, în intrările listelor trecute și în statistici."
+    },
+    "bigScreen": {
+      "name": "Ecran mare",
+      "adds": "Un aranjament de laptop pentru ferestre Full HD, QHD și 4K: toate ecranele și dispozitivele muzicienilor deodată, și informațiile sălii."
+    },
+    "welcome": {
+      "name": "Pagina de bun venit",
+      "adds": "O pagină pentru proiectoare înainte de serviciu: numele și logoul comunității, o numărătoare și anunțuri."
+    },
+    "insertBetween": {
+      "name": "Adaugă între rânduri",
+      "adds": "Un + între rândurile unei liste adaugă chiar acolo o cântare, un separator sau un text."
+    }
+  },
+  "detect": {
+    "title": "Cântă un acord",
+    "piano": "Folosește un pian",
+    "pianoStop": "Oprește pianul",
+    "bluetooth": "Conectează un pian Bluetooth",
+    "listen": "Ascultă",
+    "listenStop": "Nu mai asculta",
+    "chooseInput": "Alege ce să asculte",
+    "inputHelp": "Un microfon aude toată sala; intrarea de la mixer aude limpede un singur instrument.",
+    "bluetoothOn": "Pian Bluetooth: {{name}}",
+    "pianoOn": "Pian: {{name}}",
+    "noMidi": "Browserul acesta nu poate folosi un pian MIDI: Chrome sau Edge pe Android sau pe laptop pot. Ascultarea merge peste tot.",
+    "denied": "Norless nu are voie s-o folosească: permite-i din setările site-ului în browser.",
+    "plugIn": "Conectează un pian MIDI prin cablu sau unul Bluetooth.",
+    "how": "Apasă pe o literă, apoi cântă acordul: ajunge acolo când iei mâinile de pe clape. Cât asculți, acordul auzit e propus când apeși pe o literă.",
+    "playing": "Acordul cântat",
+    "wheel": "Cercul cvintelor",
+    "wheelOn": "Cercul cvintelor, se cântă {{chord}}",
+    "useHeard": "Folosește {{chord}}",
+    "share": "Împarte acordurile",
+    "shareStop": "Nu mai împărți ({{chord}})",
+    "fromPiano": "De la un pian MIDI",
+    "fromMixer": "De la mixer",
+    "fromMic": "De la un microfon",
+    "from": {
+      "midi": "De la pianul lui {{name}}",
+      "mixer": "De la mixer, prin dispozitivul lui {{name}}",
+      "mic": "De la microfonul lui {{name}}"
+    },
+    "nobody": "Nimeni nu împarte acum acordurile. Un membru al echipei le împarte din meniul Împarte acordurile al acestei pagini: de la un pian, de la mixer sau de la un microfon."
+  },
+  "team": {
+    "title": "Programul echipei",
+    "help": "Cine ce face la serviciile și repetițiile următoare. Echipa completează locurile; fiecare acceptă sau refuză ce e al lui.",
+    "membersOnly": "Programul echipei e pentru membrii comunității.",
+    "noEvents": "Încă nu sunt servicii săptămânale",
+    "noEventsHelp": "Programul urmează serviciile și repetițiile din Setări → Program.",
+    "toSettings": "Deschide programul serviciilor",
+    "addSlot": "Adaugă un loc",
+    "noSlots": "Încă nu sunt locuri pentru data aceasta.",
+    "noSlotsTeam": "Încă nu sunt locuri: adaugă, sau stabilește mai jos cu ce începe serviciul acesta.",
+    "who": "Cine la {{role}}",
+    "open": "Liber",
+    "asked": "Așteaptă răspuns",
+    "offered": "Se oferă",
+    "away": "Lipsește în ziua aceea",
+    "twice": "Două roluri în ziua aceea",
+    "personAway": "{{name}} (lipsește)",
+    "confirm": "Confirmă",
+    "turnDown": "Refuză",
+    "take": "Îl iau eu",
+    "offer": "Mă ofer",
+    "removeSlot": "Scoate locul acesta la {{role}}",
+    "templates": "Cu ce începe fiecare dată",
+    "templatesHelp": "Pentru fiecare serviciu sau repetiție săptămânală, locurile cu care începe fiecare dată; o dată anume o schimbi mai sus.",
+    "saveTemplate": "Salvează pentru {{name}}",
+    "people": "Cine ce face",
+    "peopleHelp": "Cei marcați pentru un rol iau imediat locurile libere și află când se eliberează unul. Cei care cântă la un instrument sunt deja marcați pentru rolul lui.",
+    "nobody": "Nimeni încă",
+    "choosePeople": "Alege oamenii",
+    "peopleFor": "Oameni pentru {{role}}",
+    "byInstrument": "Contează și cei care cântă la instrumentul lui în profilul de muzician.",
+    "mine": "Programul meu",
+    "yours": "Serviciile tale",
+    "noneYours": "Nimic pentru tine în săptămânile următoare.",
+    "also": "Și {{roles}} în ziua aceea",
+    "accept": "Accept",
+    "decline": "Refuz",
+    "openForYou": "Locuri libere pentru tine săptămâna aceasta",
+    "declineTitle": "Refuzi {{role}}?",
+    "why": "De ce (opțional)",
+    "awayTitle": "Zilele în care lipsești",
+    "awayHelp": "Echipa le vede când face programul.",
+    "from": "De la",
+    "to": "Până la",
+    "note": "Notă",
+    "addAway": "Adaugă",
+    "removeAway": "Scoate zilele acestea",
+    "push": "Notificări pe acest dispozitiv",
+    "pushInstall": "Notificările cer Norless instalat",
+    "pushInstallHow": "Pe iPhone: deschide Norless în Safari, apasă Partajează, apoi Adaugă pe ecranul principal; deschide-l de acolo și pornește notificările. Până atunci, noutățile apar aici și în partea de sus a paginilor.",
+    "pushOff": "Serverul acesta nu trimite încă notificări: noutățile apar aici și în partea de sus a paginilor.",
+    "pushOn": "Notificările sunt pornite pe acest dispozitiv.",
+    "pushTurnOn": "Pornește notificările",
+    "pushDenied": "Browserul le blochează: permite notificările pentru Norless din setările lui.",
+    "notifications": "Noutăți pentru tine",
+    "noNotifications": "Nimic încă.",
+    "pushSent": "Trimis pe dispozitivele tale: {{count}}",
+    "pushSent_one": "Trimis pe dispozitivul tău",
+    "pushFailed": "netrimis pe dispozitive: {{count}}",
+    "pushFailed_one": "netrimis pe 1 dispozitiv",
+    "pushGone": "dispozitive care au oprit notificările: {{count}}",
+    "pushGone_one": "1 dispozitiv a oprit notificările",
+    "pushKeys": "Doar aici: notificările pe telefon nu sunt încă pregătite",
+    "pushDevices": "Doar aici: niciun dispozitiv de-al tău n-a permis notificările",
+    "next": "Ești la {{role}}: {{when}}",
+    "unread": "{{count}} noutăți",
+    "unread_one": "1 noutate",
+    "today": "Azi: {{roles}}",
+    "roles": "Roluri",
+    "rolesHelp": "Rolurile unui serviciu, pentru programul echipei. Un rol pentru un instrument îi marchează pe cei care cântă la el.",
+    "roleName": "Nume",
+    "instrument": "Instrument",
+    "noInstrument": "Niciunul",
+    "addRole": "Adaugă un rol",
+    "removeRole": "Scoate {{role}}",
+    "told": {
+      "assigned": "Ești la {{role}}: {{when}}",
+      "unassigned": "Nu mai ești la {{role}}: {{when}}",
+      "reminder": "În 3 ore: {{role}}, {{when}}",
+      "open": "Loc liber: {{role}}, {{when}}",
+      "declined": "{{who}} nu poate la {{role}}: {{when}}",
+      "signedUp": "{{who}} se înscrie la {{role}}: {{when}}",
+      "offered": "{{who}} se oferă la {{role}}: {{when}}",
+      "confirmed": "Ești la {{role}}: {{when}}",
+      "notTaken": "{{role}}, {{when}}: echipa a ales pe altcineva",
+      "ready": "{{title}} e gata: {{count}} cântări",
+      "changed": "{{song}} s-a schimbat, în {{title}}"
+    },
+    "noDates": "Niciun serviciu în săptămânile următoare",
+    "noDatesHelp": "Programul arată serviciile și repetițiile din următoarele 8 săptămâni, din Setări → Program.",
+    "slotActions": "Acțiuni: locul pentru {{role}}",
+    "confirmRemoveSlot": "Elimini acest loc pentru {{role}}?",
+    "leadsSongs": "Conduce cântările",
+    "ledBy": "Conduce {{name}}",
+    "ledByMenu": "Conduce…",
+    "ledByTitle": "Cine conduce {{song}}",
+    "ledByLead": "{{name}}, liderul de laudă",
+    "ledByNone": "Nimeni ales",
+    "ledByHelp": "Din locurile acestui serviciu. Fără o alegere, conduce liderul de laudă.",
+    "ledByNobody": "Încă nu conduce și nu cântă nimeni în locurile acestui serviciu: le umple programul echipei."
+  },
+  "whatsNew": {
+    "open": "Ce e nou: {{count}}",
+    "new": "Nou în Norless: {{names}}",
+    "gotIt": "Am înțeles",
+    "many": "Nou în Norless: {{count}} funcții",
+    "many_one": "Nou în Norless: o funcție"
+  },
+  "calendar": {
+    "title": "În calendarul bisericii",
+    "failed": "Calendarul nu s-a putut citi acum; acestea sunt de mai devreme.",
+    "allDay": "Toată ziua",
+    "settingsTitle": "Calendarul bisericii",
+    "settingsHelp": "Membrii văd ce urmează în calendarul bisericii în Programul meu și în programul echipei. Lipește adresa lui iCal: în Google Calendar, setările calendarului, „Adresa secretă în format iCal”. Doar proprietarii văd adresa.",
+    "address": "Adresa iCal",
+    "addressHelp": "https://… sau webcal://…, citită din nou în fiecare oră.",
+    "invalid": "O adresă https:// sau webcal://.",
+    "notRead": "Nu s-a putut citi un calendar la această adresă.",
+    "read": "{{count}} evenimente urmează, citite la {{at}}.",
+    "read_one": "1 eveniment urmează, citit la {{at}}."
+  },
+  "offline": {
+    "keep": "Păstrează cântările pentru offline",
+    "keepHelp": "Acest dispozitiv păstrează toate cântările și cele mai noi liste, ca să proiecteze fără internet.",
+    "offWithout": "Nu e internet: oprit, acest dispozitiv uită cântările păstrate și nu le poate păstra din nou până nu revine internetul. Oprești totuși?",
+    "kept": "{{count}} cântări păstrate, la {{at}}.",
+    "kept_one": "1 cântare păstrată, la {{at}}.",
+    "title": "Offline",
+    "keptOn": "Păstrate pe acest dispozitiv la {{at}}: {{count}} cântări și {{playlists}} liste.",
+    "nothing": "Nimic păstrat pe acest dispozitiv",
+    "nothingHelp": "Cu internet, pornește „Păstrează cântările pentru offline” în Acest dispozitiv, sub comenzile live; apoi pagina aceasta le proiectează fără internet.",
+    "playlists": "Liste",
+    "project": "Proiectează",
+    "window": "Fereastra proiectorului",
+    "stop": "Oprește proiectarea",
+    "newPlaylist": "Listă nouă",
+    "newPlaceholder": "Foc de tabără",
+    "create": "Creează lista",
+    "remove": "Scoate {{title}}",
+    "search": "Adaugă o cântare",
+    "open": "Deschide ce a păstrat acest dispozitiv"
+  },
+  "news": {
+    "tell": "Spune-le că lista e gata",
+    "tellAgain": "Spune-le din nou",
+    "tellHelp": "Toți cei din locurile acestui serviciu află că lista e gata, în Norless și pe telefoanele cu notificări. Cântările schimbate după aceea le sunt spuse muzicienilor și vocilor.",
+    "toldBefore": "Spus la {{at}}.",
+    "told": "Am spus la {{count}} oameni.",
+    "told_one": "Am spus unui om.",
+    "nobody": "Încă nu e nimeni în locurile acestui serviciu: le umple programul echipei.",
+    "tellButton": "Spune-le"
+  },
+  "replays": {
+    "title": "Vezi din nou",
+    "watch": "Vezi în transmisiune",
+    "latest": "{{title}}: ultimul serviciu în transmisiune"
+  },
+  "slides": {
+    "add": "Slide-uri dintr-un fișier",
+    "page": "Slide-uri {{page}}/{{total}}",
+    "nextPage": "Pagina următoare",
+    "pages_one": "{{count}} pagină",
+    "pages_other": "{{count}} pagini",
+    "preparing": "Se pregătește {{pages}}/{{total}}",
+    "failed": "Fișierul nu a putut fi deschis",
+    "asPdf": "O prezentare se adaugă ca PDF: exportă-o mai întâi. PowerPoint: Fișier → Salvare ca → PDF. Keynote: Fișier → Exportă în → PDF. Google Slides și Canva: Descărcare → PDF.",
+    "closeHint": "Închide",
+    "addFor": "Adaugă un fișier pentru {{language}}",
+    "replaceFor": "Înlocuiește fișierul pentru {{language}}",
+    "removeFor": "Șterge fișierul pentru {{language}}",
+    "timer": "Pagina următoare la fiecare … secunde",
+    "seconds": "Secunde pe pagină",
+    "timerHelp": "Între 3 și 120. Pornește de la această intrare, reia după ultima pagină și se oprește când altceva intră live.",
+    "startTimer": "Pornește",
+    "stopTimer": "Oprește temporizatorul",
+    "download": "Descarcă fișierul",
+    "rename": "Redenumește slide-urile",
+    "title": "Titlu"
+  },
+  "bigScreen": {
+    "screens": "Ecranele sălii",
+    "people": "Dispozitivele muzicienilor și vocaliștilor",
+    "nobody": "Nu e deschisă acum nicio vedere de muzicieni sau vocaliști.",
+    "device": "{{name}} · {{layout}} · {{device}}",
+    "open": "Deschide {{name}} mai mare",
+    "screenSettings": "Setările acestui ecran",
+    "nextSong": "Cântarea următoare",
+    "noNextSong": "Nicio cântare după aceasta",
+    "room": "Sala",
+    "problems_one": "{{count}} problemă",
+    "problems_other": "{{count}} probleme",
+    "here": "Cine e aici"
+  },
+  "welcome": {
+    "name": "Bun venit",
+    "eventIn": "{{event}} începe în {{time}}",
+    "in": "Începe în {{time}}",
+    "at": "{{event}} · {{day}} la {{time}}",
+    "settings": "Pagina de bun venit",
+    "settingsHelp": "Apare pe proiectoare din meniul Pagini înainte de un serviciu: numele și logoul comunității, numărătoarea până la următorul serviciu sau repetiție și aceste anunțuri, unul după altul.",
+    "announcements": "Anunțuri",
+    "announcementsHelp": "Un rând gol între două anunțuri. Merge Markdown: **îngroșat**, # un titlu."
+  }
+}

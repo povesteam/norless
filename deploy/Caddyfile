@@ -1,0 +1,27 @@
+# HTTPS for every address, with certificates from Let's Encrypt.
+
+# A service, and during a deploy its candidate (deploy.sh): requests go to the service,
+# and to the candidate only while the service doesn't answer, as when it restarts on the
+# new version.
+(norless) {
+	reverse_proxy {args[0]}:3000 {args[0]}-candidate:3000 {
+		lb_policy first
+		lb_try_duration 10s
+		fail_duration 10s
+	}
+}
+
+norless.com {
+	encode zstd gzip
+	import norless norless
+}
+
+www.norless.com {
+	redir https://norless.com{uri} permanent
+}
+
+# The old app's addresses, once their DNS points here: the app sends each old link to
+# its new place, in Ukrainian for app-ua.
+app.norless.com, app-ua.norless.com {
+	import norless norless
+}

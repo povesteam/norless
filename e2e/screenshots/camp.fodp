@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:style style:name="big" style:family="paragraph"><style:paragraph-properties fo:text-align="center"/><style:text-properties fo:font-size="54pt" fo:font-weight="bold" fo:color="#ffffff" style:font-name="Carlito" fo:font-family="Carlito"/></style:style>
+  <style:style style:name="small" style:family="paragraph"><style:paragraph-properties fo:text-align="center"/><style:text-properties fo:font-size="30pt" fo:color="#f4d58d" style:font-name="Carlito" fo:font-family="Carlito"/></style:style>
+  <style:page-layout style:name="pm"><style:page-layout-properties fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/></style:page-layout>
+  <style:style style:name="dp" style:family="drawing-page"><style:drawing-page-properties draw:fill="solid" draw:fill-color="#14213d" draw:background-size="full"/></style:style>
+  <style:style style:name="gr" style:family="graphic"><style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle"/></style:style>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="M" style:page-layout-name="pm" draw:style-name="dp"/></office:master-styles>
+ <office:body><office:presentation>
+  <draw:page draw:name="1" draw:master-page-name="M" draw:style-name="dp"><draw:frame draw:style-name="gr" svg:x="1cm" svg:y="3cm" svg:width="26cm" svg:height="10cm"><draw:text-box><text:p text:style-name="big">Summer camp 2027</text:p><text:p text:style-name="small">July 12–18 · in the mountains</text:p></draw:text-box></draw:frame></draw:page>
+  <draw:page draw:name="2" draw:master-page-name="M" draw:style-name="dp"><draw:frame draw:style-name="gr" svg:x="1cm" svg:y="3cm" svg:width="26cm" svg:height="10cm"><draw:text-box><text:p text:style-name="big">Everyone from 12 years</text:p><text:p text:style-name="small">Sign up by June 1</text:p></draw:text-box></draw:frame></draw:page>
+  <draw:page draw:name="3" draw:master-page-name="M" draw:style-name="dp"><draw:frame draw:style-name="gr" svg:x="1cm" svg:y="3cm" svg:width="26cm" svg:height="10cm"><draw:text-box><text:p text:style-name="big">Questions?</text:p><text:p text:style-name="small">Ask Andrei after the service</text:p></draw:text-box></draw:frame></draw:page>
+ </office:presentation></office:body>
+</office:document>

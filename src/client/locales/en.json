@@ -1,0 +1,1776 @@
+{
+  "connection": {
+    "reconnecting": "Reconnecting…",
+    "offline": "Offline"
+  },
+  "notFound": {
+    "message": "This page doesn't exist.",
+    "home": "Go to the start page"
+  },
+  "song": {
+    "key": "Key: {{key}}",
+    "time": "Time: {{time}}",
+    "language": "Language",
+    "deleted": "This song was deleted.",
+    "createdBy": "Added by {{name}}",
+    "updatedBy": "Last edited by {{name}}",
+    "tempo": "Tempo: {{bpm}} BPM",
+    "references": "Recordings to learn it from",
+    "source": "Source",
+    "more": "More actions"
+  },
+  "search": {
+    "placeholder": "Search songs",
+    "empty": "No songs found",
+    "lastPlayed": "last played {{when}}",
+    "failed": "The search didn't work. Check the connection and try again.",
+    "bible": "Bible reference",
+    "addDivider": "Add “{{text}}” as a divider",
+    "newSong": "Create the song “{{title}}”",
+    "command": "Command",
+    "bibleHint": "Type a reference to add a passage, like {{example}}",
+    "lately": "Played lately",
+    "place": "After “{{title}}”",
+    "placeTop": "At the top",
+    "cancelPlace": "Add at the end instead"
+  },
+  "language": {
+    "label": "Interface language"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "email": "Email",
+    "notInvited": "Ask your community for an invitation to edit or control.",
+    "deleteAccount": "Delete my account…",
+    "confirmDelete": "Delete your account? Your name and email are removed, and you're logged out everywhere. Songs and playlists you added stay, without your name.",
+    "lastOwner": "You're the community's last owner. Make someone else an owner first.",
+    "emailLink": "Email me a login link",
+    "checkEmail": "Check your email: if {{email}} can log in, a link is on its way. It works once, for 15 minutes.",
+    "tooMany": "Several links were sent to this address just now. Use the latest one, or try again in 15 minutes.",
+    "linkHere": "Log in to Norless with this link. It works once.",
+    "linkExpired": "This login link has expired or was already used.",
+    "newLink": "Ask for a new link",
+    "google": "Continue with Google",
+    "googleUnverified": "Google hasn't verified this account's email address, so Norless can't use it. Log in with an email link instead.",
+    "googleFailed": "The login with Google didn't finish. Try again.",
+    "otherWays": "Other ways to log in",
+    "devMail": "Development: this is the link Norless would email.",
+    "devOpenLink": "Open the link",
+    "devGoogle": "Development only: this isn't Google. It logs in the account you choose, without checking it.",
+    "devGoogleOff": "This page only stands in for Google in development.",
+    "chooseAccount": "Choose an account",
+    "anotherAccount": "Another account's email",
+    "continue": "Continue"
+  },
+  "editor": {
+    "editSong": "Edit song",
+    "editSection": "Edit section",
+    "newSong": "New song",
+    "save": "Save",
+    "saveAndAdd": "Save and add to playlist",
+    "close": "Close",
+    "saved": "Saved",
+    "discard": "Discard your unsaved changes?",
+    "conflict": "Someone else changed this meanwhile",
+    "theirs": "Their version",
+    "mine": "Your version",
+    "keepMine": "Keep mine",
+    "useTheirs": "Use theirs",
+    "removed": "(removed)",
+    "key": "Key",
+    "time": "Time signature",
+    "tags": "Tags",
+    "newTag": "Add “{{tag}}”",
+    "title": "Title",
+    "text": "Text",
+    "textHelp": "A blank line starts a new slide. A line like R: or [Bridge] names its part, and R alone repeats it. Lines starting with ! are notes, never projected.",
+    "editingBy": "{{name}} is editing",
+    "heldBy": "{{name}} is editing this song",
+    "heldByHelp": "It's read-only until they close it, or after 5 minutes without typing.",
+    "notSaved": "The song wasn't saved. Your text is still here: check the connection and try again.",
+    "needsTitle": "Give the song a title in at least one language to save it.",
+    "unclosedRepeat": "A repeat mark (/: … :/) doesn't close in section {{sections}}: it shows as written.",
+    "layout": "Editor layout",
+    "layouts": {
+      "side-by-side": "Side by side",
+      "one": "One language"
+    },
+    "titleIn": "Title in {{language}}",
+    "textIn": "Text in {{language}}",
+    "secondLanguage": "Language on the right",
+    "addLanguage": "Add a language",
+    "authors": "Authors",
+    "copyright": "Copyright",
+    "source": "Source",
+    "sourceHelp": "The https page the song was taken from",
+    "addTag": "Add a tag"
+  },
+  "roles": {
+    "owner": "Owner",
+    "editor": "Editor",
+    "team": "Team"
+  },
+  "members": {
+    "title": "Members",
+    "ownersOnly": "Only owners can manage members.",
+    "lastOwner": "The community needs an owner: make someone else owner first.",
+    "invited": "Invited",
+    "roles": "Roles of {{name}}",
+    "remove": "Remove",
+    "confirmRemove": "Remove {{name}} from the community?",
+    "imported": "Accounts from the old app",
+    "importedHelp": "Invite the people who still help, with their roles, and delete the others. Deleting removes their name and email; what they made stays without a name.",
+    "person": "Person",
+    "created": "Created",
+    "lastActive": "Last active",
+    "wasAdmin": "Was admin",
+    "invite": "Invite",
+    "inviteEmail": "Email",
+    "inviteRoles": "Roles",
+    "delete": "Delete",
+    "confirmDelete": "Delete {{name}}'s account? Their name and email are removed.",
+    "noRoles": "No roles (reads only)",
+    "emailed": "Invited: {{email}} gets an email with a login link.",
+    "notEmailed": "Invited. No email was sent: {{email}} can log in at {{login}} with this address.",
+    "actions": "Actions: {{name}}"
+  },
+  "presence": {
+    "online": "Online",
+    "phone": "phone",
+    "computer": "computer",
+    "lastChange": "last live change"
+  },
+  "states": {
+    "loading": "Loading…",
+    "tryAgain": "Try again",
+    "loadFailed": "This didn't load. Check the connection and try again.",
+    "actionFailed": "That didn't go through. Check the connection and try again."
+  },
+  "home": {
+    "empty": "No songs yet",
+    "emptyHelp": "Songs added here can be found with the search box and projected in every language of the community.",
+    "addFirst": "Add the first song"
+  },
+  "playlists": {
+    "title": "Playlists",
+    "all": "All playlists",
+    "new": "New playlist",
+    "more": "Show more",
+    "empty": "No playlists yet",
+    "emptyHelp": "A playlist plans a service: songs, Bible readings, dividers and announcements in order, the same on every device. Rehearsals use the next service's playlist.",
+    "createFirst": "Create the first playlist",
+    "filter": "Find a playlist",
+    "noMatch": "No playlist has that in its title or date.",
+    "showArchived": "Show archived",
+    "noArchived": "No archived playlists.",
+    "nextService": "Next service",
+    "songs": "{{count}} songs",
+    "songs_one": "{{count}} song",
+    "created": "Created {{date}}"
+  },
+  "playlist": {
+    "title": "Playlist title",
+    "actions": "Playlist actions",
+    "rename": "Rename",
+    "entries": "Entries",
+    "empty": "Nothing in this playlist yet",
+    "emptyHelp": "Add songs, Bible references and dividers with the search box above, and announcements with “Add text slide”.",
+    "emptyVisitor": "The team hasn't added anything yet.",
+    "addText": "Add text slide",
+    "move": "Move",
+    "remove": "Remove",
+    "edit": "Edit",
+    "songDeleted": "deleted",
+    "playedRecently": "played in the last hour",
+    "minutes": "{{count}} min",
+    "onBibleCom": "bible.com",
+    "addedBy": "Added by {{name}}",
+    "editDivider": "Divider",
+    "editText": "Text slide",
+    "heading": "Heading",
+    "markdown": "Text (Markdown)",
+    "movingBy": "{{name}} is moving it",
+    "alsoHere": "{{name}} has this playlist open",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "entryActions": "Entry actions",
+    "removed": "Removed “{{title}}”",
+    "undo": "Undo",
+    "addDividerAbove": "Add divider above",
+    "addDivider": "Add divider",
+    "duration": "{{hours}} h {{minutes}} min",
+    "hours": "{{hours}} h",
+    "plannedTime": "Planned time",
+    "plannedTimeHelp": "For example 45, 1h30 or 1:30",
+    "plannedTimeInvalid": "Up to 4 hours, for example 45, 1h30 or 1:30",
+    "archive": "Archive playlist",
+    "archivedOn": "Archived on {{date}}",
+    "restore": "Restore",
+    "actionsOf": "Actions: {{title}}",
+    "insertHere": "Add here",
+    "songHere": "Song here",
+    "dividerHere": "Divider here",
+    "textHere": "Text slide here",
+    "songAbove": "Add song above",
+    "textAbove": "Add text slide above"
+  },
+  "device": {
+    "title": "This device is a",
+    "phone": "Phone",
+    "tablet": "Tablet",
+    "laptop": "Laptop"
+  },
+  "settings": {
+    "title": "Settings",
+    "ownersOnly": "Only owners can change the settings.",
+    "privacy": {
+      "title": "Privacy notice",
+      "help": "Who answers for the personal data of the community's people, shown on the privacy page.",
+      "name": "Who answers for the data",
+      "address": "Postal address",
+      "email": "Email for questions about personal data",
+      "save": "Save the contact"
+    }
+  },
+  "schedule": {
+    "title": "Schedule",
+    "help": "From the schedule, Norless knows whether a song is played in a service or a rehearsal: from an event's start until 30 minutes after its end. Outside every event it's a rehearsal. Times are in the community's time zone.",
+    "addRecurring": "Add a weekly event",
+    "addOneOff": "Add a one-off event",
+    "cancelDay": "Cancel one day",
+    "empty": "No events yet",
+    "emptyHelp": "Add the weekly services, so songs played in them count as played in a service.",
+    "recurring": "Every week",
+    "oneOff": "Once",
+    "cancelled": "Cancelled days",
+    "between": "from {{from}} to {{to}}",
+    "since": "since {{from}}",
+    "until": "until {{to}}",
+    "service": "Service",
+    "rehearsal": "Rehearsal",
+    "confirmDelete": "Delete “{{name}}” from the schedule?",
+    "invalid": "That event can't be saved: check that the end is after the start, the dates, and that a cancelled day falls on its event's weekday.",
+    "event": "Event",
+    "name": "Name",
+    "type": "Type",
+    "weekday": "Day",
+    "date": "Date",
+    "start": "Starts",
+    "end": "Ends",
+    "firstDate": "From (optional)",
+    "lastDate": "Until (optional)",
+    "classifyTitle": "Plays from the old app",
+    "classifyHelp": "The plays imported from the old app have no type of their own. After changing past periods of the schedule, classify them again: each becomes a service or a rehearsal play by the event it falls in. Nothing is deleted.",
+    "classify": "Classify imported plays",
+    "confirmClassify": "Classify every imported play again with this schedule?",
+    "classified": "{{service}} service plays and {{rehearsal}} rehearsal plays.",
+    "actions": "Actions: {{name}}"
+  },
+  "live": {
+    "live": "Live",
+    "nothing": "Nothing is live",
+    "blanked": "blank",
+    "next": "Next",
+    "previous": "Previous",
+    "mediaKeys": "Media keys",
+    "blank": "Blank",
+    "show": "Show again",
+    "service": "Service",
+    "rehearsal": "Rehearsal",
+    "modeLabel": "Mode: {{mode}}, from the schedule",
+    "lastChange": "last change: {{name}}, {{time}}",
+    "changedBy": "{{name}} → {{part}}",
+    "parts": "Parts of the live song",
+    "slides": "Slides",
+    "verse": "Verse {{n}}",
+    "bible": "Bible reference",
+    "text": "Text slide",
+    "types": {
+      "refrain": "Refrain",
+      "bridge": "Bridge",
+      "pre-chorus": "Pre-chorus",
+      "intro": "Intro",
+      "ending": "Ending",
+      "verse": "Verse"
+    },
+    "moreControls": "More controls",
+    "fewerControls": "Fewer controls",
+    "thisDevice": "This device"
+  },
+  "screen": {
+    "fullscreen": "Fullscreen",
+    "gone": "This screen's link no longer works. Ask an owner for the new one."
+  },
+  "screens": {
+    "title": "Screens",
+    "help": "Each screen opens at its own link on the device that shows it, without logging in, and only shows what's live. If a link gets out, give the screen a new one.",
+    "add": "Add a screen",
+    "empty": "No screens yet",
+    "emptyHelp": "Add a projector for each language, so each shows the songs in its own language.",
+    "open": "Open",
+    "copy": "Copy link",
+    "newLink": "New link",
+    "confirmSecret": "Give “{{name}}” a new link? Devices with the old one stop showing it.",
+    "confirmDelete": "Delete the screen “{{name}}”?",
+    "language": "Language",
+    "secondLanguage": "Second language",
+    "none": "None",
+    "split": "Two languages",
+    "rows": "One above the other",
+    "columns": "Side by side",
+    "types": {
+      "projector": "Projector",
+      "musicians": "Musicians",
+      "vocalists": "Vocalists",
+      "stage": "Stage monitor",
+      "overlay": "Broadcast overlay"
+    },
+    "overlayBackground": "Background",
+    "backgrounds": {
+      "transparent": "Transparent (OBS)",
+      "green": "Chroma green",
+      "black": "Black"
+    },
+    "look": "Look",
+    "background": "Background",
+    "textColor": "Text",
+    "font": "Font",
+    "backgroundImage": "Background image (https address)",
+    "imageOpacity": "Image shows {{percent}}%",
+    "clock": "Show the time",
+    "sections": "Sections",
+    "italic": "Italic",
+    "bold": "Bold",
+    "openNamed": "Open {{name}}",
+    "chooseDisplay": "Choose displays",
+    "display": "Display {{n}}"
+  },
+  "stage": {
+    "left": "Minutes left",
+    "next": "Next: {{part}}",
+    "nextSong": "Next: {{title}}",
+    "toStage": "To the stage:",
+    "message": "Message…",
+    "clear": "Clear",
+    "presets": {
+      "fiveMinutes": "5 minutes",
+      "wrapUp": "Wrap up",
+      "time": "Time"
+    },
+    "look": "Display",
+    "colors": "Colors",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "Like this device",
+    "textSize": "Text size: {{percent}}%",
+    "larger": "Larger text",
+    "smaller": "Smaller text"
+  },
+  "pages": {
+    "title": "Pages",
+    "help": "Web pages the team projects with one click, such as a start page before the service and announcements at the end. Projectors show them full screen until something else goes live.",
+    "add": "Add a page",
+    "empty": "No pages yet",
+    "emptyHelp": "Add a start page to show before the service.",
+    "address": "Address",
+    "httpsOnly": "Only https addresses can be shown.",
+    "up": "Move up",
+    "down": "Move down",
+    "confirmDelete": "Delete the page “{{name}}”?",
+    "notEmbeddable": "“{{name}}” doesn't let other sites show it, so it will look empty on the projector.",
+    "clear": "Take “{{name}}” off the screens",
+    "showing": "Pages: {{name}} on the screens"
+  },
+  "musicians": {
+    "title": "Musicians",
+    "layout": "Layout",
+    "layouts": {
+      "bar-grid": "Bar grid",
+      "chords": "Chords over words",
+      "guitar-words": "Guitar: shapes over the words",
+      "guitar-bars": "Guitar: bar grid with shapes",
+      "guitar-chart": "Guitar: chart and diagrams",
+      "keys-concert": "Keys: concert pitch",
+      "keys-numbers": "Keys: number chart",
+      "drums-parts": "Drums: parts by bars",
+      "drums-cue": "Drums: big cue",
+      "bass-roots": "Bass: roots",
+      "live-chord": "Live chord"
+    },
+    "noSong": "No song is live.",
+    "noChords": "This song has no chords yet.",
+    "addChords": "Add chords",
+    "structure": "Structure",
+    "back": "Back"
+  },
+  "vocalists": {
+    "title": "Vocalists",
+    "languages": "Languages",
+    "all": "All",
+    "parts": "Parts",
+    "map": "Map of the parts",
+    "layouts": {
+      "whole": "Whole song",
+      "sideways": "Sideways",
+      "tablet": "Tablet"
+    }
+  },
+  "times": {
+    "approximate": "Estimated from the text: the song hasn't been played in a service yet",
+    "endLabel": "Estimated end",
+    "end": "Ends at {{time}}",
+    "endApprox": "Ends at about {{time}}",
+    "past": "{{count}} min past the event's end ({{time}})",
+    "before": "{{count}} min before the event's end ({{time}})"
+  },
+  "commands": {
+    "blank": "Blank the screens",
+    "next": "Next slide",
+    "previous": "Previous slide",
+    "part": "Go to {{part}}",
+    "page": "Show the page {{name}}",
+    "screen": "Open the screen {{name}}"
+  },
+  "controller": {
+    "previews": "What the projectors show",
+    "preview": "Projector {{language}}",
+    "layouts": {
+      "controller": "Controller",
+      "running-order": "Running order",
+      "big": "Big now and next",
+      "tablet": "Tablet",
+      "phone": "Phone",
+      "classic": "Classic",
+      "big-screen": "Big screen"
+    },
+    "phone": {
+      "order": "Order",
+      "song": "Song",
+      "screens": "Screens"
+    }
+  },
+  "problems": {
+    "count": "{{count}} problems",
+    "count_one": "1 problem",
+    "screen": "{{name}} isn't connected",
+    "translation": "No {{language}} version",
+    "small": "Slides {{slides}} too small to read in {{language}}",
+    "key": "No key, and the band has a musicians screen",
+    "smallInEditor": "Slides {{slides}} are too long to read on a projector: split them or shorten their lines.",
+    "excluded": "Excluded: {{reason}}",
+    "slides": {
+      "preparing": "The slides are still being prepared",
+      "failed": "The slides' file couldn't be opened"
+    }
+  },
+  "local": {
+    "start": "Project here",
+    "window": "Projector window",
+    "stop": "Stop projecting",
+    "hint": "On a screen connected to this device, without changing the church's screens",
+    "closed": "The projector window was closed, so projecting stopped."
+  },
+  "pair": {
+    "title": "Pair a device",
+    "howTo": "On the TV or device, open {{host}}/pair. Type the code it shows and choose the screen it should be.",
+    "instructions": "To show a Norless screen here, ask someone on the team to pair this device with this code.",
+    "code": "Pairing code",
+    "screen": "Screen",
+    "pair": "Pair",
+    "unknownCode": "No device shows this code. Codes change every 5 minutes.",
+    "paired": "Paired devices",
+    "pairedBy": "paired by {{name}} on {{date}}",
+    "unpair": "Unpair",
+    "menu": "Pair a device…",
+    "qr": "QR code to pair this device from a phone",
+    "scan": "Or scan it with the phone of someone on the team.",
+    "logIn": "Log in to pair this device",
+    "onlyTeam": "Only the team can pair devices as screens."
+  },
+  "bibleCom": {
+    "menu": "bible.com windows…",
+    "title": "bible.com projection",
+    "available": "The bible.com projection extension is ready. Choose the window each language goes to on this device.",
+    "unavailable": "bible.com projection unavailable. Norless's own screens still work.",
+    "none": "None",
+    "window": "Window {{n}}",
+    "all": "All windows",
+    "openWindow": "Open bible.com projection window {{n}} first",
+    "failed": "bible.com projection didn't take the slide (status {{status}})",
+    "verse": "Verse from bible.com: {{reference}}",
+    "back": "Back to the playlist",
+    "notConnected": "bible.com extension not connected.",
+    "install": "Install it",
+    "connected": "bible.com extension connected.",
+    "connectedWindows": "bible.com extension connected, windows {{windows}} open."
+  },
+  "app": {
+    "menu": "Menu",
+    "more": "More",
+    "stage": "Stage",
+    "team": "Team",
+    "backTo": "Back to {{name}}"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "letter": "A letter",
+    "search": "Search songs, and commands for the team",
+    "add": "Add the song found to the playlist, or run the command",
+    "select": "Select an entry in the playlist",
+    "move": "Move the selected entry",
+    "live": "Send the selected entry live",
+    "next": "Next slide",
+    "previous": "Previous slide",
+    "blank": "Blank the screens",
+    "remove": "Remove the selected entry",
+    "save": "Save the song in the editor",
+    "this": "This list"
+  },
+  "share": {
+    "copy": "Copy short link",
+    "copied": "Link copied"
+  },
+  "account": {
+    "title": "My account",
+    "deleteHelp": "Deleting your account removes your name, email and photo. Songs and playlists you added stay, without your name.",
+    "logoutTitle": "Log out of Norless?",
+    "everywhere": "Also on my other devices",
+    "countUsage": "Help improve Norless: count how I use it",
+    "countUsageHelp": "Norless counts what's used, such as how songs go live and which layouts show, to see what helps and what doesn't. The counts stay in Norless, and only its app team sees them. Switched off, they're kept without your account.",
+    "photo": {
+      "none": "Your initials. A Google login brings your Google photo, or upload one.",
+      "google": "Your Google photo, updated at each Google login and every week.",
+      "own": "Your own photo.",
+      "initials": "Your initials: no photo is kept.",
+      "upload": "Upload a photo",
+      "useInitials": "Use my initials",
+      "useGoogle": "Use my Google photo",
+      "failed": "That photo couldn’t be used. Try a JPEG or PNG."
+    }
+  },
+  "about": {
+    "title": "About Norless",
+    "what": "Norless keeps a church's songs and playlists, and shows them on its projectors, stage screens and phones during services.",
+    "license": "Norless is free software under the GNU Affero General Public License, version 3 or later: anyone may use, study, change and share it, and whoever runs a changed version for others must publish their changes.",
+    "licenseLink": "The license (GNU AGPL 3.0)",
+    "source": "The source code of the version running here",
+    "noSource": "This server hasn't set the link to its source code yet.",
+    "sounds": "Notation plays with sounds from FluidR3_GM by Frank Wen, under the Creative Commons Attribution 3.0 license.",
+    "soundsLicense": "The sounds’ license (CC BY 3.0)"
+  },
+  "theme": {
+    "title": "Theme",
+    "help": "The community's colors, font and logo, so the app matches its other materials. Projector screens keep their own look.",
+    "color": "Primary color",
+    "tint": "Background (light mode)",
+    "reset": "Reset",
+    "font": "Font",
+    "logo": "Logo (up to 200 KB)",
+    "removeLogo": "Remove the logo",
+    "save": "Save the theme",
+    "problems": {
+      "color": "White text on the primary color would be hard to read. Choose a darker color.",
+      "tint": "Text on this background would be hard to read. Choose a lighter background.",
+      "soft": "Text in the primary color would be hard to read on this background.",
+      "bigLogo": "The logo is larger than 200 KB.",
+      "bigFont": "The font file is larger than 300 KB."
+    },
+    "fontFile": "Font file (.woff2, up to 300 KB)",
+    "fontFileHelp": "Without it, people who don't have the font installed see the system's font. For Switzer, download the kit from fontshare.com and choose its variable .woff2 file.",
+    "fontFileSet": "Norless serves this font file itself."
+  },
+  "install": {
+    "title": "Install Norless",
+    "why": "Install Norless for its own window and icon, and to open it without a network.",
+    "install": "Install the app",
+    "notNow": "Not now",
+    "ok": "OK",
+    "ios": "Install Norless: tap Share, then Add to Home Screen.",
+    "macSafari": "Install Norless: in Safari, choose File, then Add to Dock."
+  },
+  "start": {
+    "communities": "Communities"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "intro": "Norless keeps songs, playlists and what is live for churches. To let people log in and work together, it keeps a little about them. This page says what, why, for how long, and who to ask.",
+    "responsibleTitle": "Who answers for your data",
+    "responsible": "Each community is responsible for the personal data of its people, and decides what it is used for. Write to it with any question:",
+    "noContact": "contact not set yet",
+    "operator": "This server is run by {{operator}}, who processes the data on the communities' behalf.",
+    "services": "It uses these services:",
+    "keptTitle": "What Norless keeps",
+    "kept": {
+      "account": "Your account: your name and email address, until you or an owner delete it.",
+      "google": "If you log in with Google: only the name, email address and profile photo Google gives Norless, nothing from your Google account beyond that. Norless keeps a small copy of the photo as your avatar, which members of your community see, and the photo's address, to copy it again every week; on My account you can upload another or use your initials. To offer it, the login page loads Google's sign-in from accounts.google.com, so Google learns that page was opened; no other page of Norless loads anything from Google.",
+      "history": "Who did what: each change to songs, playlists, settings, members and recordings, with who made it, when, and what it was before, which the owners can read; and when songs were played. If you delete your account, your changes stay without your name.",
+      "sessions": "Your login: a random token in one cookie, for 30 days, renewed while you use Norless; logging out ends it.",
+      "links": "Login links sent by email: they work once, for 15 minutes (invitations a week), and are deleted a day after they expire.",
+      "preferences": "Your preferences: layouts, colors and text size for each kind of device.",
+      "usage": "How Norless is used: what was used, when, and on which kind of device and layout, with your account unless you switch that off on My account. Kept in Norless for good; only its app team sees it.",
+      "online": "While you're connected, that you're online and on what kind of device; this isn't stored.",
+      "logs": "Server logs: IP addresses and the pages asked for, kept a few days, to find problems.",
+      "backups": "Backups: copies of all of this, kept 14 days on the server and copied to the operator's computer.",
+      "recordings": "Recordings: what the team recorded in rehearsals and services, with who recorded it and who may listen; kept until whoever recorded it or an owner deletes it."
+    },
+    "why": "All of this is to let you log in, to let the team work together and see who did what, and to remember how you like Norless.",
+    "visitors": "If you use Norless without an account, it keeps only the server logs and how it's used, with nothing that says who you are; your choices stay in your own browser.",
+    "cookiesTitle": "Cookies",
+    "cookies": "Norless sets one cookie, for your login, and only when you log in. No ads, no tracking, no analytics, and its fonts and pictures come from Norless itself, so there is no cookie banner.",
+    "rightsTitle": "Your rights",
+    "rights": "To see or get a copy of your data, or to have it corrected, write to your community.",
+    "delete": "To delete your account, choose \"Delete my account…\" in your account menu: your name and email are removed and you are logged out everywhere. What you added stays, without your name. Backups with your data are gone within 14 days."
+  },
+  "classic": {
+    "newSong": "Create new song",
+    "more": "More",
+    "back": "Back to the playlist",
+    "goLive": "Go live"
+  },
+  "feedback": {
+    "open": "Ideas and feedback",
+    "new": "Send an idea",
+    "label": "Your idea, or what could work better",
+    "send": "Send",
+    "cancel": "Cancel",
+    "close": "Close",
+    "thanks": "Thank you! The community's owners will read it and may answer you by email.",
+    "title": "Ideas and feedback",
+    "showArchived": "Show archived",
+    "empty": "No ideas yet",
+    "noArchived": "Nothing archived",
+    "emptyHelp": "Members send ideas and feedback from the menu; they show up here and by email.",
+    "someone": "Someone who left",
+    "archive": "Archive",
+    "restore": "Restore",
+    "ownersOnly": "Only owners can read the ideas and feedback.",
+    "to": "Send to",
+    "toOwners": "The community's owners",
+    "toApp": "The Norless app team",
+    "thanksApp": "Thank you! The people who make Norless will read it and may answer you by email.",
+    "appTitle": "Ideas for the Norless app",
+    "appOnly": "Only the Norless app team can read these ideas.",
+    "appMenu": "Ideas for the app"
+  },
+  "bible": {
+    "title": "Bible",
+    "help": "The version on bible.com that Bible references in playlists link to, for each language.",
+    "other": "Other…",
+    "id": "bible.com version number",
+    "idHelp": "The number after /bible/ in the version's link, e.g. 191 in bible.com/bible/191/JHN.3.16",
+    "save": "Save the versions"
+  },
+  "usage": {
+    "title": "Usage",
+    "menu": "Usage",
+    "appOnly": "Only the Norless app team sees usage.",
+    "csv": "Download CSV",
+    "unusedTitle": "Not used in 30 days",
+    "unusedHelp": "For each community, the ways nobody used in the last 30 days, among those its features show.",
+    "allUsed": "Everything was used.",
+    "last": "last {{date}}",
+    "never": "never",
+    "timelineTitle": "Timeline",
+    "feature": "Feature",
+    "by": "Show",
+    "byWeek": "Per week",
+    "byDay": "Per day",
+    "day": "Day",
+    "week": "Week from",
+    "total": "Total",
+    "service": "Service",
+    "noEvents": "Nothing counted yet",
+    "noEventsHelp": "Uses show up here once people use Norless.",
+    "serviceTitle": "One service",
+    "noServices": "No services yet",
+    "noServicesHelp": "A community's services come from its schedule, in its settings.",
+    "uncounted": "not counted"
+  },
+  "deviceLogin": {
+    "withPhone": "Log in with your phone",
+    "withPhoneHelp": "Point your phone's camera at this code, on a phone where you're logged in to Norless. Nothing to type here.",
+    "qr": "QR code to log in from your phone",
+    "code": "Code",
+    "number": "Your phone shows the same number:",
+    "title": "Log in a device",
+    "logInFirst": "Log in on this phone first",
+    "checkNumber": "Is this the number on the device?",
+    "asMe": "Log in as me",
+    "asMeHelp": "For 30 days, as you, like any login.",
+    "asLaptop": "As the community's laptop",
+    "asLaptopHelp": "Only the team role, until its browser closes or 12 hours pass. Its changes show as Laptop ({{name}}).",
+    "asGuest": "As a guest musician",
+    "asGuestHelp": "The team role for 4 hours on the guest's phone, shown as “<name> (guest of {{name}})”.",
+    "guestName": "The guest's name",
+    "done": "The device is logged in.",
+    "gone": "This code has run out or was used. Look at the device: it shows a new one.",
+    "another": "Log in another device",
+    "codeHelp": "Type the code its login page shows.",
+    "continue": "Continue",
+    "nearby": "Log in the laptop at {{community}}?",
+    "review": "Review",
+    "notNow": "Not now",
+    "devicesTitle": "Devices you logged in",
+    "until": "until {{time}}",
+    "end": "End",
+    "thisDevice": "This device was logged in from a phone. Its login ends by itself, or with Log out.",
+    "guestTitle": "A guest musician",
+    "guestHelp": "A QR code to show a guest: it logs their phone in with the team role for 4 hours.",
+    "showGuestQr": "Show a guest QR code",
+    "guestQr": "QR code for the guest's phone",
+    "guestScan": "The guest scans it with their phone's camera within 5 minutes. It works once.",
+    "guestJoin": "Log in as {{name}} for 4 hours?",
+    "passGone": "This QR code has run out or was used. Ask for a new one.",
+    "guestOpened": "Opened on a phone. Waiting for {{name}} to log in.",
+    "guestIn": "{{name}} is in, until {{time}}.",
+    "guestExpired": "This QR ran out after 5 minutes unused.",
+    "guestAgain": "New QR",
+    "guestDone": "Done",
+    "scan": "Scan with your phone",
+    "cantScan": "Can't scan? Type a code instead",
+    "typeCode": "On your phone, under Log in another device on My account, type:"
+  },
+  "hints": {
+    "label": "Hint",
+    "goLive": "Double-click an entry, or select it and press Go live, to project it.",
+    "search": "Type anywhere to search for a song; Enter adds the first one to the playlist.",
+    "keys": "Page Down or → goes to the next slide, Page Up or ← back, and Esc blanks the screens. A clicker works too.",
+    "project": "A projector's button opens it full screen on the second display.",
+    "gotIt": "Got it"
+  },
+  "export": {
+    "print": "Print",
+    "html": "Save as HTML",
+    "copy": "Copy as text",
+    "language": "Language",
+    "help": "The songs in playlist order, without chords; a song missing in this language comes in the one it has.",
+    "copied": "Copied. Paste it into a chat or a document.",
+    "contents": "Contents",
+    "top": "Top",
+    "theme": "Light or dark",
+    "printFrame": "Playlist to print"
+  },
+  "update": {
+    "label": "New version",
+    "ready": "A new version of Norless is ready.",
+    "reload": "Reload"
+  },
+  "chords": {
+    "title": "Chords: {{title}}",
+    "open": "Chords",
+    "addToSong": "Add chords",
+    "hint": "Tap a letter to put a chord over it; tap a letter with a chord to change or remove it. Nothing changes until you save.",
+    "refused": "Only chords, bar lines and notes can change here. Editors change the words in the song editor.",
+    "repeat": "Repeats a part above.",
+    "tempo": "Tempo (BPM)",
+    "tap": "Tap",
+    "over": "Chord over “{{word}}”",
+    "change": "Change {{chord}}",
+    "other": "Other chord",
+    "otherHint": "G, F#m7, Re m…",
+    "add": "Add",
+    "remove": "Remove",
+    "reference": "Add a recording to learn it from",
+    "referenceHelp": "An https link, e.g. a YouTube video; its title and picture are read from it",
+    "linkTitle": "Title",
+    "removeLink": "Remove link",
+    "addLink": "Add",
+    "scope": {
+      "label": "Where this change goes",
+      "only": "Only this one",
+      "all": {
+        "verse": "All verses",
+        "refrain": "All refrains",
+        "bridge": "All bridges",
+        "pre-chorus": "All pre-choruses",
+        "intro": "All intros",
+        "ending": "All endings",
+        "other": "All parts like this"
+      }
+    },
+    "moveLeft": "Move the chord a letter left",
+    "moveRight": "Move the chord a letter right",
+    "beatsOf": "Beats of {{chords}}",
+    "beatEnd": "Where {{chord}} ends"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No changes saved in Norless yet.",
+    "saved": "{{name}}, {{when}}",
+    "someone": "Someone",
+    "restore": "Restore as it was before",
+    "confirmRestore": "Restore the song as it was before this change? The current version stays in the history.",
+    "notRestored": "The song wasn’t restored. Check the connection and try again.",
+    "key": "Key: {{from}} → {{to}}",
+    "time": "Time signature: {{from}} → {{to}}",
+    "tempo": "Tempo: {{from}} → {{to}}",
+    "tags": "Tags: {{from}} → {{to}}",
+    "titleIn": "Title in {{language}}: {{from}} → {{to}}",
+    "textIn": "Text in {{language}}",
+    "none": "(none)",
+    "authors": "Authors: {{from}} → {{to}}",
+    "copyright": "Copyright: {{from}} → {{to}}",
+    "source": "Source: {{from}} → {{to}}",
+    "links": "Recordings: {{from}} → {{to}}"
+  },
+  "keys": {
+    "forService": "Key for this service",
+    "forThisService": "Key",
+    "songIn": "The song is in {{key}}. The key you choose here is for this playlist only.",
+    "songWithout": "The song has no key yet.",
+    "useSongKey": "Use the song’s key",
+    "makePermanent": "Make it the song’s key",
+    "notSaved": "The key wasn’t saved. Check the connection and try again.",
+    "same": "same key",
+    "up": "up {{count}} half steps",
+    "up_one": "up 1 half step",
+    "down": "down {{count}} half steps",
+    "down_one": "down 1 half step",
+    "change": "Change key",
+    "changeHelp": "The chords move with the key, in every language.",
+    "newKey": "New key",
+    "serviceChip": "{{key}} (song: {{song}})",
+    "fromBefore": "{{from}} → {{to}}, {{change}}"
+  },
+  "instruments": {
+    "capo": "Capo {{fret}}",
+    "noCapo": "No capo",
+    "capoDown": "Capo one fret lower",
+    "capoUp": "Capo one fret higher",
+    "shapes": "{{key}} shapes",
+    "numbers": "Numbers",
+    "bass": "Bass",
+    "map": "The song by bars",
+    "bars": "{{count}} bars",
+    "bars_one": "1 bar",
+    "energy": {
+      "calm": "Calm",
+      "full": "Full",
+      "building": "Building"
+    },
+    "ends": "{{part}} ends on {{chord}} → {{next}} starts on {{first}}",
+    "nextSong": "Next song: {{title}}",
+    "diagrams": "Shapes in this song",
+    "ask": "What do you play?",
+    "profile": "Musician",
+    "profileHelp": "What you play chooses your musicians layouts; the guitar shapes you like choose the capo.",
+    "play": "I play",
+    "names": {
+      "guitar": "Guitar",
+      "keys": "Keys",
+      "bass": "Bass",
+      "drums": "Drums",
+      "vocals": "Vocals",
+      "other": "Other"
+    },
+    "main": "Main instrument",
+    "guitarShapes": "Guitar shapes I like",
+    "noteNames": "Chord names",
+    "chordColors": "Color chords by their degree in the key",
+    "chordColorsHelp": "Each chord shares its color with its relative (C and Am, F and Dm, G and Em), the minor one softer, and each degree keeps its color in every key: G in D and B♭ in F are both 4. The tonic stays plain, chords outside the key are magenta, and a bass note after the slash takes its own degree's color.",
+    "naming": {
+      "community": "As the community chooses",
+      "letters": "Letters: C D E",
+      "solfege": "Do-Re-Mi",
+      "numbers": "Numbers: 1 4 5"
+    },
+    "settingsTitle": "Music",
+    "settingsHelp": "How musicians layouts name chords for members who didn’t choose. Songs keep their chords in letters.",
+    "whatIPlay": "What I play",
+    "done": "Done",
+    "degrees": "Degrees:",
+    "suffixes": "Suffixes:"
+  },
+  "follow": {
+    "language": "Language",
+    "both": "Both",
+    "smaller": "Smaller text",
+    "larger": "Larger text",
+    "light": "Light",
+    "dark": "Dark",
+    "nothing": "Nothing is on the screens right now. The songs show here as they go live.",
+    "next": "Next: {{title}}",
+    "qr": "QR code: follow the songs on your phone",
+    "qrOnPage": "QR code to follow along"
+  },
+  "recordings": {
+    "title": "Recordings",
+    "all": "All recordings",
+    "record": "Record",
+    "chooseInput": "Choose the input to record",
+    "start": "Start recording",
+    "stop": "Stop",
+    "help": "Records the band from this device’s microphone or another input, such as the mixer. Each song gets its own file, marked with its parts. It belongs to you; others in the team can ask you for access.",
+    "input": "Input",
+    "hears": "Input level",
+    "inputN": "Input {{n}}",
+    "noMicrophone": "This browser may not use a microphone. Allow it in the browser’s settings for this site.",
+    "on": "Recording",
+    "onBy": "Recording · {{name}}",
+    "empty": "No recordings yet",
+    "emptyHelp": "Record a rehearsal or a service from the musicians view or the live bar: each song gets a file you can play from any part.",
+    "by": "by {{name}}",
+    "from": "from {{device}}",
+    "mode": {
+      "service": "Service",
+      "rehearsal": "Rehearsal"
+    },
+    "status": {
+      "recording": "Recording now",
+      "processing": "Being cut into songs",
+      "ready": "Ready",
+      "failed": "Nothing was saved"
+    },
+    "asking": "{{count}} asking for access",
+    "asking_one": "1 asking for access",
+    "requests": "Asking for access",
+    "access": {
+      "asked": "Asking",
+      "granted": "Can listen",
+      "refused": "Refused"
+    },
+    "grant": "Let them listen",
+    "refuse": "Refuse",
+    "withdraw": "Take it back",
+    "noAccess": "Ask {{name}} to let you listen.",
+    "askedHelp": "You asked for access; it shows here once it’s granted.",
+    "ask": "Ask for access",
+    "delete": "Delete recording",
+    "confirmDelete": "Delete this recording and its audio for good?",
+    "kinds": {
+      "bible": "Bible reading",
+      "divider": "Between songs",
+      "text": "Text slide",
+      "none": "Nothing live",
+      "song": "Song"
+    },
+    "parts": "Parts",
+    "download": "Download"
+  },
+  "tempo": {
+    "listen": "Listen for tempo",
+    "chooseInput": "Choose the input to listen for tempo",
+    "listenInstead": "Listen here instead of {{name}}",
+    "listeningAt": "Listening · {{bpm}} BPM",
+    "start": "Start listening",
+    "help": "This device listens to the band through its microphone or another input, such as a feed from the mixer, and shows on stage when the band drifts from a song’s tempo. Nothing is recorded or sent; only the hint reaches the screens.",
+    "fast": "Speeding up · {{measured}} → {{target}}",
+    "slow": "Dragging · {{measured}} → {{target}}",
+    "measured": "Measured: {{bpm}} BPM",
+    "accept": "Use it",
+    "settingsTitle": "Tempo check",
+    "settingsHelp": "The stage shows that the band is speeding up or dragging once it’s off by this much for this long.",
+    "percent": "Off by (%)",
+    "seconds": "For (seconds)"
+  },
+  "notation": {
+    "title": "Notation",
+    "of": "Notation for {{part}}",
+    "add": "Add notation",
+    "edit": "Edit notation",
+    "remove": "Remove",
+    "apply": "Use this notation",
+    "notes": "Notes",
+    "grid": "Drum grid",
+    "text": "ABC notation",
+    "textHint": "A few bars in ABC: letters are notes (C D E…, and c d e an octave up), numbers are lengths, | are bar lines. A click on a note in the preview puts the cursor on it.",
+    "preview": "Preview",
+    "play": "Play",
+    "stop": "Stop",
+    "error": "Line {{line}}, column {{column}}: {{message}}",
+    "meter": "Time",
+    "bars": "Bars",
+    "moreDrums": "Toms, crash and ride",
+    "cell": "Bar {{bar}}, beat {{beat}}, step {{step}}",
+    "drums": {
+      "crash": "Crash",
+      "hihat": "Hi-hat",
+      "ride": "Ride",
+      "highTom": "High tom",
+      "midTom": "Mid tom",
+      "snare": "Snare",
+      "floorTom": "Floor tom",
+      "kick": "Kick"
+    }
+  },
+  "opinions": {
+    "title": "Song feedback",
+    "like": "Like",
+    "dislike": "Dislike",
+    "liked": "You like it",
+    "likes": "{{count}} likes",
+    "likes_one": "1 like",
+    "dislikes": "{{count}} dislikes",
+    "dislikes_one": "1 dislike",
+    "reasons": "Why members dislike it",
+    "reason": "{{name}}: {{reason}}",
+    "dislikeTitle": "Dislike this song",
+    "why": "Why? (optional)",
+    "exclude": "Exclude",
+    "excludeTitle": "Exclude this song",
+    "excludeHelp": "Search will no longer find it, and its page will show your reason to everyone. Playlists that have it keep it. You can include it again.",
+    "excludeReason": "Why it isn't played here",
+    "include": "Include again",
+    "excluded": "Not played here",
+    "disliked": "Disliked songs",
+    "noDisliked": "No song has a dislike",
+    "noDislikedHelp": "When members dislike a song on its page, it shows here with their reasons.",
+    "excludedSongs": "Excluded songs",
+    "noExcluded": "No excluded songs",
+    "noExcludedHelp": "Exclude a song from its page, or from the list above, when it shouldn't be played here.",
+    "excludedBy": "Excluded by {{name}} {{when}}",
+    "excludedAt": "Excluded {{when}}"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "help": "Services only: rehearsals don't count.",
+    "mostSung": "Most played",
+    "period": "Period",
+    "last12": "Last 12 months",
+    "all": "All time",
+    "season": "Season",
+    "wholeYear": "Whole year",
+    "seasons": {
+      "winter": "Winter (Jan, Feb, Dec)",
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn"
+    },
+    "services": "{{count}} services",
+    "services_one": "1 service",
+    "noServices": "No services in this period",
+    "noServicesHelp": "Songs played in services show here, most played first. Pick another period.",
+    "notLately": "Not played lately",
+    "notLatelyHelp": "Played in 3 services or more, none in the last 6 months.",
+    "noneForgotten": "No forgotten songs",
+    "noneForgottenHelp": "Every song played in 3 services or more was played in the last 6 months.",
+    "songHistory": "Services",
+    "neverSung": "Not played in a service yet.",
+    "sungIn": "Played in {{count}} services, first on {{first}}, last {{last}}",
+    "sungIn_one": "Played in 1 service, on {{first}}",
+    "year": "{{year}}: {{count}}",
+    "membersOnly": "Only the community's members see the statistics."
+  },
+  "chapters": {
+    "title": "YouTube chapters",
+    "start": "Start",
+    "firstAt": "When the first entry starts in the video",
+    "firstAtHelp": "As the video shows it, e.g. 12:30 or 1:02:05. The others follow at their real distance.",
+    "text": "Chapters, for the video's description",
+    "copy": "Copy",
+    "copied": "Copied",
+    "none": "No chapters yet",
+    "noneHelp": "They're written when the playlist's entries go live in a service.",
+    "fromStream": "From the live stream that started at {{time}}; the others follow at their real distance. Change it if the video was cut.",
+    "openVideo": "Open the video",
+    "setChannel": "Set the YouTube channel in the settings, to fill this in from the live stream"
+  },
+  "youtube": {
+    "title": "YouTube channel",
+    "help": "Where the services are streamed. YouTube chapters then find the service's live stream and when the first entry starts in it.",
+    "label": "Channel address or @handle",
+    "example": "E.g. https://www.youtube.com/@church or @church; empty for none.",
+    "invalid": "That isn't a YouTube channel: paste its address or its @handle.",
+    "save": "Save the channel"
+  },
+  "rotation": {
+    "title": "Played a lot lately",
+    "help": "Played in at least 2 of the last 4 services.",
+    "none": "Nothing played too often",
+    "noneHelp": "No song was played in 2 of the last 4 services.",
+    "hint": "Played in {{count}} of the last {{of}} services",
+    "ofLast": "{{count}} of the last {{of}}"
+  },
+  "recap": {
+    "title": "{{year}} in songs",
+    "songs": "{{count}} songs",
+    "songs_one": "1 song",
+    "new": "{{count}} played for the first time",
+    "new_one": "1 played for the first time"
+  },
+  "grid": {
+    "title": "The last 12 services",
+    "song": "Song",
+    "sung": "Played",
+    "emptyHelp": "Once songs are played in services, each one's Sundays show here."
+  },
+  "host": {
+    "title": "Host",
+    "words": "Host's words",
+    "wordsFor": "Host's words: {{title}}",
+    "wordsHelp": "What the host says around this entry. Only members see it, in the Host view.",
+    "wordsIn": "In {{language}}",
+    "membersOnly": "Only the community's members see the host's words.",
+    "allLanguages": "All",
+    "now": "Live",
+    "next": "Next",
+    "nothingLive": "Nothing is live",
+    "nothingLiveHelp": "When the team sends an entry live, it shows here with its host's words, and what comes next."
+  },
+  "changes": {
+    "title": "Changes",
+    "help": "Who changed songs, playlists, settings, members and recordings, and when, with what each change was before. Only owners see this page.",
+    "person": "Person",
+    "everyone": "Everyone",
+    "kind": "About",
+    "kinds": {
+      "all": "Everything",
+      "songs": "Songs",
+      "playlists": "Playlists",
+      "settings": "Settings",
+      "members": "Members",
+      "recordings": "Recordings"
+    },
+    "actions": {
+      "insert": "Added",
+      "update": "Changed",
+      "remove": "Removed",
+      "restore": "Restored"
+    },
+    "norless": "Norless",
+    "deleted": "A deleted account",
+    "moved": "moved",
+    "edited": "edited",
+    "on": "on",
+    "off": "off",
+    "switchedOn": "Switched on:",
+    "switchedOff": "Switched off:",
+    "older": "Older changes",
+    "empty": "No changes yet",
+    "emptyHelp": "Changes appear here as people edit songs, playlists and settings.",
+    "emptyFiltered": "Nothing matches these choices. Choose Everyone or Everything to see more.",
+    "ownersOnly": "Only the community's owners see its changes.",
+    "tables": {
+      "songs": "Song",
+      "song_versions": "Song text",
+      "playlists": "Playlist",
+      "entries": "Playlist entry",
+      "members": "Member",
+      "recordings": "Recording",
+      "recording_access": "Access to a recording",
+      "screens": "Screen",
+      "screen_devices": "Paired TV",
+      "pages": "Page",
+      "schedule_events": "Schedule",
+      "rooms": "Room",
+      "communities": "Community settings"
+    },
+    "fields": {
+      "title": "Title",
+      "text": "Text",
+      "key_signature": "Key",
+      "time_signature": "Time signature",
+      "tags": "Tags",
+      "bpm": "Tempo",
+      "authors": "Authors",
+      "copyright": "Copyright",
+      "source_url": "Source",
+      "reference_links": "Recordings to learn it from",
+      "excluded_reason": "Excluded because",
+      "name": "Name",
+      "roles": "Roles",
+      "status": "Status",
+      "kind": "Kind",
+      "planned_minutes": "Planned minutes",
+      "host_words": "Host's words",
+      "url": "Address",
+      "show_qr": "QR code",
+      "type": "Type",
+      "languages": "Languages",
+      "layout": "Layout",
+      "settings": "Display settings",
+      "theme": "Theme",
+      "privacy": "Privacy notice",
+      "weekday": "Day",
+      "start_time": "Starts",
+      "end_time": "Ends",
+      "date": "Date",
+      "archived_at": "Archived",
+      "language": "Language",
+      "mode": "Mode",
+      "switches": "Features",
+      "welcome": "Welcome page"
+    },
+    "reordered": "Same items, another order"
+  },
+  "misses": {
+    "title": "Looked for, not found",
+    "help": "What people searched for in the last 90 days and found no song. Who searched isn't kept.",
+    "none": "Nothing missing",
+    "noneHelp": "Searches that find no song show here, so you can add what people look for.",
+    "times_one": "once, {{last}}",
+    "times_other": "{{count}} times, last {{last}}",
+    "newSong": "New song"
+  },
+  "lookAhead": {
+    "earlier": "Earlier song",
+    "later": "Later song",
+    "hint": "Look at the songs before and after, on this device only",
+    "looking": "Looking at {{title}}: only on this device",
+    "back": "Back to live"
+  },
+  "rooms": {
+    "title": "Rooms",
+    "menu": "Room: {{room}}",
+    "main": "Main room",
+    "mainWithOthers_one": "Main room · 1 practice room",
+    "mainWithOthers_other": "Main room · {{count}} practice rooms",
+    "practice": "Practice · {{name}}",
+    "start": "Start a practice room",
+    "startHelp": "A room of its own next to the service, for band practice or a children's meeting: its slides don't touch the main screens. It ends when you end it, or after 4 hours without a change.",
+    "playlist": "Playlist",
+    "counts": "Counts as",
+    "rehearsal": "Rehearsal",
+    "service": "Service",
+    "startButton": "Start",
+    "invite": "Show its link and QR code",
+    "inviteHelp": "Screens and guests open this to follow the room.",
+    "qr": "QR code to follow the practice room",
+    "asService": "Count as a service",
+    "asRehearsal": "Count as a rehearsal",
+    "end": "End this room",
+    "confirmEnd": "End the practice room for everyone in it?",
+    "ended": "This practice room has ended",
+    "toCommunity": "To the community",
+    "joinTitle": "A practice room",
+    "join": "Follow this room",
+    "joinedHelp": "This device follows the practice room. Open a view:",
+    "playlistLink": "The playlist",
+    "following": "Practice room",
+    "leave": "Back to the main room"
+  },
+  "featureTree": {
+    "title": "Features",
+    "help": "Everything Norless can do, each feature after the one it needs. Tap one to see what it does, and to ask the owners for it.",
+    "helpOwner": "Every feature, after the one it needs. Tap a feature to switch it on or off for everyone. Members can ask you for one here.",
+    "switch": "On for everyone",
+    "path": "Switching it on also switches on: {{names}}",
+    "note": "Why you'd like it (optional)",
+    "ask": "Ask the owners",
+    "askAgain": "Update my request",
+    "withdraw": "Withdraw",
+    "asked": "{{count}} asked",
+    "asked_one": "1 asked",
+    "state": {
+      "planned": "Planned",
+      "always": "Always on",
+      "on": "On",
+      "off": "Off",
+      "locked": "Needs {{name}}",
+      "new": "New, not switched on yet"
+    },
+    "membersOnly": "The feature tree is for the community's members.",
+    "askedTitle": "Asked-for features",
+    "askedNone": "Nobody has asked for a feature yet.",
+    "open": "Open the feature tree",
+    "newFeature": "{{name}}: {{adds}}",
+    "branches": {
+      "screens": "Screens",
+      "live": "Live",
+      "stage": "Stage",
+      "chords": "Chords",
+      "songs": "Songs",
+      "stats": "Statistics",
+      "app": "App",
+      "team": "Team"
+    },
+    "branchesTitle": "Branches",
+    "marksTitle": "Marks",
+    "marks": {
+      "locked": "Needs the feature before it",
+      "planned": "Planned",
+      "new": "New"
+    },
+    "pan": "Drag to see the whole graph",
+    "onTheirOwn": "Features on their own"
+  },
+  "features": {
+    "feedback": {
+      "name": "Ideas and feedback",
+      "adds": "Members send ideas and feedback to the owners."
+    },
+    "deviceLogin": {
+      "name": "Log in from a phone",
+      "adds": "Log the laptop in with a phone, by QR code or a code."
+    },
+    "export": {
+      "name": "Print and copy",
+      "adds": "Print, save and copy a playlist's lyrics."
+    },
+    "appFrame": {
+      "name": "App menu",
+      "adds": "The app's header and menu: the list of playlists, the search box and song pages."
+    },
+    "layouts": {
+      "name": "Laptop layouts",
+      "adds": "Controller, Running order and Big on laptops, with screen previews, part buttons and the service or rehearsal status."
+    },
+    "textSlides": {
+      "name": "Text slides",
+      "adds": "Slides of your own text in a playlist, with planned minutes."
+    },
+    "times": {
+      "name": "Times",
+      "adds": "How long each entry took, and when the service will end."
+    },
+    "problems": {
+      "name": "Problems",
+      "adds": "Warnings about what may go wrong, like a missing translation or a screen that isn't connected."
+    },
+    "commands": {
+      "name": "Search commands",
+      "adds": "Commands typed in the search box, like a Bible reference or a heading."
+    },
+    "presence": {
+      "name": "Who's here",
+      "adds": "Who has a playlist open, and who is moving an entry."
+    },
+    "mediaKeys": {
+      "name": "Media keys",
+      "adds": "A keyboard's next, previous and play keys move the slides."
+    },
+    "stageViews": {
+      "name": "Stage and musicians",
+      "adds": "The stage monitor with messages and a countdown, and views for musicians and vocalists."
+    },
+    "liveNotice": {
+      "name": "Who changed the slide",
+      "adds": "A notice of who changed the slide, and the last live change."
+    },
+    "screenMenu": {
+      "name": "Screens menu",
+      "adds": "Open a screen on a chosen display, or pair a TV with a code."
+    },
+    "touchLayouts": {
+      "name": "Tablet and phone layouts",
+      "adds": "Control the service from a tablet or a phone."
+    },
+    "chords": {
+      "name": "Chords mode",
+      "adds": "Musicians add chords, notes and the tempo to songs."
+    },
+    "history": {
+      "name": "Song history",
+      "adds": "Each save of a song, who made it, and going back to an earlier one."
+    },
+    "notation": {
+      "name": "Notation",
+      "adds": "An intro, a riff or a groove written as notes, which can be played."
+    },
+    "instruments": {
+      "name": "Instrument layouts",
+      "adds": "Musician profiles, layouts for guitar, keys, bass and drums, and keys for a service."
+    },
+    "recordings": {
+      "name": "Recordings",
+      "adds": "The band records rehearsals and services."
+    },
+    "tempoCheck": {
+      "name": "Tempo check",
+      "adds": "A device listens to the band, and the stage shows when it drifts from the song's tempo."
+    },
+    "screens": {
+      "name": "Screens",
+      "adds": "Screens with their own links, and the broadcast overlay."
+    },
+    "projectHere": {
+      "name": "Project here",
+      "adds": "Project the slides on this device."
+    },
+    "followAlong": {
+      "name": "Follow along",
+      "adds": "Anyone follows the songs on their phone, through the community's address or a QR code."
+    },
+    "shortLinks": {
+      "name": "Short links",
+      "adds": "Short links to playlists, songs and screens."
+    },
+    "sideBySide": {
+      "name": "Side by side",
+      "adds": "Two languages side by side in the song editor."
+    },
+    "install": {
+      "name": "Install the app",
+      "adds": "Install Norless as an app on phones and laptops."
+    },
+    "theme": {
+      "name": "Community colors",
+      "adds": "The community's colors and font in the app."
+    },
+    "shortcuts": {
+      "name": "Keyboard shortcuts",
+      "adds": "The list of keyboard shortcuts."
+    },
+    "songFeedback": {
+      "name": "Likes",
+      "adds": "Members like and dislike songs; owners can exclude one."
+    },
+    "referenceLink": {
+      "name": "Reference recordings",
+      "adds": "Recordings to learn a song from, linked on its page."
+    },
+    "credits": {
+      "name": "Authors and copyright",
+      "adds": "A song's authors, copyright and source."
+    },
+    "statistics": {
+      "name": "Statistics",
+      "adds": "The most sung songs, and the services each song was sung in."
+    },
+    "rotation": {
+      "name": "Rotation",
+      "adds": "A hint on songs sung in most of the last services."
+    },
+    "yearRecap": {
+      "name": "Year in songs",
+      "adds": "A year's songs at a glance."
+    },
+    "servicesGrid": {
+      "name": "Services grid",
+      "adds": "The last 12 services as a grid."
+    },
+    "searchMisses": {
+      "name": "Searches with no results",
+      "adds": "What editors and owners searched for and didn't find."
+    },
+    "chapters": {
+      "name": "YouTube chapters",
+      "adds": "Chapters for the service's video, from when each entry went live."
+    },
+    "chordColors": {
+      "name": "Chord colors",
+      "adds": "Chords colored by their degree in the key."
+    },
+    "host": {
+      "name": "Host view",
+      "adds": "The host's words between songs, with what's next."
+    },
+    "changes": {
+      "name": "Changes",
+      "adds": "Who changed what, and when, for owners."
+    },
+    "practiceRooms": {
+      "name": "Practice rooms",
+      "adds": "Rooms next to the live service, for a band practice or a children's meeting."
+    },
+    "midiChords": {
+      "name": "Chords from a piano",
+      "adds": "Play a chord on a MIDI or Bluetooth piano, and Norless writes it into the song."
+    },
+    "audioChords": {
+      "name": "Chords by ear",
+      "adds": "Norless listens through a microphone or the mixer and names the chord."
+    },
+    "chordWheel": {
+      "name": "Chord wheel",
+      "adds": "A circle of fifths that shows which chord is playing."
+    },
+    "liveChord": {
+      "name": "Live chord",
+      "adds": "Musicians see the chord the pianist plays, as it's played."
+    },
+    "chordHelper": {
+      "name": "Chord helper",
+      "adds": "Someone follows the lyrics while the pianist plays, and each chord lands there."
+    },
+    "fileSlides": {
+      "name": "Slides from files",
+      "adds": "PDF and pictures in a playlist, a page per slide, with a file per language and a timer."
+    },
+    "melodia": {
+      "name": "melodia.ro songs",
+      "adds": "Search and import songs from melodia.ro."
+    },
+    "webhooks": {
+      "name": "Webhooks",
+      "adds": "Other apps follow the service: when an entry goes live, when it starts and ends."
+    },
+    "offline": {
+      "name": "Offline",
+      "adds": "Songs and the newest playlists kept on a device, so it projects without internet, with playlists made there by searching them."
+    },
+    "serviceRoles": {
+      "name": "Service roles",
+      "adds": "Who plays, sings and serves in each service, from a template per weekly event."
+    },
+    "signUps": {
+      "name": "Sign-ups",
+      "adds": "Members sign up for open places in the schedule."
+    },
+    "blockouts": {
+      "name": "Away dates",
+      "adds": "Members mark the dates they're away."
+    },
+    "pushNotifications": {
+      "name": "Notifications",
+      "adds": "Notifications on phones: when you're scheduled, reminders and open places."
+    },
+    "mySchedule": {
+      "name": "My schedule",
+      "adds": "Each member's own services and roles."
+    },
+    "ledBy": {
+      "name": "Led by",
+      "adds": "Who leads each song: the service's worship lead, or a vocalist the team chose, on the playlist and the stage views."
+    },
+    "churchCalendar": {
+      "name": "Church calendar",
+      "adds": "What's coming in the church's calendar, on My schedule and the team schedule, read from its iCal address."
+    },
+    "playlistNews": {
+      "name": "Playlist news",
+      "adds": "The team tells a service's people its playlist is ready, and its musicians hear of songs changed after."
+    },
+    "replays": {
+      "name": "Watch again",
+      "adds": "Each song's moments in the services' YouTube streams: on its page, in a past playlist's entries and in the statistics."
+    },
+    "bigScreen": {
+      "name": "Big screen",
+      "adds": "A laptop layout for Full HD, QHD and 4K windows: every screen and every musician's device at once, and the room's information."
+    },
+    "welcome": {
+      "name": "Welcome page",
+      "adds": "A built-in page for the projectors before a service: the community's name and logo, a countdown and announcements."
+    },
+    "insertBetween": {
+      "name": "Add between rows",
+      "adds": "A + between a playlist's rows adds a song, a divider or a text slide right there."
+    }
+  },
+  "detect": {
+    "title": "Play a chord",
+    "piano": "Use a piano",
+    "pianoStop": "Stop the piano",
+    "bluetooth": "Connect a Bluetooth piano",
+    "listen": "Listen",
+    "listenStop": "Stop listening",
+    "chooseInput": "Choose what to listen to",
+    "inputHelp": "A microphone hears the whole room; the mixer's input hears one instrument clearly.",
+    "bluetoothOn": "Bluetooth piano: {{name}}",
+    "pianoOn": "Piano: {{name}}",
+    "noMidi": "This browser can't use a MIDI piano: Chrome or Edge on Android or a laptop can. Listening works everywhere.",
+    "denied": "Norless may not use it: allow it in the browser's site settings.",
+    "plugIn": "Plug in a MIDI piano, or connect a Bluetooth one.",
+    "how": "Tap a letter, then play the chord: it goes there when you let go of the keys. While listening, the chord heard is offered when you tap a letter.",
+    "playing": "Chord played",
+    "wheel": "Circle of fifths",
+    "wheelOn": "Circle of fifths, {{chord}} played",
+    "useHeard": "Use {{chord}}",
+    "share": "Share chords",
+    "shareStop": "Stop sharing ({{chord}})",
+    "fromPiano": "From a MIDI piano",
+    "fromMixer": "From the mixer",
+    "fromMic": "From a microphone",
+    "from": {
+      "midi": "From {{name}}'s piano",
+      "mixer": "From the mixer, through {{name}}'s device",
+      "mic": "From {{name}}'s microphone"
+    },
+    "nobody": "Nobody is sharing chords right now. A team member shares them from this view's Share chords menu: from a piano, the mixer or a microphone."
+  },
+  "team": {
+    "title": "Team schedule",
+    "help": "Who does what in the coming services and rehearsals. The team fills the places; each person accepts or declines their own.",
+    "membersOnly": "The team schedule is for the community's members.",
+    "noEvents": "No weekly services yet",
+    "noEventsHelp": "The schedule follows the services and rehearsals in Settings → Schedule.",
+    "toSettings": "Open the service schedule",
+    "addSlot": "Add a place",
+    "noSlots": "No places set for this date yet.",
+    "noSlotsTeam": "No places yet: add some, or set what this service starts with below.",
+    "who": "Who for {{role}}",
+    "open": "Open",
+    "asked": "Waiting for an answer",
+    "offered": "Offers to",
+    "away": "Away that day",
+    "twice": "Two roles that day",
+    "personAway": "{{name}} (away)",
+    "confirm": "Confirm",
+    "turnDown": "Turn down",
+    "take": "Take it",
+    "offer": "Offer to do it",
+    "removeSlot": "Remove this place for {{role}}",
+    "templates": "What each date starts with",
+    "templatesHelp": "For each weekly service or rehearsal, the places each of its dates starts with; change a date on its own above.",
+    "saveTemplate": "Save for {{name}}",
+    "people": "Who does what",
+    "peopleHelp": "People marked for a role take its open places at once and hear when one opens. Those who play an instrument are marked for its role already.",
+    "nobody": "Nobody yet",
+    "choosePeople": "Choose people",
+    "peopleFor": "People for {{role}}",
+    "byInstrument": "Those who play its instrument in their musician profile count too.",
+    "mine": "My schedule",
+    "yours": "Your services",
+    "noneYours": "Nothing for you in the coming weeks.",
+    "also": "Also {{roles}} that day",
+    "accept": "Accept",
+    "decline": "Decline",
+    "openForYou": "Open places for you this week",
+    "declineTitle": "Decline {{role}}?",
+    "why": "Why (optional)",
+    "awayTitle": "Days you're away",
+    "awayHelp": "The team sees them when it plans.",
+    "from": "From",
+    "to": "To",
+    "note": "Note",
+    "addAway": "Add",
+    "removeAway": "Remove these days",
+    "push": "Notifications on this device",
+    "pushInstall": "Notifications need Norless installed",
+    "pushInstallHow": "On an iPhone: open Norless in Safari, tap Share, then Add to Home Screen; open it from there and turn notifications on. Until then, what's new shows here and at the top of the pages.",
+    "pushOff": "This server doesn't send notifications yet: what's new shows here and at the top of the pages.",
+    "pushOn": "Notifications are on for this device.",
+    "pushTurnOn": "Turn on notifications",
+    "pushDenied": "The browser blocks them: allow notifications for Norless in its settings.",
+    "notifications": "What's new for you",
+    "noNotifications": "Nothing yet.",
+    "pushSent": "Sent to {{count}} of your devices",
+    "pushSent_one": "Sent to your device",
+    "pushFailed": "not sent to {{count}} devices",
+    "pushFailed_one": "not sent to 1 device",
+    "pushGone": "{{count}} devices stopped notifications",
+    "pushGone_one": "1 device stopped notifications",
+    "pushKeys": "Only here: notifications to phones aren't set up yet",
+    "pushDevices": "Only here: none of your devices allowed notifications",
+    "next": "You're on {{role}}: {{when}}",
+    "unread": "{{count}} new",
+    "unread_one": "1 new",
+    "today": "Today: {{roles}}",
+    "roles": "Roles",
+    "rolesHelp": "The roles of a service, for the team schedule. A role for an instrument marks those who play it.",
+    "roleName": "Name",
+    "instrument": "Instrument",
+    "noInstrument": "None",
+    "addRole": "Add a role",
+    "removeRole": "Remove {{role}}",
+    "told": {
+      "assigned": "You're on {{role}}: {{when}}",
+      "unassigned": "You're no longer on {{role}}: {{when}}",
+      "reminder": "In 3 hours: {{role}}, {{when}}",
+      "open": "Open place: {{role}}, {{when}}",
+      "declined": "{{who}} can't do {{role}}: {{when}}",
+      "signedUp": "{{who}} takes {{role}}: {{when}}",
+      "offered": "{{who}} offers to do {{role}}: {{when}}",
+      "confirmed": "You're on {{role}}: {{when}}",
+      "notTaken": "{{role}}, {{when}}: the team chose someone else",
+      "ready": "{{title}} is ready: {{count}} songs",
+      "changed": "{{song}} changed, in {{title}}"
+    },
+    "noDates": "No services in the coming weeks",
+    "noDatesHelp": "The schedule shows the services and rehearsals of the next 8 weeks, from Settings → Schedule.",
+    "slotActions": "Actions: place for {{role}}",
+    "confirmRemoveSlot": "Remove this place for {{role}}?",
+    "leadsSongs": "Leads the songs",
+    "ledBy": "Led by {{name}}",
+    "ledByMenu": "Led by…",
+    "ledByTitle": "Who leads {{song}}",
+    "ledByLead": "{{name}}, the worship lead",
+    "ledByNone": "Nobody chosen",
+    "ledByHelp": "From this service's slots. Without a choice, the worship lead leads.",
+    "ledByNobody": "Nobody leads or sings in this service's slots yet: the team schedule fills them."
+  },
+  "whatsNew": {
+    "open": "What's new: {{count}}",
+    "new": "New in Norless: {{names}}",
+    "gotIt": "Got it",
+    "many": "New in Norless: {{count}} features",
+    "many_one": "New in Norless: 1 feature"
+  },
+  "calendar": {
+    "title": "In the church's calendar",
+    "failed": "The calendar couldn't be read just now; these are from before.",
+    "allDay": "All day",
+    "settingsTitle": "Church calendar",
+    "settingsHelp": "Members see what's coming in the church's calendar on My schedule and the team schedule. Paste its iCal address: in Google Calendar, the calendar's settings, \"Secret address in iCal format\". Only owners see the address.",
+    "address": "iCal address",
+    "addressHelp": "https://… or webcal://…, read again every hour.",
+    "invalid": "An https:// or webcal:// address.",
+    "notRead": "Couldn't read a calendar at this address.",
+    "read": "{{count}} events coming, read at {{at}}.",
+    "read_one": "1 event coming, read at {{at}}."
+  },
+  "offline": {
+    "keep": "Keep songs for offline",
+    "keepHelp": "This device keeps every song and the newest playlists, to project without internet.",
+    "offWithout": "There's no internet: switched off, this device forgets the kept songs and can't keep them again until the internet is back. Switch off anyway?",
+    "kept": "{{count}} songs kept, at {{at}}.",
+    "kept_one": "1 song kept, at {{at}}.",
+    "title": "Offline",
+    "keptOn": "Kept on this device on {{at}}: {{count}} songs and {{playlists}} playlists.",
+    "nothing": "Nothing kept on this device",
+    "nothingHelp": "With internet, switch on \"Keep songs for offline\" in This device, under the live controls; then this page projects them without internet.",
+    "playlists": "Playlists",
+    "project": "Project",
+    "window": "Projector window",
+    "stop": "Stop projecting",
+    "newPlaylist": "New playlist",
+    "newPlaceholder": "Campfire",
+    "create": "Create the playlist",
+    "remove": "Remove {{title}}",
+    "search": "Add a song",
+    "open": "Open what this device kept"
+  },
+  "news": {
+    "tell": "Tell the team it's ready",
+    "tellAgain": "Tell the team again",
+    "tellHelp": "Everyone in this service's slots is told the playlist is ready, in Norless and on phones with notifications. Songs changed after this are told to its musicians and singers.",
+    "toldBefore": "Told on {{at}}.",
+    "told": "Told {{count}} people.",
+    "told_one": "Told 1 person.",
+    "nobody": "Nobody is in this service's slots yet: the team schedule fills them.",
+    "tellButton": "Tell them"
+  },
+  "replays": {
+    "title": "Watch again",
+    "watch": "Watch in the stream",
+    "latest": "{{title}}: its latest service in the stream"
+  },
+  "slides": {
+    "add": "Slides from a file",
+    "page": "Slides {{page}}/{{total}}",
+    "nextPage": "Next page",
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "preparing": "Preparing {{pages}}/{{total}}",
+    "failed": "The file couldn't be opened",
+    "asPdf": "A presentation is added as a PDF: export it first. PowerPoint: File → Save As → PDF. Keynote: File → Export To → PDF. Google Slides and Canva: Download → PDF.",
+    "closeHint": "Close",
+    "addFor": "Add a file for {{language}}",
+    "replaceFor": "Replace the file for {{language}}",
+    "removeFor": "Remove the file for {{language}}",
+    "timer": "Next page every … seconds",
+    "seconds": "Seconds per page",
+    "timerHelp": "From 3 to 120. It starts from this entry, loops after the last page, and stops when anything else goes live.",
+    "startTimer": "Start",
+    "stopTimer": "Stop the timer",
+    "download": "Download the file",
+    "rename": "Rename the slides",
+    "title": "Title"
+  },
+  "bigScreen": {
+    "screens": "The room's screens",
+    "people": "Musicians' and vocalists' devices",
+    "nobody": "No musicians or vocalists view is open now.",
+    "device": "{{name}} · {{layout}} · {{device}}",
+    "open": "Open {{name}} larger",
+    "screenSettings": "This screen's settings",
+    "nextSong": "The next song",
+    "noNextSong": "No song after this one",
+    "room": "The room",
+    "problems_one": "{{count}} problem",
+    "problems_other": "{{count}} problems",
+    "here": "Who's here"
+  },
+  "welcome": {
+    "name": "Welcome",
+    "eventIn": "{{event}} starts in {{time}}",
+    "in": "Starts in {{time}}",
+    "at": "{{event}} · {{day}} at {{time}}",
+    "settings": "Welcome page",
+    "settingsHelp": "Shown on the projectors from the Pages menu before a service: the community's name and logo, a countdown to the next service or rehearsal, and these announcements, one after another.",
+    "announcements": "Announcements",
+    "announcementsHelp": "A blank line between two announcements. Markdown works: **bold**, # a heading."
+  }
+}

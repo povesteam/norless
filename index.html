@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <!-- The browser's bar and the page before its styles load, in the system's mode, so
+         opening the app never flashes white in a dark room (app-shell spec). -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#f5f5f5"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#060607"
+    />
+    <script>
+      // Before the first paint: screens and stage views dark, whatever the system's mode,
+      // so loading or reloading one never flashes light (add-loading-shell); a paired
+      // screen in what it showed last, e.g. an overlay's transparency. The device type as
+      // the app tells it (deviceTypeFor), for where the placeholder goes.
+      {
+        const html = document.documentElement;
+        const path = location.pathname;
+        const read = (key) => {
+          try {
+            return localStorage.getItem(key);
+          } catch {
+            return null;
+          }
+        };
+        const screens =
+          /^\/(s\/|pair(\/|$)|[^/]+\/(projector|local)\/|[^/]+\/stage(\/|$))/;
+        const stage = /^\/[^/]+\/(musicians|vocalists)(\/|$)/;
+        if (screens.test(path)) html.dataset.screen = "";
+        if (screens.test(path) || stage.test(path)) {
+          const background =
+            (path.startsWith("/s/") && read("norless:screen-background")) ||
+            "#000";
+          html.dataset.dark = "";
+          html.style.background = background;
+          for (const meta of document.querySelectorAll(
+            'meta[name="theme-color"]',
+          ))
+            meta.content = background === "transparent" ? "#000" : background;
+        }
+        html.dataset.device =
+          read("norless:device-type") ??
+          (Math.min(screen.width, screen.height) < 600
+            ? "phone"
+            : matchMedia("(pointer: coarse)").matches
+              ? "tablet"
+              : "laptop");
+      }
+    </script>
+    <style>
+      html {
+        background: #f5f5f5;
+      }
+      @media (prefers-color-scheme: dark) {
+        html {
+          background: #060607;
+        }
+      }
+      /* While the app's code loads: the app's own placeholder bars (Placeholder, as a
+         playlist page asks for them: a heading and 8 lines), where and as it draws
+         them, after 300 ms (add-loading-shell), until Root removes them; none on
+         screens. */
+      #shell {
+        --bar: oklch(0.9373 0.0013 286.37);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 88px 1rem 2rem;
+        opacity: 0;
+        animation: shell-in 150ms 300ms forwards;
+      }
+      html[data-device="phone"] #shell {
+        padding-top: 77px;
+      }
+      html[data-screen] #shell {
+        display: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        #shell {
+          --bar: oklch(0.2721 0.0024 247.91);
+        }
+      }
+      html[data-dark] #shell {
+        --bar: oklch(0.2721 0.0024 247.91);
+      }
+      #shell > div {
+        position: relative;
+        overflow: hidden;
+        height: 1rem;
+        border-radius: 0.5rem;
+        background: color-mix(in oklab, var(--bar) 70%, transparent);
+      }
+      #shell > div::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        translate: -100%;
+        background-image: linear-gradient(
+          to right in oklab,
+          transparent,
+          var(--bar),
+          transparent
+        );
+        animation: shell-shimmer 2s linear infinite;
+      }
+      #shell > div:first-child {
+        height: 1.75rem;
+        width: 33.333%;
+      }
+      @keyframes shell-in {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes shell-shimmer {
+        to {
+          transform: translate(200%);
+        }
+      }
+    </style>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>Norless</title>
+  </head>
+  <body class="bg-background text-foreground">
+    <div id="shell" role="status" aria-label="Loading…">
+      <div></div>
+      <div style="width: 80%"></div>
+      <div style="width: 60%"></div>
+      <div style="width: 66.667%"></div>
+      <div style="width: 50%"></div>
+      <div style="width: 80%"></div>
+      <div style="width: 60%"></div>
+      <div style="width: 66.667%"></div>
+      <div style="width: 50%"></div>
+    </div>
+    <script>
+      // The label in the browser's language, as the app's strings haven't loaded yet.
+      {
+        const shell = document.getElementById("shell");
+        const language = navigator.language.slice(0, 2);
+        if (language === "ro") shell.ariaLabel = "Se încarcă…";
+        if (language === "uk") shell.ariaLabel = "Завантаження…";
+      }
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/client/main.tsx"></script>
+  </body>
+</html>

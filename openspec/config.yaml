@@ -1,0 +1,55 @@
+schema: spec-driven
+githubCopilot:
+  cloudAgent: false
+
+context: |
+  Norless: song projection for communities (churches, camps, choirs) that project
+  several languages in sync. First user: one community projecting Romanian and Ukrainian.
+  Open source, public repo. The full plan and milestones are in PLAN.md.
+
+  Terminology:
+  - community: the tenant (community_id). v1 has a single community.
+  - language: a language group inside a community (ro, uk, later en). Never "congregation".
+  - room: where a presentation runs. One live state per room. v1 has one default room.
+  - screen: an output in a room with its own language(s) and layout (projector, musicians,
+    vocalists, stage monitor, broadcast overlay). All screens in a room follow the room's live state.
+  - layout: a named way to show a view (e.g. Controller, Running order) for a device type
+    (phone, tablet, laptop), chosen per member and device type.
+  - part: a section of a song (verse, refrain…), or an unnamed slide, which is its own
+    numbered part. Stage screens show whole parts.
+  - roles: owner, editor, team (live control and playlists). A member may have no role.
+    Who can do what: the matrix in the members spec, and its overview in PLAN.md.
+
+  Stack (stable releases only, 1.0 or later):
+  TypeScript, React, Vite, HeroUI with React Aria, Tailwind CSS, wouter, i18next, PWA with
+  vite-plugin-pwa (Workbox); Node LTS, Fastify, ws;
+  SQLite with better-sqlite3 and plain SQL migrations; Google login with openid-client plus
+  email magic links; Vitest and Playwright; Docker behind Caddy.
+
+  Product requirements that apply to every UI change: works on phone, tablet and desktop,
+  light/dark mode follows the system (stage layouts are dark by default), every user-facing
+  string is translatable,
+  visible resources have permalinks, and the app links to its source code (AGPL-3.0 section 13
+  requires offering the source to network users).
+
+  License: AGPL-3.0-or-later. Contributions are signed off (DCO), no CLA.
+
+  Norless's own projector screens are the main projector. Bible verses are handled by
+  Nicolae Matei's "Project verses from bible.com" extension; Norless can optionally send song
+  slides to its projection windows through its External API (updateText).
+
+  AI features suggest and a person approves: nothing AI-generated is applied without review.
+
+  Public access: without login, anyone can read songs and playlists, see what is live, search,
+  export, project locally and follow along on their phone (v1.1). Changes, room live control,
+  members and presence need a login or a guest pass (v1.1).
+
+  Before writing a change, ask the maintainers every open question until none remain, and
+  record the answers as decisions in the change.
+
+rules:
+  proposal:
+    - Name the milestone (v1, v1.1, v1.2, v2, v3, v4) the change belongs to.
+    - Include a "Non-goals" section.
+  tasks:
+    - Every behavior change has a test task (Vitest, or Playwright for user flows).

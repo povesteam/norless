@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/* What's live: the main color's opposite, as the old app's pink stood out from its blue
+   (2026-10-02), vivid and at one lightness, so a dark main color doesn't make it
+   brown and a frame of it stands out in light and dark (fix-classic-review). Set with
+   each theme, so a scope with its own main color gets its own. */
+:root,
+.light,
+.dark,
+[data-theme] {
+  --live: oklch(from hsl(from var(--accent) calc(h + 180) 100% 50%) 0.64 c h);
+}
+@theme inline {
+  --color-live: var(--live);
+}
+
+/* HeroUI's defaults, a little darker where text didn't reach a 4.5:1 contrast (axe, in
+   the end-to-end tests): white on the main color and on its hover, muted text also on a
+   selected row, and soft success and warning text. A community's own color comes after, with its
+   own contrast check. */
+:root {
+  --accent: oklch(0.55 0.195 253.83);
+}
+:root,
+.light,
+.dark {
+  --accent-hover: color-mix(in oklab, var(--accent) 90%, black 10%);
+}
+:root:not(.dark),
+.light {
+  --muted: oklch(0.49 0.0138 285.94);
+  --success-soft-foreground: color-mix(
+    in oklab,
+    var(--success) 40%,
+    var(--foreground) 60%
+  );
+  --warning-soft-foreground: color-mix(
+    in oklab,
+    var(--warning) 40%,
+    var(--foreground) 60%
+  );
+}
+
+/* Chords in the accent color, a quarter toward the text color, so they reach 4.5:1 on
+   the page in light and dark, and on a stage's own look. */
+@utility text-chord {
+  color: color-mix(in oklab, var(--accent) 75%, var(--foreground));
+}
+
+/* Links sit an icon before their text, as buttons do. */
+.link {
+  gap: 0.375rem;
+}
+
+/* Feels like an installed app, not a website (app-shell spec). */
+html,
+body {
+  /* No pull-to-refresh or rubber-band scrolling of the whole page. */
+  overscroll-behavior: none;
+}
+/* The page's background (a community's tint) down to the screen's bottom, not only as
+   far as a short page goes; screens and stage views keep the dark they load in. */
+html:not([data-dark]) body {
+  min-height: 100dvh;
+}
+body {
+  /* Clear of notches and the home indicator. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0
+    env(safe-area-inset-left);
+  -webkit-tap-highlight-color: transparent;
+}
+/* A page with live controls at its bottom fills the screen, so the bar sits at the
+   screen's bottom even when the page is short, not in the middle of it. */
+#root > div:has([data-bottom-bar]) {
+  min-height: 100dvh;
+  padding-bottom: 0;
+}
+/* An app screen (Classic on a laptop) fills the window: its columns scroll, the page
+   doesn't, and About and Privacy are in its menu. */
+@media (min-width: 750px) {
+  #root > div:has([data-app-screen]) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  #root > div:has([data-app-screen]) > footer {
+    display: none;
+  }
+}
+/* Interface text can't be selected by accident; lyrics and editors stay selectable. */
+button,
+[role="button"],
+[role="tab"],
+[role="menuitem"],
+[role="menuitemradio"],
+[role="radio"],
+[role="option"],
+nav,
+label {
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (pointer: coarse) {
+  /* iOS zooms into a field whose text is under 16px. */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+  /* Touch targets of at least 44 × 44 points. */
+  button,
+  [role="button"],
+  [role="menuitem"],
+  [role="menuitemradio"],
+  [role="option"],
+  [role="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Unchecked checkboxes and radios show their edge on a light page, where the theme's
+   faint shadow alone left them almost invisible (screenshot review, 2026-10-05). */
+.checkbox:not([data-selected="true"]) .checkbox__control,
+.radio:not([data-selected="true"]) .radio__control {
+  border-width: 1px;
+  border-color: var(--muted);
+}

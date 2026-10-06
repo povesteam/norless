@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # The deploy workflow runs it first, on what it deploys.
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Every commit is signed off (DCO)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          for commit in $(git rev-list "$BASE..$HEAD"); do
+            git log -1 --format=%B "$commit" | grep -q '^Signed-off-by: ' \
+              || { echo "::error::Commit $commit is not signed off. Use git commit -s."; exit 1; }
+          done
+
+      - run: npm run lint
+      - run: npm run i18n
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run specs
+      - run: npm test
+
+      # The e2e run builds and starts the converter's image.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e
+
+      - run: docker build -t norless:ci .
+      - run: docker build -t norless-converter:ci src/converter
+      # The image starts as production runs it: a server import missing from
+      # `dependencies` only fails here.
+      - name: The images start and answer
+        run: |
+          docker run -d --name norless-ci norless:ci
+          docker run -d --name norless-converter-ci --read-only --tmpfs /tmp norless-converter:ci
+          for name in norless-ci:3000/api/health norless-converter-ci:3900/health; do
+            container=${name%%:*} address=${name#*:}
+            for i in $(seq 1 30); do
+              docker exec "$container" node -e "fetch('http://127.0.0.1:$address').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))" && continue 2
+              sleep 1
+            done
+            docker logs "$container"
+            exit 1
+          done

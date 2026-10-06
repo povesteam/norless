@@ -1,0 +1,34 @@
+# Feature switches design
+
+Why a community moves from Classic to the full interface one feature at a time, as the `feature-switches` spec says (the capability keeps its name; it has no steps).
+
+## Decisions
+
+- **Switches, one per feature**: owners release features a few at a time so the team isn't hit by dozens on one Sunday. A switch is per community, not per member, so everyone sees the same app and there is one thing to teach and support.
+- **Storage**: `communities.switches` is one JSON object of what owners set (true or false per feature). Nothing stored means off, so a stale value or an unknown key does no harm.
+- **Classic is the app frame switched off**: there is no separate Classic flag. Classic's own features (feedback, logging a laptop in from a phone, print/save/copy of a playlist) are marked `classic` in `src/shared/features.ts`: always on, not switchable, because operators used them from the first Sunday. The imported community has only these on, so it behaves like the old Norless.
+- **Classic stays a layout choice while the frame is on**: its flow differs from the Controller's (a click only selects; in the Controller it sends live), so people who learned one aren't forced into the other.
+- **Layouts carry their feature**: each layout option names the feature that offers it. A view lists the options whose feature is on, then takes the person's choice or the first option that fits the device. A hidden choice stays in the preferences, so it returns with its feature.
+- **Needs: one parent per feature**: a feature needs the feature its only way in sits in (practice rooms are in the live bar of the laptop layouts, which sit in the app menu). A feature with a second way in needs nothing. One parent at most makes the features a forest, which draws without crossing lines.
+- **Locked, not rewritten**: a feature is on when its own switch is on and its parent is on (`switchesOn`). Switching a parent off doesn't touch its children's settings; they return with it. Switching on a locked feature switches on its whole path in one confirmation (`pathTo`), because a switch that shows nothing reads as broken.
+- **Interface only**: the server never checks switches; the "Who can do what" matrix is the authority. Background work (plays recorded with the schedule's mode, screens following the live state) runs whatever is on. Data of a feature switched off stays and still works. Settings are all there at Classic, so owners prepare before the features appear.
+- **New features arrive off**: a feature with `added` and no stored switch is off and marked new until an owner switches it on or off. A new feature needs its key in `features`, its icon in `featureIcons` and its branch in `branchOf`; the type checker enforces the last two.
+- **Every member sees the Features page**: from the menu, in Classic too, so members see what is coming and can ask for it. Planned features (`planned`) are in the graph, not switchable.
+- **Requests have their own table**: `feature_requests`, one row per member and feature with an optional note. A count per feature and one per member don't fit free-text ideas. A withdrawal deletes the row, and a deleted account takes its rows. Only active members count. Requests are not emailed: a tap is lighter than an idea, and owners would get a mail per tap. Owners read them in the Ideas page, most asked first.
+- **Graph layout**: d3-hierarchy's tidy tree (Reingold-Tilford), left to right. A parent sits beside its children, and different parents' children never interleave, so lines can't cross. Each line is an S-curve from the end of the parent's pill to the child, with the same x-shape between two columns, so none crosses another or runs behind a node.
+- **Computed, not measured**: node and line positions come from `layOut` in `tree-layout.ts`, so no DOM measuring and a unit test can check them. Children follow the order of `features`. The tallest tree is on the left; the other trees and the features on their own pack into a grid on the right. d3-hierarchy is a dev dependency (Vite bundles it); only `hierarchy` and `tree` are used.
+- **Laptop fits, phone pans**: the graph has one fixed size. A laptop window holds its width; a phone scrolls both ways and pinch-zooms. No zoom controls or canvas.
+- **Nodes**: round icon (the feature's own app icon) with the name beside it, in a fixed colour per branch that reads in light and dark. Color is never the only sign: fill or ring, the lock, hourglass and spark marks, and the state in the accessible name ("Practice rooms, Needs Laptop layouts"). Lines light up when the feature they lead to is on. A node's size is fixed, so a state change moves nothing. Nodes are React Aria buttons, since HeroUI's ToggleButton is a compact toolbar button.
+- **A tap opens a dialog, the switch is inside**: in a dense graph a stray tap can't switch anything. The dialog says what the feature does, lists the path it also switches on under the switch, and holds the request for members. It is the one confirmation. `/features?feature=<id>` opens it.
+- **What's new is a bubble**: each feature switched on since the person last looked, by name, with what it does and a link to its node. Members' seen features are kept in their preferences (`seenSwitches`, per community), visitors' in the browser. The set only grows, so off and on again announces nothing. A first visit only notes what is on. Opening the dialog counts as seen at once, so closing it any way leaves nothing. Screen devices never render it.
+- **The bubble moves**: dragged, it snaps to the nearer side at the height it was let go, kept inside the window, and each device remembers its place. A press that moves under 6 pixels is a tap, and the click ending a drag is ignored. It starts at the left, over the playlist's times, away from the rows' actions and above a phone's live bar.
+
+## Rejected
+
+- Interface steps (six preset groups): they only set the switches' defaults, and owners met them in two places (a row above the graph, What's new by step). One concept is enough.
+- A reset button ("Back to Classic", "Everything on"): owners switch features one by one, and switching off a parent already turns its children off.
+- Owners trying a feature alone before the team: plain on/off is enough, and the staging server is for trying.
+- Per-member opt-in: the team would see different apps.
+- A banner for What's new: with five features it filled more than half a phone.
+- dagre for the layout: it packs unconnected features into one wide row and routes lines itself. A force layout can't promise no crossings.
+- Branch columns by step tiers with a trunk bar: lines ran behind nodes and across columns, and the last column was cut off on a laptop.

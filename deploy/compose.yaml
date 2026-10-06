@@ -1,0 +1,74 @@
+# Norless on its VM: production, its converter and Caddy in front; staging runs on a
+# maintainer's machine (deploy/rehearse.sh). See deploy/README.md.
+# deploy/.env on the VM sets IMAGE, PRODUCTION_TAG, CONVERTER_PRODUCTION_TAG and the
+# Mailgun settings. During a deploy, deploy.sh updates the converter, then runs the new
+# tag beside the service as its candidate.
+name: norless
+
+# The logs hold visitors' IP addresses: a few days' worth at most.
+x-logging: &logs
+  driver: local
+  options:
+    max-size: 10m
+    max-file: "3"
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    logging: *logs
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+  norless:
+    image: ${IMAGE}:${PRODUCTION_TAG}
+    restart: unless-stopped
+    logging: *logs
+    environment:
+      APP_ORIGIN: https://norless.com
+      TRUST_PROXY: "1"
+      MAILGUN_API_KEY: ${MAILGUN_API_KEY}
+      MAILGUN_DOMAIN: mg.norless.com
+      MAILGUN_API_URL: https://api.eu.mailgun.net
+      MAIL_FROM: Norless <login@norless.com>
+      MAIL_REPLY_TO: ${MAIL_REPLY_TO}
+      OPERATOR: ${OPERATOR}
+      APP_TEAM_EMAILS: ${APP_TEAM_EMAILS}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
+      PRIVACY_SERVICES: Hetzner Online GmbH, Germany (servers); Mailgun, EU region (email); Google (login with Google)
+      CONVERTER_URL: http://converter:3900
+    networks: [default, convert]
+    volumes:
+      - norless-data:/data
+
+  # Reads the files that come from people and the internet: only its
+  # app reaches it, it reaches nothing (an internal network, no internet), keeps
+  # nothing, and stays within a CPU and 1.5 GB so the app keeps the other.
+  converter:
+    image: ${IMAGE}-converter:${CONVERTER_PRODUCTION_TAG}
+    restart: unless-stopped
+    logging: *logs
+    networks: [convert]
+    read_only: true
+    tmpfs:
+      - /tmp:size=1g
+    cpus: 1
+    mem_limit: 1536m
+
+networks:
+  default:
+  convert:
+    internal: true
+
+volumes:
+  norless-data:
+  caddy-data:
+  caddy-config:
