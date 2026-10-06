@@ -60,6 +60,9 @@ test("a team member records a rehearsal through two songs and plays the refrain 
 
   await page.goto("/repetitii/musicians");
   await page.getByRole("button", { name: "Record", exact: true }).click();
+  // The first time on this device: everyone in the room is recorded.
+  await expect(page.getByText("Tell them before you start")).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Start recording" }).click();
   await expect(page.getByText("Recording · Radu")).toBeVisible();
   // A visitor's stage screen shows it, without the name.
@@ -149,6 +152,7 @@ test("the live panel folds this device's setup, remembers it, and says while it 
   await page.reload();
   await expect(device).toHaveAttribute("aria-expanded", "true");
   await record.click();
+  await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Start recording" }).click();
   await expect(page.getByRole("button", { name: /^Stop/ })).toBeVisible();
   // Folded, it records on and says so.
@@ -156,6 +160,13 @@ test("the live panel folds this device's setup, remembers it, and says while it 
   await expect(page.getByText("Recording", { exact: true })).toBeVisible();
   await page.waitForTimeout(2000);
   await device.click();
+  await page.getByRole("button", { name: /^Stop/ }).click();
+  await expect(record).toBeVisible({ timeout: 20_000 });
+  // The next time, this device starts at once, without the notice.
+  await record.click();
+  await expect(page.getByRole("button", { name: /^Stop/ })).toBeVisible();
+  await expect(page.getByText("Tell them before you start")).toHaveCount(0);
+  await page.waitForTimeout(1000);
   await page.getByRole("button", { name: /^Stop/ }).click();
   await expect(record).toBeVisible({ timeout: 20_000 });
 });

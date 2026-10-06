@@ -948,7 +948,10 @@
       "song": "Song"
     },
     "parts": "Parts",
-    "download": "Download"
+    "download": "Download",
+    "noticeTitle": "Everyone in the room is recorded",
+    "notice": "The band, the singers and anyone near the microphone are recorded. Tell them before you start; the stage screens show that recording is on.",
+    "continue": "Continue"
   },
   "tempo": {
     "listen": "Listen for tempo",

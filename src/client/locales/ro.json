@@ -948,7 +948,10 @@
       "song": "Cântare"
     },
     "parts": "Părți",
-    "download": "Descarcă"
+    "download": "Descarcă",
+    "noticeTitle": "Toți cei din sală sunt înregistrați",
+    "notice": "Formația, cântăreții și oricine e lângă microfon sunt înregistrați. Spune-le înainte să începi; ecranele de pe scenă arată că se înregistrează.",
+    "continue": "Continuă"
   },
   "tempo": {
     "listen": "Ascultă tempoul",

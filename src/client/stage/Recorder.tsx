@@ -1,5 +1,5 @@
-import { Circle, Mic, Square } from "lucide-react";
-import { Button } from "@heroui/react";
+import { ArrowRight, Circle, Mic, Square, X } from "lucide-react";
+import { Button, Modal } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { LiveView } from "../../server/live/live-view";
@@ -159,6 +159,63 @@ function Elapsed({ since }: { since: number }) {
   );
 }
 
+const NOTICED = "norless:recording-notice";
+/** Whether this device was told, before its first recording, that everyone is recorded. */
+const noticed = () => {
+  try {
+    return localStorage.getItem(NOTICED) === "1";
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Before the first recording on a device: everyone in the room is recorded, so tell
+ * them first. Continue goes on, and the device doesn't ask again.
+ */
+function RecordingNotice({
+  onContinue,
+  onClose,
+}: {
+  onContinue: () => void;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Modal.Backdrop isOpen onOpenChange={(isOpen) => !isOpen && onClose()}>
+      <Modal.Container>
+        <Modal.Dialog>
+          <Modal.Header>
+            <Modal.Heading>{t("recordings.noticeTitle")}</Modal.Heading>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{t("recordings.notice")}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onPress={onClose}>
+              <X />
+              {t("editor.close")}
+            </Button>
+            <Button
+              onPress={() => {
+                try {
+                  localStorage.setItem(NOTICED, "1");
+                } catch {
+                  // Asked again next time.
+                }
+                onContinue();
+              }}
+            >
+              <ArrowRight />
+              {t("recordings.continue")}
+            </Button>
+          </Modal.Footer>
+        </Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
+  );
+}
+
 /** Record, with the input chosen once; while recording, the time and Stop. */
 export function RecordButton({
   slug,
@@ -173,6 +230,10 @@ export function RecordButton({
   const { t } = useTranslation();
   const { state, since, start, stop } = useRecorder(slug);
   const input = useInputChoice("record", start);
+  // What Record or the input's arrow does once the notice is acknowledged.
+  const [then, setThen] = useState<(() => void) | null>(null);
+  const afterNotice = (next: () => void) => () =>
+    noticed() ? next() : setThen(() => next);
   if (state === "recording" || state === "stopping")
     return (
       <Button
@@ -191,12 +252,21 @@ export function RecordButton({
         big={big}
         chooseLabel={t("recordings.chooseInput")}
         label={compact ? t("recordings.record") : undefined}
-        onStart={() => void input.begin()}
-        onChoose={input.choose}
+        onStart={afterNotice(() => void input.begin())}
+        onChoose={afterNotice(input.choose)}
       >
         <Mic />
         {!compact && t("recordings.record")}
       </StartWithInput>
+      {then && (
+        <RecordingNotice
+          onContinue={() => {
+            setThen(null);
+            then();
+          }}
+          onClose={() => setThen(null)}
+        />
+      )}
       {input.choosing && (
         <InputDialog
           initial={input.remembered}
