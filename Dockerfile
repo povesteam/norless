@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:24-slim AS build
+FROM node:25-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json .npmrc ./
 RUN npm ci
@@ -9,7 +9,7 @@ RUN npm run build
 
 # Alpine (slim-app-image): an 8 MB base instead of Debian's 108 MB. better-sqlite3 ships
 # its musl build. The converter's image is Alpine too (ffmpeg, poppler).
-FROM node:24-alpine
+FROM node:26-alpine
 WORKDIR /app
 # Where users find this version's source code (AGPL): the repository, and the commit.
 ARG SOURCE_URL=""
