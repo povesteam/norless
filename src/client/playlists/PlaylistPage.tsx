@@ -371,6 +371,7 @@ export function PlaylistPage({ id }: { id: string }) {
             canEditSongs={canEditSongs}
             editor={songEditor}
             onEdit={setEditingSong}
+            empty={entries.length === 0}
             aside={
               canChange &&
               entries.length === 0 &&

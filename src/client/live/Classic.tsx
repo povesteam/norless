@@ -233,6 +233,7 @@ export function ClassicColumns({
   editor,
   onEdit,
   aside,
+  empty,
 }: {
   /** Above the playlist and staying there: its title and the search box. */
   top: React.ReactNode;
@@ -259,6 +260,8 @@ export function ClassicColumns({
   onEdit: (songId: string) => void;
   /** In the slides' place while no entry is selected, e.g. suggestions for an empty playlist. */
   aside?: React.ReactNode;
+  /** No entries yet: the hint about going live waits for one. */
+  empty: boolean;
 }) {
   const { t } = useTranslation();
   const searchHint = useHintAnchor("search");
@@ -272,7 +275,7 @@ export function ClassicColumns({
           {top}
         </div>
         <div
-          ref={goLiveHint}
+          ref={empty ? undefined : goLiveHint}
           className="min-[750px]:min-h-0 min-[750px]:flex-1 min-[750px]:overflow-y-auto"
         >
           {playlist}

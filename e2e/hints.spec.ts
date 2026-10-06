@@ -44,3 +44,13 @@ test("Classic's hints show one at a time beside their control, and Got it hides 
   ])
     await expect(page.getByText(seen)).toHaveCount(0);
 });
+
+test("on an empty playlist the first hint is about searching, not going live", async ({
+  page,
+}) => {
+  await logInAs(page, "vera@example.com");
+  await page.goto("/clasic/playlists/classic-empty");
+  const hint = page.getByRole("note", { name: "Hint" });
+  await expect(hint).toContainText("Type anywhere to search");
+  await expect(page.getByText("Double-click an entry")).toHaveCount(0);
+});

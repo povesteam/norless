@@ -215,13 +215,18 @@ for (const [id, days] of [
     "INSERT INTO plays (id, community_id, song_id, mode, played_at, created_at, updated_at) VALUES (?, 'c', 'isus', 'service', ?, '2026-01-01', '2026-01-01')",
   ).run(id, daysAgo(days));
 
-// Classic's hints: Eva hasn't seen them; everyone else has, so they don't cover what
-// the other tests click.
+// Classic's hints: Eva and Vera haven't seen them; everyone else has, so they don't
+// cover what the other tests click. Vera's playlist has no entries yet.
 db.exec(`
+  INSERT INTO users (id, display_name, email, status, created_at, updated_at) VALUES
+    ('vera', 'Vera', 'vera@example.com', 'active', '2026-01-01', '2026-01-01');
   INSERT INTO members (id, community_id, user_id, roles, status, created_at, updated_at) VALUES
-    ('m-eva-classic', 'c-classic', 'eva', '["team"]', 'active', '2026-01-01', '2026-01-01');
+    ('m-eva-classic', 'c-classic', 'eva', '["team"]', 'active', '2026-01-01', '2026-01-01'),
+    ('m-vera-classic', 'c-classic', 'vera', '["team"]', 'active', '2026-01-01', '2026-01-01');
+  INSERT INTO playlists (id, community_id, title, created_at, updated_at, created_by) VALUES
+    ('classic-empty', 'c-classic', 'Goală', '2025-12-01', '2025-12-01', 'vera');
   UPDATE users SET preferences = '{"hints":["goLive","search","keys","project","musician"]}'
-    WHERE id <> 'eva';
+    WHERE id NOT IN ('eva', 'vera');
 `);
 
 // A band of its own for the instrument layouts, whose live song no other test changes.

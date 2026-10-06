@@ -115,11 +115,15 @@ Classic's bar SHALL hold, from the left, a menu button; on a playlist, its name 
 
 ### Requirement: Classic hints
 
-Classic SHALL show the team up to four hints, one at a time, each in a small bubble next to the control it's about, until the member presses "Got it", which hides it for good on their account: a double-click or Go live projects the selected entry; typing anywhere searches and Enter adds; Page Down or → goes next, Page Up or ← previous, and Esc blanks; and a projector's button opens it full screen on the second display. A hint SHALL NOT cover the control it points at, nor move anything on the page.
+Classic SHALL show the team up to four hints, one at a time, each in a small bubble next to the control it's about, until the member presses "Got it", which hides it for good on their account: a double-click or Go live projects the selected entry; typing anywhere searches and Enter adds; Page Down or → goes next, Page Up or ← previous, and Esc blanks; and a projector's button opens it full screen on the second display. A hint SHALL NOT cover the control it points at, nor move anything on the page, and the one about going live SHALL wait until the playlist has an entry.
 
 #### Scenario: First Sunday
 - **WHEN** an operator opens Classic for the first time
 - **THEN** one hint points at Go live, and after "Got it" the next one shows, until all four were seen
+
+#### Scenario: An empty playlist
+- **WHEN** an operator who hasn't seen the hints opens a playlist without entries
+- **THEN** the first hint is about searching, and the one about going live waits for an entry
 
 ### Requirement: Classic song editor
 
