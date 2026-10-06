@@ -6,7 +6,7 @@
 #
 # Settings come from the environment, or from the git-ignored .env next to this file:
 #   DATABASE_PATH  the local database (default: data/norless.db)
-#   PROD_SSH       where the old app runs, for a fresh backup (e.g. root@app.norless.com)
+#   PROD_SSH       where the old app runs, for a fresh backup (e.g. root@old-app.example.com)
 #   OWNER_EMAIL    who is invited as owner again after the import
 set -e
 cd "$(dirname "$0")"
