@@ -102,9 +102,12 @@ export function App() {
           live ? "" : "max-w-7xl"
         } ${phone ? "pb-4" : "py-8"}`}
       >
-        <Shown feature="install">
-          <InstallSuggestion />
-        </Shown>
+        {/* The login page keeps to logging in. */}
+        {top !== "login" && (
+          <Shown feature="install">
+            <InstallSuggestion />
+          </Shown>
+        )}
         <NearbyLogins />
         {/* Not while the start page opens the last community: the
           installed app would flash this header first. */}

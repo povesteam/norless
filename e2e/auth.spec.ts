@@ -119,10 +119,14 @@ test("a laptop shows the QR first, the code only on asking, and the other ways o
   await page.getByRole("button", { name: /Can't scan/ }).click();
   await expect(page.getByText(/under Log in another device/)).toBeVisible();
   await page.getByRole("button", { name: "Other ways to log in" }).click();
+  // In the QR's place, all within the window.
+  await expect(qr).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "Continue with Google" }),
-  ).toBeVisible();
-  await expect(page.getByLabel("Email")).toBeVisible();
+  ).toBeInViewport();
+  await expect(page.getByLabel("Email")).toBeInViewport();
+  await page.getByRole("button", { name: "Log in with your phone" }).click();
+  await expect(qr).toBeVisible();
 });
 
 test("My account leads back to the community this device opened", async ({

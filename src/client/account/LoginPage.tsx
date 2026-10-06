@@ -1,4 +1,4 @@
-import { LogIn, Mail, Wrench } from "lucide-react";
+import { LogIn, Mail, Smartphone, Wrench } from "lucide-react";
 import {
   Alert,
   Button,
@@ -98,33 +98,43 @@ export function LoginPage() {
           </Alert.Content>
         </Alert>
       )}
-      {laptop ? <PhoneLogin target={target} big /> : phoneMain}
-      {hasOthers &&
-        (others ? (
-          <section className="flex flex-col gap-4 border-t border-separator pt-4">
-            <h3 className="text-lg font-semibold">{t("auth.otherWays")}</h3>
-            {laptop ? (
-              <>
-                {googleButton}
-                {emailForm}
-              </>
-            ) : (
-              <>
-                {googleButton && emailForm}
-                <PhoneLogin target={target} />
-              </>
-            )}
-          </section>
-        ) : (
+      {laptop && others ? (
+        // On a laptop the other ways take the QR's place, so all fits the window.
+        <section className="flex flex-col gap-4">
+          <h3 className="text-lg font-semibold">{t("auth.otherWays")}</h3>
+          {googleButton}
+          {emailForm}
           <button
             type="button"
             className="link self-start underline"
-            onClick={() => setOthers(true)}
+            onClick={() => setOthers(false)}
           >
-            <LogIn />
-            {t("auth.otherWays")}
+            <Smartphone />
+            {t("deviceLogin.withPhone")}
           </button>
-        ))}
+        </section>
+      ) : (
+        <>
+          {laptop ? <PhoneLogin target={target} big /> : phoneMain}
+          {hasOthers &&
+            (others ? (
+              <section className="flex flex-col gap-4 border-t border-separator pt-4">
+                <h3 className="text-lg font-semibold">{t("auth.otherWays")}</h3>
+                {googleButton && emailForm}
+                <PhoneLogin target={target} />
+              </section>
+            ) : (
+              <button
+                type="button"
+                className="link self-start underline"
+                onClick={() => setOthers(true)}
+              >
+                <LogIn />
+                {t("auth.otherWays")}
+              </button>
+            ))}
+        </>
+      )}
     </div>
   );
 }
@@ -135,7 +145,12 @@ type Gis = {
     id: {
       initialize: (options: object) => void;
       renderButton: (parent: HTMLElement, options: object) => void;
-      prompt: () => void;
+      prompt: (
+        listener?: (moment: {
+          isSkippedMoment: () => boolean;
+          isDismissedMoment: () => boolean;
+        }) => void,
+      ) => void;
     };
   };
 };
@@ -199,6 +214,9 @@ function GoogleButton({
   const { t, i18n } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const [own, setOwn] = useState(false);
+  // One Tap's prompt shows alone: the button's space stays empty until Google says the
+  // prompt was closed or didn't come (FedCM reports no moment it shows).
+  const [prompting, setPrompting] = useState(signIn && prompt);
   useEffect(() => {
     if (!signIn) return;
     let gone = false;
@@ -214,7 +232,11 @@ function GoogleButton({
           .catch(() => null),
       ]);
       const parent = ref.current;
-      if (gone || !google || !start || !parent) return;
+      if (gone) return;
+      if (!google || !start || !parent) {
+        setPrompting(false);
+        return;
+      }
       google.accounts.id.initialize({
         client_id: start.clientId,
         nonce: start.nonce,
@@ -248,7 +270,11 @@ function GoogleButton({
         locale: i18n.language,
       });
       setOwn(true);
-      if (prompt) google.accounts.id.prompt();
+      if (prompt)
+        google.accounts.id.prompt((moment) => {
+          if (moment.isSkippedMoment() || moment.isDismissedMoment())
+            setPrompting(false);
+        });
     })();
     return () => {
       gone = true;
@@ -257,7 +283,9 @@ function GoogleButton({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="grid w-full [&>*]:[grid-area:1/1]">
+    <div
+      className={`grid w-full [&>*]:[grid-area:1/1] ${prompting ? "invisible" : ""}`}
+    >
       <a
         href={href}
         aria-hidden={own || undefined}
@@ -270,11 +298,12 @@ function GoogleButton({
         <GoogleLogo />
         {t("auth.google")}
       </a>
-      {/* Takes clicks only once Google's button is in it. */}
+      {/* Takes clicks only once Google's button is in it. Its iframe's light color
+        scheme, like Google's page in it, keeps its backdrop transparent in dark mode. */}
       {signIn && (
         <div
           ref={ref}
-          className={`flex h-11 items-center justify-center ${
+          className={`flex h-11 items-center justify-center [color-scheme:light] ${
             own ? "" : "pointer-events-none"
           }`}
         />

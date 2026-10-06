@@ -172,6 +172,14 @@ export const classic: View[] = [
     go: open(`/login?next=${encodeURIComponent(playlist)}`),
   },
   {
+    name: "login-other-ways",
+    sizes: ["laptop"],
+    go: async (page) => {
+      await open(`/login?next=${encodeURIComponent(playlist)}`)(page);
+      await page.getByRole("button", { name: en.auth.otherWays }).click();
+    },
+  },
+  {
     name: "send-idea",
     as: singer,
     sizes: ["phone"],
