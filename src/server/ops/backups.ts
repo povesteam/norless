@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import {
   copyFileSync,
   existsSync,
@@ -21,8 +22,10 @@ const DAY = 24 * HOUR;
  * fails its check; the file there stays as it was.
  */
 export async function backUp(db: Db, target: string): Promise<boolean> {
-  const temporary = `${target}.tmp`;
-  rmSync(temporary, { force: true });
+  // A name of its own: another backup may be writing beside it (the app's hourly one,
+  // one by hand before a deploy, or a deploy's candidate's on the same volume).
+  // ponytail: one killed halfway leaves its .tmp behind; the disk alert would tell.
+  const temporary = `${target}.${randomUUID()}.tmp`;
   await db.backup(temporary);
   // One file on its own, without the WAL's side files, to copy and pull anywhere.
   const copy = new Database(temporary);

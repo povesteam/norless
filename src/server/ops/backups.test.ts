@@ -1,4 +1,4 @@
-import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import Database from "better-sqlite3";
@@ -37,6 +37,21 @@ test("a checked latest copy each run, a dated one after 03:00, and 14 days of th
   expect(existsSync(join(backups, "norless-2026-10-03.db"))).toBe(true);
   expect(existsSync(join(backups, "norless-2026-09-18.db"))).toBe(false);
   expect(existsSync(join(backups, "norless-2026-09-20.db"))).toBe(true);
+});
+
+test("two backups at once, as the app's hourly one and one by hand, both succeed", async () => {
+  const { db, backups } = setup();
+  const now = new Date("2026-10-02T23:00:00Z");
+  expect(
+    await Promise.all([
+      runBackups(db, backups, { now }),
+      runBackups(db, backups, { now }),
+    ]),
+  ).toEqual([true, true]);
+  const copy = new Database(join(backups, "latest.db"), { readonly: true });
+  expect(copy.pragma("integrity_check", { simple: true })).toBe("ok");
+  copy.close();
+  expect(readdirSync(backups)).toEqual(["latest.db"]);
 });
 
 test("the health check fails when the database doesn't answer", async () => {
