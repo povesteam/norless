@@ -9,6 +9,7 @@ The login page (`LoginPage.tsx`) shows one way first by device: the QR card on a
 **Goals:**
 - Every way in fits a laptop's window without scrolling.
 - One "Continue as" at a time on a phone.
+- Nothing from Google before the person chooses it.
 
 **Non-Goals:**
 - Changing which way comes first on each device.
@@ -17,10 +18,9 @@ The login page (`LoginPage.tsx`) shows one way first by device: the QR card on a
 ## Decisions
 
 - **The other ways replace the QR on a laptop.** The card shows one thing at a time, and "Log in with your phone" goes back. Alternatives: two columns on wide windows, rejected as two ways at once; a smaller QR, rejected since the QR is the laptop's main way and must scan from across a desk.
-- **One Tap's prompt first, the button after.** The button's space is kept but empty while the prompt may show, and fills on the prompt's skipped or dismissed moment, the only moments FedCM still reports (it reports no display moment). Where the script doesn't load or isn't asked to prompt, the button shows at once. Alternative: the button only, without the prompt, rejected by the maintainer.
-- **Google's iframe takes the light color scheme.** An iframe whose color scheme differs from its document's gets an opaque backdrop, which showed as a white strip in dark mode; `color-scheme: light` on the button's container matches Google's document, so the backdrop stays transparent.
+- **Google loads on the press.** The page shows only its own button in Google's look; pressed, it loads Google's script and asks for a nonce, then opens the "Continue as" prompt. On the prompt's skipped moment (closed, or no Google account in the browser), the only moment FedCM still reports besides dismissed, it goes to Google's own login page, as it does when the script doesn't load. So Google learns of a visit only from someone who chose it, and the person's Google name and photo no longer show before the press. Alternatives: the prompt on opening the page with Google's own button (tried first, it loaded Google for everyone); straight to Google's login page with no script (rejected by the maintainer: the prompt keeps the person on the page).
 - **The install suggestion skips the login page.** Someone logging in has one task there; the suggestion shows on the next page.
 
 ## Risks / Trade-offs
 
-- [A browser where Google reports no moment at all would keep the button's space empty] → the email link and another phone stay under "Other ways to log in".
+- [A browser where Google reports no moment at all would leave the press without an answer] → pressing again tries again, and the email link and another phone stay under "Other ways to log in".

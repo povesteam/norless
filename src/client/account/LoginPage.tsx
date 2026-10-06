@@ -7,7 +7,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "wouter";
 import { useDeviceType } from "../data/device";
@@ -54,10 +54,8 @@ export function LoginPage() {
           : `/api/auth/google?next=${encodeURIComponent(target)}`
       }
       target={target}
-      // Google's own button and One Tap only with the real Google.
+      // Google's prompt only with the real Google.
       signIn={!m.fakeGoogle}
-      // One Tap's prompt where Google is the main way: phones and tablets.
-      prompt={!laptop}
       onRefused={setRefused}
     />
   );
@@ -144,12 +142,8 @@ type Gis = {
   accounts: {
     id: {
       initialize: (options: object) => void;
-      renderButton: (parent: HTMLElement, options: object) => void;
       prompt: (
-        listener?: (moment: {
-          isSkippedMoment: () => boolean;
-          isDismissedMoment: () => boolean;
-        }) => void,
+        listener?: (moment: { isSkippedMoment: () => boolean }) => void,
       ) => void;
     };
   };
@@ -192,123 +186,73 @@ const GoogleLogo = () => (
 );
 
 /**
- * Continue with Google: Google's own button where its script loads,
- * with the account's name and photo for someone who signed in before, and One Tap's
- * "Continue as …" on phones; until then, or without it, a button in Google's look that
- * goes through the redirect. Both sit in one cell, so nothing moves when one replaces
- * the other.
+ * Continue with Google, in Google's look. Nothing loads from Google before it's pressed;
+ * pressed, Google's script opens its "Continue as …" prompt on the page, and where the
+ * script doesn't load or the prompt doesn't come, Google's own login page opens instead.
  */
 function GoogleButton({
   href,
   target,
   signIn,
-  prompt,
   onRefused,
 }: {
   href: string;
   target: string;
   signIn: boolean;
-  prompt: boolean;
   onRefused: (why: string) => void;
 }) {
-  const { t, i18n } = useTranslation();
-  const ref = useRef<HTMLDivElement>(null);
-  const [own, setOwn] = useState(false);
-  // One Tap's prompt shows alone: the button's space stays empty until Google says the
-  // prompt was closed or didn't come (FedCM reports no moment it shows).
-  const [prompting, setPrompting] = useState(signIn && prompt);
-  useEffect(() => {
-    if (!signIn) return;
-    let gone = false;
-    void (async () => {
-      const [google, start] = await Promise.all([
-        loadGis(),
-        fetch("/api/auth/google/one-tap")
-          .then((r) =>
-            r.ok
-              ? (r.json() as Promise<{ clientId: string; nonce: string }>)
-              : null,
-          )
-          .catch(() => null),
-      ]);
-      const parent = ref.current;
-      if (gone) return;
-      if (!google || !start || !parent) {
-        setPrompting(false);
-        return;
-      }
-      google.accounts.id.initialize({
-        client_id: start.clientId,
-        nonce: start.nonce,
-        context: "signin",
-        itp_support: true,
-        use_fedcm_for_prompt: true,
-        use_fedcm_for_button: true,
-        callback: async ({ credential }: { credential: string }) => {
-          const response = await send("POST", "/api/auth/google/one-tap", {
-            credential,
-            next: target,
-          });
-          const body = (await response?.json().catch(() => null)) as {
-            next?: string;
-            error?: string;
-          } | null;
-          if (response?.ok && body?.next) window.location.assign(body.next);
-          else onRefused(body?.error ?? "failed");
-        },
-      });
-      google.accounts.id.renderButton(parent, {
-        type: "standard",
-        theme: document.documentElement.classList.contains("dark")
-          ? "filled_black"
-          : "outline",
-        size: "large",
-        text: "continue_with",
-        shape: "pill",
-        logo_alignment: "left",
-        width: Math.min(400, parent.offsetWidth),
-        locale: i18n.language,
-      });
-      setOwn(true);
-      if (prompt)
-        google.accounts.id.prompt((moment) => {
-          if (moment.isSkippedMoment() || moment.isDismissedMoment())
-            setPrompting(false);
+  const { t } = useTranslation();
+  const leave = () => window.location.assign(href);
+  const press = async () => {
+    const [google, start] = await Promise.all([
+      loadGis(),
+      fetch("/api/auth/google/one-tap")
+        .then((r) =>
+          r.ok
+            ? (r.json() as Promise<{ clientId: string; nonce: string }>)
+            : null,
+        )
+        .catch(() => null),
+    ]);
+    if (!google || !start) return leave();
+    google.accounts.id.initialize({
+      client_id: start.clientId,
+      nonce: start.nonce,
+      context: "signin",
+      itp_support: true,
+      use_fedcm_for_prompt: true,
+      callback: async ({ credential }: { credential: string }) => {
+        const response = await send("POST", "/api/auth/google/one-tap", {
+          credential,
+          next: target,
         });
-    })();
-    return () => {
-      gone = true;
-    };
-    // Once per login page: the script keeps its own state.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+        const body = (await response?.json().catch(() => null)) as {
+          next?: string;
+          error?: string;
+        } | null;
+        if (response?.ok && body?.next) window.location.assign(body.next);
+        else onRefused(body?.error ?? "failed");
+      },
+    });
+    // Closed, or not shown (no Google account in this browser): Google's own page.
+    google.accounts.id.prompt((moment) => {
+      if (moment.isSkippedMoment()) leave();
+    });
+  };
   return (
-    <div
-      className={`grid w-full [&>*]:[grid-area:1/1] ${prompting ? "invisible" : ""}`}
+    <a
+      href={href}
+      onClick={(event) => {
+        if (!signIn) return;
+        event.preventDefault();
+        void press();
+      }}
+      // Google's branding: white or near-black, a grey line, its G before the words.
+      className="flex h-11 w-full items-center justify-center gap-3 rounded-full border border-[#747775] bg-white px-4 text-sm font-medium text-[#1F1F1F] outline-none focus-visible:ring-2 focus-visible:ring-focus dark:border-[#8E918F] dark:bg-[#131314] dark:text-[#E3E3E3]"
     >
-      <a
-        href={href}
-        aria-hidden={own || undefined}
-        tabIndex={own ? -1 : undefined}
-        // Google's branding: white or near-black, a grey line, its G before the words.
-        className={`flex h-11 items-center justify-center gap-3 rounded-full border border-[#747775] bg-white px-4 text-sm font-medium text-[#1F1F1F] outline-none focus-visible:ring-2 focus-visible:ring-focus dark:border-[#8E918F] dark:bg-[#131314] dark:text-[#E3E3E3] ${
-          own ? "pointer-events-none invisible" : ""
-        }`}
-      >
-        <GoogleLogo />
-        {t("auth.google")}
-      </a>
-      {/* Takes clicks only once Google's button is in it. Its iframe's light color
-        scheme, like Google's page in it, keeps its backdrop transparent in dark mode. */}
-      {signIn && (
-        <div
-          ref={ref}
-          className={`flex h-11 items-center justify-center [color-scheme:light] ${
-            own ? "" : "pointer-events-none"
-          }`}
-        />
-      )}
-    </div>
+      <GoogleLogo />
+      {t("auth.google")}
+    </a>
   );
 }
 

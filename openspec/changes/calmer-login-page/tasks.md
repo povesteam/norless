@@ -3,8 +3,8 @@
 ## 1. Login page
 
 - [x] 1.1 Laptop: "Other ways to log in" replaces the QR in the card, with "Log in with your phone" back; update `e2e/auth.spec.ts`, `e2e/device-login.spec.ts` and `e2e/members.spec.ts` where they open the other ways on a laptop, plus a check that the QR comes back
-- [x] 1.2 Phone: keep Google's button space empty while One Tap's prompt may show, filled on its skipped or dismissed moment; at once where the script doesn't load
-- [x] 1.3 Google's button container takes `color-scheme: light`
+- [x] 1.2 Google loads only on the press: the prompt, else Google's login page (replaces One Tap on opening the page and Google's own button)
+- [ ] 1.3 Try on norless.com: nothing from accounts.google.com before the press (browser's network panel), then Continue as on a phone and on a laptop
 - [x] 1.4 No install suggestion on the login page (`App.tsx`)
 
 ## 2. Screenshots and archive
