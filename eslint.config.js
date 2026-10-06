@@ -12,7 +12,6 @@ export default tseslint.config(
       "test-results",
       ".claude",
       ".cursor",
-      ".github/prompts",
       ".github/skills",
     ],
   },
