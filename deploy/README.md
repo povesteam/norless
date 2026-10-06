@@ -114,23 +114,24 @@ one once a day, at the first try of the day (a Mac that was asleep catches up wh
 wakes), over SSH, with a key that can only run `pull-backup.sh`; each pull is noted in
 `/data/backups/pulled-at`. In the Mac's crontab, with `$HOME` standing for the folder
 `setup.sh` asks for (a synced one, such as Dropbox or iCloud Drive, keeps the copies
-off-site too):
+off-site too), where `IdentitiesOnly` offers this key alone (ssh would offer the agent's
+keys first, and the deploy user would run `deploy.sh` for one it knows):
 
 ```
-0 * * * * f="$HOME/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "$HOME/norless-backup" && ssh -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
+0 * * * * f="$HOME/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "$HOME/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
 ```
 
 The same key copies the recordings the Mac doesn't have yet (`/data/recordings`, a
 file per song once a recording is finished, about 25 MB an hour), beside the backups:
 
 ```
-30 * * * * mkdir -p "$HOME/norless-recordings" && cd "$HOME/norless-recordings" && find . -type f | ssh -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
+30 * * * * mkdir -p "$HOME/norless-recordings" && cd "$HOME/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
 ```
 
 Slides from files (`/data/slides`: each uploaded file and its pages) the same way:
 
 ```
-40 * * * * mkdir -p "$HOME/norless-slides" && cd "$HOME/norless-slides" && find . -type f | ssh -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
+40 * * * * mkdir -p "$HOME/norless-slides" && cd "$HOME/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
 ```
 
 To restore, stop the app, put the copy in the volume as `/data/norless.db` (removing

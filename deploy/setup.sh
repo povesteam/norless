@@ -346,7 +346,7 @@ step_backups() {
   add_key mac-backup "$(forced /opt/norless/pull-backup.sh "$HOME/.ssh/norless-backup.pub")" || return 1
   vm 'cd /opt/norless && docker compose exec -T norless node dist/server/cli/backup.js' >/dev/null || return 1
   copy=$(mktemp)
-  ssh -i "$HOME/.ssh/norless-backup" -o StrictHostKeyChecking=accept-new deploy@norless.com >"$copy" || return 1
+  ssh -T -o IdentitiesOnly=yes -i "$HOME/.ssh/norless-backup" -o StrictHostKeyChecking=accept-new deploy@norless.com >"$copy" || return 1
   if [ "$(head -c 15 "$copy")" != "SQLite format 3" ]; then
     note "The pull didn't bring a database."
     rm -f "$copy"
@@ -361,9 +361,9 @@ step_backups() {
       {
         crontab -l 2>/dev/null || true
         sed "s|BASE|$base|g" <<'CRON'
-0 * * * * f="BASE/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "BASE/norless-backup" && ssh -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
-30 * * * * mkdir -p "BASE/norless-recordings" && cd "BASE/norless-recordings" && find . -type f | ssh -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
-40 * * * * mkdir -p "BASE/norless-slides" && cd "BASE/norless-slides" && find . -type f | ssh -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
+0 * * * * f="BASE/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "BASE/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
+30 * * * * mkdir -p "BASE/norless-recordings" && cd "BASE/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
+40 * * * * mkdir -p "BASE/norless-slides" && cd "BASE/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
 CRON
       } | crontab -
     fi

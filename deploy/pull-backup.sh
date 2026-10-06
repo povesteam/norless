@@ -2,11 +2,11 @@
 # The Mac's backup key may only run this (see README.md).
 # - Without a command, it sends the latest checked database backup to standard output,
 #   then notes the time of the pull, which the 48-hour alert reads.
-#   On the Mac: ssh -i ~/.ssh/norless-backup deploy@norless.com > norless.db
+#   On the Mac: ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > norless.db
 # - Asked for "recordings" or "slides" (slides from files), it reads the
 #   files of that folder the Mac already has (one path per line) and sends a tar of the
 #   others.
-#   On the Mac: (cd recordings && find . -type f) | ssh -i … deploy@norless.com recordings | tar -x -C recordings
+#   On the Mac: (cd recordings && find . -type f) | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x -C recordings
 set -euo pipefail
 cd "$(dirname "$0")"
 folder="${SSH_ORIGINAL_COMMAND:-}"
