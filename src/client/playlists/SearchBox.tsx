@@ -347,7 +347,12 @@ export function SearchBox({
                     )}
                   </ListBox.Item>
                 ) : result.type === "song" ? (
-                  <ListBox.Item id={id} textValue={title(result)}>
+                  <ListBox.Item
+                    id={id}
+                    textValue={title(result)}
+                    // The details go under a title they'd squeeze, as on a phone.
+                    className="flex-wrap gap-y-1"
+                  >
                     <SongOption song={result} title={title(result)} />
                   </ListBox.Item>
                 ) : (
