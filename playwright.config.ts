@@ -14,6 +14,8 @@ export default defineConfig({
   use: {
     baseURL: `http://127.0.0.1:${port}`,
     locale: "en-US",
+    // Moments show in the viewer's time zone: the seeded communities' own, whatever the machine's.
+    timezoneId: "Europe/Bucharest",
     serviceWorkers: "block",
   },
   projects: [
