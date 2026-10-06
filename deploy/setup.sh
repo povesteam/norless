@@ -355,13 +355,13 @@ step_backups() {
   rm -f "$copy"
   note "✓ A backup pulled over SSH."
   if ! crontab -l 2>/dev/null | grep -q 'deploy@norless.com'; then
-    note "Adds deploy/README.md's three lines to your crontab: the database every hour, then recordings and slides."
+    note "Adds deploy/README.md's three lines to your crontab: the database tried every hour and pulled once a day, then recordings and slides."
     base=$(ask backup_base "The Mac's folder for the copies (a synced one keeps them off-site)" "$HOME")
     if yes_no "Add them, into $base?"; then
       {
         crontab -l 2>/dev/null || true
         sed "s|BASE|$base|g" <<'CRON'
-0 * * * * mkdir -p "BASE/norless-backup" && ssh -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "BASE/norless-backup/$(date +\%F)-norless.db"
+0 * * * * f="BASE/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "BASE/norless-backup" && ssh -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
 30 * * * * mkdir -p "BASE/norless-recordings" && cd "BASE/norless-recordings" && find . -type f | ssh -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -x
 40 * * * * mkdir -p "BASE/norless-slides" && cd "BASE/norless-slides" && find . -type f | ssh -i ~/.ssh/norless-backup deploy@norless.com slides | tar -x
 CRON
@@ -414,7 +414,7 @@ environments|The environments, the switch waiting for a maintainer
 caddy|Caddy, with HTTPS
 images|The first images, public on ghcr.io
 production|norless.com runs
-backups|The Mac pulls backups every hour
+backups|The Mac pulls a backup a day
 uptime|An uptime monitor on /api/health
 pages|The manual on GitHub Pages
 spf|norless.com'"'"'s SPF without Google'

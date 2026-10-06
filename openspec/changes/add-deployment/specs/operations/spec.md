@@ -21,7 +21,7 @@ The server SHALL back up its database while running, with SQLite's online backup
 The latest backup SHALL leave the server over SSH, pulled by the maintainer's Mac with a key that can only fetch it: that key's one command sends the latest checked copy and records the time of the pull. The app SHALL NOT offer the backup over HTTP.
 
 #### Scenario: the maintainer's Mac pulls the backup
-- **WHEN** the Mac's hourly job connects with its key
+- **WHEN** the Mac's hourly job, without the day's copy yet, connects with its key
 - **THEN** it gets the latest checked copy, and the server notes the time
 
 #### Scenario: The key does nothing else

@@ -109,14 +109,15 @@ when it's back.
 ## Backups
 
 The app backs up its database every hour into the volume (`/data/backups/latest.db`),
-and keeps one copy a day for 14 days. A maintainer's Mac pulls the latest one every hour over
-SSH, with a key that can only run `pull-backup.sh`; each pull is noted in
+and keeps one copy a day for 14 days. A maintainer's Mac tries every hour and pulls the latest
+one once a day, at the first try of the day (a Mac that was asleep catches up when it
+wakes), over SSH, with a key that can only run `pull-backup.sh`; each pull is noted in
 `/data/backups/pulled-at`. In the Mac's crontab, with `$HOME` standing for the folder
 `setup.sh` asks for (a synced one, such as Dropbox or iCloud Drive, keeps the copies
 off-site too):
 
 ```
-0 * * * * mkdir -p "$HOME/norless-backup" && ssh -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$HOME/norless-backup/$(date +\%F)-norless.db"
+0 * * * * f="$HOME/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "$HOME/norless-backup" && ssh -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f"; }
 ```
 
 The same key copies the recordings the Mac doesn't have yet (`/data/recordings`, a

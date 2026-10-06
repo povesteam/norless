@@ -3,7 +3,7 @@
 # builds the app's image, runs it on a copy of a backup the Mac pulled, and checks that it
 # starts (its migrations ran), answers, and leaves a sound database. Nothing leaves the
 # machine, and the copy is deleted afterwards.
-#   deploy/rehearse.sh <backup.db>    e.g. the newest of the hourly pulls (README.md)
+#   deploy/rehearse.sh <backup.db>    e.g. the newest of the daily pulls (README.md)
 set -euo pipefail
 backup=${1:-}
 if [ ! -f "$backup" ] || [ "$(head -c 15 "$backup")" != "SQLite format 3" ]; then
