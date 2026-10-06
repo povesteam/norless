@@ -83,7 +83,7 @@ It deletes the local database and imports from scratch, so it can run again afte
 DATABASE_PATH=<data folder>/norless.db npm run import -- <dumps folder>/<date>-norless-all.mongodump.archive.gzip
 ```
 
-It reads a `mongodump --archive --gzip` backup of the old `norless` and `norless-ua` databases, and prints a report. Re-running it updates the imported rows and leaves alone anything changed in the new app since. In the container, run `node dist/server/import/cli.js <archive>`. **Keep backups and the database outside the repo**: they contain members' emails.
+It reads a `mongodump --archive --gzip` backup of the old `norless` and `norless-ua` databases, and prints a report. Re-running it updates the imported rows and leaves alone anything changed in the new app since. `./run-reimport.sh --keep` does the same with a fresh backup and its oplog. Into production, `deploy/import.sh` does it (`deploy/README.md`). In the container, run `node dist/server/import/cli.js <archive>`. **Keep backups and the database outside the repo**: they contain members' emails.
 
 ## The first owner
 

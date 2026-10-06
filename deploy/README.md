@@ -127,6 +127,26 @@ Dropbox or iCloud Drive, keeps the copies off-site too):
 To restore, stop the app, put the copy in the volume as `/data/norless.db` (removing
 `norless.db-wal` and `norless.db-shm`), and start it again.
 
+## Importing the old app's data
+
+Until cutover, the old app's data is imported into production again, in place: the
+Saturday night before the shadow Sunday, and the night before cutover. On the Mac, on the
+commit production runs, with the root key `setup.sh` made:
+
+```
+deploy/import.sh [<archive> <oplog>]
+```
+
+Production stops (a few minutes) and its database comes to the Mac as a checked copy. A
+fresh backup of the old app and its oplog, over `PROD_SSH` (or the ones given), is
+imported into that copy (`run-reimport.sh --keep`), which keeps what exists only in the
+new app: members, logins, the paired TV, screens, preferences. The result goes through
+`rehearse.sh`, and only then replaces production's database. A step that fails before
+that starts production again on its own database; production unhealthy on the imported
+data goes back to the copy from before. The copies stay in `~/norless-import/<time>/`:
+`before.db` restores as above. `NORLESS_VM` (default `root@norless.com`),
+`NORLESS_ROOT_KEY` and `IMPORT_DIR` change where it goes.
+
 ## Alerts
 
 With `APP_TEAM_EMAILS` set, the app checks every 10 minutes and emails the app team

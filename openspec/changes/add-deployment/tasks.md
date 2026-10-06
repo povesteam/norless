@@ -18,7 +18,7 @@
 ## 3. Alerts and cutover
 
 - [x] 3.1 Add the alerts to `APP_TEAM_EMAILS` (no good backup for 3 hours, no pull for 48 hours, disk over 80%, more than 20 errors in 10 minutes), logged until email works, and the external uptime check (2 minutes down, as in `deploy/README.md`); verify with unit tests of each check
-- [ ] 3.4 Saturday-night update of production before the shadow Sunday: a fresh prod dump and oplog imported in place through the re-runnable import, keeping what exists only in the new app (members, logins, the paired TV, screens, instruments, preferences); rehearse it once before the shadow Sunday, with the stage monitor and pairing switched on for the stage TV
+- [ ] 3.4 Saturday-night update of production before the shadow Sunday (`deploy/import.sh`, tried on a stand-in VM with the real dump: a first import and a re-import that kept a new member; verify with `deploy/import.test.ts`): a fresh prod dump and oplog imported in place through the re-runnable import, keeping what exists only in the new app (members, logins, the paired TV, screens, instruments, preferences); rehearse it once before the shadow Sunday, with the stage monitor and pairing switched on for the stage TV
 - [ ] 3.2 Shadow Sunday: the new app on production runs the service on the projector, the old app in another tab as the fallback (the switch rehearsed); note every difference as a task
 - [ ] 3.3 Cutover: re-import from a fresh dump the night before, switch DNS; the old app stays writable as the fallback until two good Sundays, then read-only for 3 months, then redirect app.norless.com and stop the old server, keeping its last dump
 

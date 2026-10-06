@@ -2,7 +2,9 @@
 # Imports the old app's data into the local database from scratch, as often as needed:
 # from a fresh backup of production and its oplog (mongodump only reads), or from the
 # backup archive given as the first argument and its oplog as the second. Stop
-# run-dev.sh first.
+# run-dev.sh first. With --keep first, it imports into the database as it is instead,
+# keeping what exists only in the new app (data-import spec, Re-runnable), as
+# deploy/import.sh does with production's.
 #
 # Settings come from the environment, or from the git-ignored .env next to this file:
 #   DATABASE_PATH  the local database (default: data/norless.db)
@@ -28,6 +30,11 @@ if lsof -t "$db" >/dev/null 2>&1; then
   exit 1
 fi
 
+keep=
+if [ "$1" = --keep ]; then
+  keep=1
+  shift
+fi
 archive="$1"
 # The old app's oplog, for history the backup doesn't keep: given, or
 # taken with a fresh backup.
@@ -52,14 +59,20 @@ if [ -z "$archive" ]; then
 fi
 
 mkdir -p "$(dirname "$db")"
-rm -f "$db" "$db-wal" "$db-shm"
+if [ -z "$keep" ]; then
+  rm -f "$db" "$db-wal" "$db-shm"
+elif [ ! -f "$db" ]; then
+  echo "--keep imports into $db, which doesn't exist." >&2
+  exit 1
+fi
 export DATABASE_PATH="$db"
 if [ -n "$oplog" ]; then
   npm run --silent import -- "$archive" --oplog "$oplog"
 else
   npm run --silent import -- "$archive"
 fi
-if [ -n "$OWNER_EMAIL" ]; then
+# A kept database keeps its members.
+if [ -n "$OWNER_EMAIL" ] && [ -z "$keep" ]; then
   npm run --silent invite -- "$OWNER_EMAIL" owner
 fi
 echo "Imported $archive into $db."
