@@ -35,3 +35,31 @@ test("the setup script remembers the steps done, and asks one again with redo", 
   expect(setup(state, "redo", "nothing").status).toBe(2);
   expect(setup(state, "now").status).toBe(2);
 });
+
+test("the deploy key step passes when the key answers with deploy.sh's usage", () => {
+  const state = join(mkdtempSync(join(tmpdir(), "setup-")), "state");
+  writeFileSync(state, "repo=owner/norless\nip=1.2.3.4\n");
+  // The VM and GitHub stubbed; ssh answers as the forced command does, exit code included.
+  const deployKey = (answer: string) =>
+    spawnSync(
+      "bash",
+      [
+        "-c",
+        `source deploy/setup.sh
+        add_key() { :; }; gh() { :; }; ssh-keyscan() { :; }
+        ssh() { echo "${answer}" >&2; return 2; }
+        step_deploy_key`,
+      ],
+      {
+        env: {
+          PATH: process.env.PATH,
+          HOME: tmpdir(),
+          NORLESS_SETUP_STATE: state,
+        },
+        encoding: "utf8",
+      },
+    );
+
+  expect(deployKey("usage: production <tag> [switch|stop]").status).toBe(0);
+  expect(deployKey("Permission denied (publickey).").status).toBe(1);
+});

@@ -268,7 +268,8 @@ step_deploy_key() {
     gh secret set DEPLOY_HOST -R "$repo" -b "$(get ip)" &&
     ssh-keyscan -t ed25519 "$(get ip)" 2>/dev/null | gh secret set DEPLOY_KNOWN_HOSTS -R "$repo" || ok=1
   # It may only run deploy.sh: asked for nothing, deploy.sh answers with its usage.
-  if [ $ok = 0 ] && ! ssh -n -i "$dir/key" -o StrictHostKeyChecking=accept-new "deploy@$(get ip)" "" 2>&1 |
+  # It exits 2 then, which pipefail would pass on as the pipeline's failure.
+  if [ $ok = 0 ] && ! { ssh -n -i "$dir/key" -o StrictHostKeyChecking=accept-new "deploy@$(get ip)" "" 2>&1 || true; } |
     grep -q "usage: production"; then
     note "The deploy key doesn't run deploy.sh."
     ok=1
