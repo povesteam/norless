@@ -8,10 +8,10 @@
 
 ## 2. Privacy notice
 
-- [ ] 2.1 Rewrite the `privacy` strings in en, ro and uk: backups, logs, links, usage, recordings, legal bases, transfers, children, cookies, rights, the complaint and deletion; and `account.deleteHelp`
-- [ ] 2.2 Add the transfers, children and complaint paragraphs to `PrivacyPage.tsx`
-- [ ] 2.3 Add the browsers' push services to `PRIVACY_SERVICES` in `deploy/compose.yaml`, and correct the logs' comment
-- [ ] 2.4 Run `e2e/about.spec.ts` and the account e2e, and take the privacy page's screenshots again
+- [x] 2.1 Rewrite the `privacy` strings in en, ro and uk: backups, logs, links, usage, recordings, legal bases, transfers, children, cookies, rights, the complaint and deletion; and `account.deleteHelp`
+- [x] 2.2 Add the transfers, children and complaint paragraphs to `PrivacyPage.tsx`
+- [x] 2.3 Add the browsers' push services to `PRIVACY_SERVICES` in `deploy/compose.yaml`, and correct the logs' comment
+- [x] 2.4 Run `e2e/about.spec.ts`, `e2e/members.spec.ts`, `e2e/device-login.spec.ts`, `e2e/device.spec.ts` and `e2e/files/recordings.spec.ts` (no screenshot set shows the privacy page, and only its text changed)
 
 ## 3. Archive
 

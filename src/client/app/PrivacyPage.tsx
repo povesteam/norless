@@ -77,6 +77,7 @@ export function PrivacyPage() {
             </ul>
           </>
         )}
+        <p>{t("privacy.transfers")}</p>
       </section>
 
       <section className="flex flex-col gap-2">
@@ -88,6 +89,7 @@ export function PrivacyPage() {
         </ul>
         <p>{t("privacy.why")}</p>
         <p>{t("privacy.visitors")}</p>
+        <p>{t("privacy.children")}</p>
       </section>
 
       <section className="flex flex-col gap-2">
@@ -98,6 +100,7 @@ export function PrivacyPage() {
       <section className="flex flex-col gap-2">
         <h3 className="text-lg font-semibold">{t("privacy.rightsTitle")}</h3>
         <p>{t("privacy.rights")}</p>
+        <p>{t("privacy.complaint")}</p>
         <p>{t("privacy.delete")}</p>
       </section>
     </article>

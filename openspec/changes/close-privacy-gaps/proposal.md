@@ -33,4 +33,4 @@ None.
 - Tests in `src/server/auth/members.test.ts` and `src/server/live/recordings.test.ts`.
 - The `privacy` strings and `account.deleteHelp` in en, ro and uk, and `src/client/app/PrivacyPage.tsx` for the new paragraphs.
 - `deploy/compose.yaml`: `PRIVACY_SERVICES`, and the logs' comment.
-- The privacy page's screenshots are taken again.
+- The privacy page's e2e (`e2e/about.spec.ts`) checks the new cookie text and the complaint.

@@ -42,5 +42,8 @@ test("the privacy page names who answers for the data, as the owner set it", asy
   await expect(
     page.getByRole("listitem").filter({ hasText: "Biserica UnuUnu" }),
   ).toContainText("contact@example.com");
-  await expect(page.getByText(/Norless sets one cookie/)).toBeVisible();
+  await expect(
+    page.getByText(/Norless sets only the cookies it needs/),
+  ).toBeVisible();
+  await expect(page.getByText(/ANSPDCP/)).toBeVisible();
 });

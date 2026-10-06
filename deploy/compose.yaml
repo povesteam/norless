@@ -5,7 +5,8 @@
 # tag beside the service as its candidate.
 name: norless
 
-# The logs hold visitors' IP addresses: a few days' worth at most.
+# The logs hold visitors' IP addresses: 30 MB at most, and a new version's container
+# starts them again, as the privacy notice says.
 x-logging: &logs
   driver: local
   options:
@@ -43,7 +44,7 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
-      PRIVACY_SERVICES: Hetzner Online GmbH, Germany (servers); Mailgun, EU region (email); Google (login with Google)
+      PRIVACY_SERVICES: Hetzner Online GmbH, Germany (servers); Mailgun, EU region (email); Google LLC, United States (login with Google); the browser's push service, from Google, Apple or Mozilla (notifications)
       CONVERTER_URL: http://converter:3900
     networks: [default, convert]
     volumes:
