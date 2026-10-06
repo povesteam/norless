@@ -1,4 +1,5 @@
-import { readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
 
@@ -21,4 +22,21 @@ it("no folder of code holds more than 40 entries", () => {
     .map((dir) => `${dir}: ${readdirSync(dir).length}`)
     .filter((line) => Number(line.split(": ")[1]) > MAX);
   expect(crowded).toEqual([]);
+});
+
+// macOS's bash 3.2, in a UTF-8 locale, reads "$work…" as a variable named "work" plus
+// the first byte of "…", unbound: a name next to a non-ASCII character takes braces.
+it("no shell script puts a variable's name right before a non-ASCII character", () => {
+  const scripts = execFileSync("git", ["ls-files", "*.sh"], {
+    encoding: "utf8",
+  })
+    .split("\n")
+    .filter(Boolean);
+  const touching = scripts.flatMap((file) =>
+    readFileSync(file, "utf8")
+      .split("\n")
+      .map((line, i) => `${file}:${i + 1}: ${line.trim()}`)
+      .filter((line) => /\$[A-Za-z_]\w*\P{ASCII}/u.test(line)),
+  );
+  expect(touching).toEqual([]);
 });

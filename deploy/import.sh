@@ -55,7 +55,7 @@ trap again EXIT
 
 echo "Stopping production…"
 on_vm "docker compose stop norless"
-echo "Copying its database to $work…"
+echo "Copying its database to ${work}…"
 on_vm "$one_off sh -c 'node dist/server/cli/backup.js >&2 && cat /data/backups/latest.db'" \
   >"$work/before.db"
 if ! is_db "$work/before.db"; then
