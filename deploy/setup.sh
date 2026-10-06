@@ -386,16 +386,6 @@ step_pages() {
   [ "$(gh api "repos/$repo/pages" -q .build_type 2>/dev/null)" = workflow ]
 }
 
-step_nicolae() {
-  local repo
-  repo=$(get repo)
-  note "Invites Nicolae Matei (github.com/nmatei) as a maintainer of $repo; GitHub emails him."
-  yes_no "Invite him?" || return 1
-  gh api -X PUT "repos/$repo/collaborators/nmatei" -f permission=maintain >/dev/null &&
-    { gh api "repos/$repo/invitations" -q '.[].invitee.login' | grep -qx nmatei ||
-      gh api "repos/$repo/collaborators/nmatei" >/dev/null 2>&1; }
-}
-
 step_spf() {
   if dig +short TXT norless.com @1.1.1.1 | grep -q '_spf.google.com'; then
     note "norless.com's SPF record still includes Google (Workspace was dropped):" \
@@ -427,7 +417,6 @@ production|norless.com runs
 backups|The Mac pulls backups every hour
 uptime|An uptime monitor on /api/health
 pages|The manual on GitHub Pages
-nicolae|Nicolae invited as maintainer
 spf|norless.com'"'"'s SPF without Google'
 
 SKIPPED=""

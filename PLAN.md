@@ -14,7 +14,7 @@ Cutover prep comes first: the server and the cutover steps below, in the open ch
 
 ## Next: cutover
 
-1. A maintainer runs `deploy/setup.sh`: the GitHub repository and its secrets, the VM (a Hetzner CAX11 in Nuremberg on Debian), DNS, the VM's `.env` (a Mailgun sending key, a Google OAuth web client with `https://norless.com` as a JavaScript origin, the app team's emails, a YouTube Data API key; VAPID keys are generated), the Mac's backup pull, an uptime monitor on `/api/health`, GitHub Pages for the manual, and Nicolae Matei's invitation as maintainer.
+1. A maintainer runs `deploy/setup.sh`: the GitHub repository and its secrets, the VM (a Hetzner CAX11 in Nuremberg on Debian), DNS, the VM's `.env` (a Mailgun sending key, a Google OAuth web client with `https://norless.com` as a JavaScript origin, the app team's emails, a YouTube Data API key; VAPID keys are generated), the Mac's backup pull, an uptime monitor on `/api/health`, and GitHub Pages for the manual.
 2. Production on the VM, and a rehearsal with a real service (`add-deployment` 2.3). With the YouTube key set, check last Sunday's chapters against the video.
 3. The Saturday-night re-import into production, rehearsed once (3.4); then the shadow Sunday beside the old app (3.2).
 4. Cutover (3.3): rotate the old app's Mailgun credentials; the old app stays writable until two good Sundays, then read-only for 3 months, then redirected; the old repositories get a README line pointing here and are archived read-only. Once the old app is read-only, nothing is imported again: delete the importer (`src/server/import`, `npm run import`, the `bson` dependency, `run-reimport.sh`).

@@ -21,7 +21,7 @@ test("the setup script remembers the steps done, and asks one again with redo", 
   const status = setup(state, "status");
   expect(status.status).toBe(0);
   const lines = status.stdout.trimEnd().split("\n");
-  expect(lines).toHaveLength(22);
+  expect(lines).toHaveLength(21);
   expect(lines[0]).toMatch(/^ {2}✓ tools/);
   expect(lines[1]).toMatch(/^ {2}✓ repo/);
   expect(lines[2]).toMatch(/^ {2}· server/);
