@@ -133,8 +133,14 @@ test("members see who is online, and on which device", async ({
   await expect(online.getByLabel(/^Ana.*computer/).first()).toBeVisible();
   // React Aria shows tooltips on hover once a pointer was used on the page.
   await page.mouse.click(0, 0);
-  await maria.hover();
-  await expect(page.getByRole("tooltip")).toHaveText(/^Maria.* · phone$/);
+  // Others' tests bring Ana or Ioana online or offline, moving Maria from under the
+  // mouse before her tooltip opens: hover her again until it does.
+  await expect(async () => {
+    await maria.hover();
+    await expect(page.getByRole("tooltip")).toHaveText(/^Maria.* · phone$/, {
+      timeout: 1000,
+    });
+  }).toPass();
 
   await context.close();
   await expect(online.getByLabel(/^Maria/)).toBeHidden();
