@@ -354,21 +354,19 @@ step_backups() {
   fi
   rm -f "$copy"
   note "✓ A backup pulled over SSH."
-  if ! crontab -l 2>/dev/null | grep -q 'deploy@norless.com'; then
-    note "Adds deploy/README.md's three lines to your crontab: the database tried every hour and pulled once a day, then recordings and slides."
+  mkdir -p "$HOME/bin" && install -m 755 deploy/mac-pull.sh "$HOME/bin/norless-pull.sh" || return 1
+  if ! crontab -l 2>/dev/null | grep -q 'norless-pull.sh'; then
+    note "Adds a line to your crontab: every hour, ~/bin/norless-pull.sh pulls the database" \
+      "once a day, and the recordings and slides; its log is ~/bin/norless-pull.log."
     base=$(ask backup_base "The Mac's folder for the copies (a synced one keeps them off-site)" "$HOME")
-    if yes_no "Add them, into $base?"; then
+    if yes_no "Add it, into $base?"; then
       {
         crontab -l 2>/dev/null || true
-        sed "s|BASE|$base|g" <<'CRON'
-0 * * * * (date "+\%F \%T database"; f="BASE/norless-backup/$(date +\%F)-norless.db"; [ -s "$f" ] || { mkdir -p "BASE/norless-backup" && ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com > /tmp/norless.db && mv /tmp/norless.db "$f" && echo "pulled $f"; }) >> "BASE/norless-backup.log" 2>&1
-30 * * * * (date "+\%F \%T recordings"; mkdir -p "BASE/norless-recordings" && cd "BASE/norless-recordings" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com recordings | tar -xv) >> "BASE/norless-backup.log" 2>&1
-40 * * * * (date "+\%F \%T slides"; mkdir -p "BASE/norless-slides" && cd "BASE/norless-slides" && find . -type f | ssh -T -o IdentitiesOnly=yes -i ~/.ssh/norless-backup deploy@norless.com slides | tar -xv) >> "BASE/norless-backup.log" 2>&1
-CRON
+        echo "0 * * * * $HOME/bin/norless-pull.sh \"$base\" >> $HOME/bin/norless-pull.log 2>&1"
       } | crontab -
     fi
   fi
-  crontab -l 2>/dev/null | grep -q 'deploy@norless.com'
+  crontab -l 2>/dev/null | grep -q 'norless-pull.sh'
 }
 
 step_uptime() {
