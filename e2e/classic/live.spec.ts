@@ -165,6 +165,7 @@ test.describe("on a laptop", () => {
   }) => {
     // A laptop with a projector, in a browser that asks before pages place windows.
     await page.addInitScript(() => {
+      Object.defineProperty(window.screen, "isExtended", { value: true });
       const w = window as unknown as Record<string, unknown>;
       w.asked = 0;
       let state = "prompt";
@@ -225,6 +226,10 @@ test.describe("on a laptop", () => {
     page,
     context,
   }) => {
+    // A laptop with a projector attached.
+    await page.addInitScript(() =>
+      Object.defineProperty(window.screen, "isExtended", { value: true }),
+    );
     await logInAs(page, "ioana@example.com");
     const id = await newPlaylist(page, "Fereastra");
     await page.goto(`/clasic/playlists/${id}`);

@@ -161,8 +161,10 @@ test("4-projectors", async ({ browser }) => {
   ]);
   await logIn(projector);
   await projector.goto(`/${slug}/projector/ro`);
-  // The projector's window is filmed on its own, beside the laptop.
+  // The projector's window is filmed on its own, beside the laptop, which has the
+  // projector attached.
   await laptop.addInitScript(() => {
+    Object.defineProperty(window.screen, "isExtended", { value: true });
     window.open = () => null;
   });
   await logIn(laptop);
