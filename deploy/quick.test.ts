@@ -27,7 +27,11 @@ function fakeMac() {
   copyFileSync("deploy/quick.sh", join(dir, "deploy/quick.sh"));
   const log = (name: string) =>
     script(join(dir, "bin", name), `echo "${name} $*" >> "${dir}/calls"`);
-  log("docker");
+  // docker login reads the token, as the real one does: gh's pipe never breaks.
+  script(
+    join(dir, "bin/docker"),
+    `echo "docker $*" >> "${dir}/calls"; [ "$1" = login ] && cat > /dev/null; true`,
+  );
   log("npm");
   script(join(dir, "bin/node"), "echo v24.0.0");
   script(join(dir, "bin/gh"), `echo "gh $*" >> "${dir}/calls"; echo pavel`);
