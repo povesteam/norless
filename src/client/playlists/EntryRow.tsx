@@ -1,12 +1,11 @@
 import { Button, Chip, Link as HeroLink } from "@heroui/react";
+import { TeamRecordingsMark } from "../songs/RecordingsMark";
 import { Ellipsis, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Entry } from "../../server/playlists/playlists";
 import type { Problem } from "../../server/playlists/problems";
 import { bibleLink, formatReference } from "../../shared/bible";
 import { titleFor } from "../../shared/song-render";
-import { keyOf } from "../../shared/music/chords";
-import { useKeyChange } from "../songs/KeyDialog";
 import { LedByIcon } from "./LedBy";
 import { useCommunity, useShows } from "../data/community";
 import { EntryIcon } from "../ui/icons";
@@ -29,7 +28,6 @@ const firstLine = (text: string) =>
 export function EntryRow({
   entry,
   ledBy,
-  keyBefore,
   problems,
   isLive,
   onOpen,
@@ -43,7 +41,6 @@ export function EntryRow({
   /** Who leads it. */
   ledBy?: string | null;
   /** The key of the song before it, when it's another one. */
-  keyBefore?: string | null;
   problems: Problem[];
   /** On the screens now. */
   isLive: boolean;
@@ -63,7 +60,6 @@ export function EntryRow({
   const community = useCommunity();
   const shows = useShows();
   const duration = useDuration();
-  const keyChange = useKeyChange();
   const languages = [i18n.language, ...community.languages];
   const { song, bible } = entry;
   const link =
@@ -114,17 +110,12 @@ export function EntryRow({
           : song?.keySignature}
       </Chip>
     ),
-    keyBefore && (
-      <span key="change" className="text-xs text-muted">
-        {t("keys.fromBefore", {
-          from: keyBefore,
-          to: entry.keySignature || song?.keySignature,
-          change: keyChange(
-            keyOf(keyBefore),
-            keyOf(entry.keySignature || song?.keySignature || ""),
-          ),
-        })}
-      </span>
+    song && (
+      <TeamRecordingsMark
+        key="recordings"
+        songId={song.id}
+        count={song.recordings}
+      />
     ),
     song?.timeSignature && (
       <Chip key="time" size="sm" variant="secondary">

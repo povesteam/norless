@@ -2,6 +2,7 @@
   "name": "Norless",
   "short_name": "Norless",
   "description": "Songs, playlists and projection for churches",
+  "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -23,6 +24,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/icon-monochrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "monochrome"
     }
   ]
 }

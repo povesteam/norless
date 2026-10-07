@@ -40,6 +40,8 @@ test.describe("on a phone", () => {
     await page.goto(`/unu-unu/playlists/${id}`);
     const parts = page.getByRole("group", { name: "Parts" });
     await expect(page.getByRole("button", { name: "Next" })).toBeInViewport();
+    // Nothing in the views beside Order widens the page, which would zoom it out.
+    expect(await page.evaluate(() => innerWidth)).toBe(390);
     await expect(page.getByRole("button", { name: "Blank" })).toBeVisible();
     await expect(parts).toHaveCount(0);
 

@@ -44,7 +44,7 @@ db.exec(`
   INSERT INTO screens (id, community_id, room_id, name, type, languages, layout, settings, secret, position, created_at, updated_at) VALUES
     ('s-ro', 'c', 'room', 'Projector RO', 'projector', '["ro"]', NULL, '{"background":"#14213d"}', 'demo-projector-ro', 1, '${at}', '${at}'),
     ('s-en', 'c', 'room', 'Projector EN', 'projector', '["en"]', NULL, '{"background":"#14213d"}', 'demo-projector-en', 2, '${at}', '${at}'),
-    ('s-band', 'c', 'room', 'Musicians', 'musicians', '["en"]', NULL, '{}', 'demo-musicians', 3, '${at}', '${at}'),
+    ('s-band', 'c', 'room', 'Instruments', 'musicians', '["en"]', NULL, '{}', 'demo-musicians', 3, '${at}', '${at}'),
     ('s-stage', 'c', 'room', 'Stage monitor', 'stage', '["en"]', NULL, '{"clock":true}', 'demo-stage', 4, '${at}', '${at}'),
     ('s-live', 'c', 'room', 'Broadcast', 'overlay', '["ro","en"]', NULL, '{"overlayBackground":"green"}', 'demo-broadcast', 5, '${at}', '${at}');
 `);

@@ -40,8 +40,8 @@ export type Musician = {
   shapes?: string[];
   /** Unset or null: the community's default. */
   noteNames?: NoteNaming | null;
-  /** Chords colored by their degree in the key. */
-  chordColors?: boolean;
+  /** Chords in one color, instead of colored by their degree in the key. */
+  plainChords?: boolean;
 };
 
 export type Preferences = Partial<Record<DeviceType, DevicePreferences>> & {

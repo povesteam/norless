@@ -234,19 +234,14 @@ export const extras: View[] = [
     },
   },
   {
-    // Chords colored by their degree, chosen on My account, in
+    // Chords colored by their degree, unless plain chords are chosen on My account, in
     // relative pairs, suffixes blended with their letter.
     name: "chord-colors",
     as: musician,
     // It Is Well with My Soul: every degree, and a chord from outside the key.
     live: "e-8",
     sizes: ["phone", "tablet"],
-    go: async (page) => {
-      await api(page, "PUT", "/api/me/preferences", {
-        musician: { chordColors: true },
-      });
-      await page.goto(`/${slug}/musicians`);
-    },
+    go: open(`/${slug}/musicians`),
   },
   {
     // What the member plays, asked the first time and from Display

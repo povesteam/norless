@@ -46,7 +46,10 @@ test("Ctrl/Cmd+S saves the whole song and keeps the editor open", async ({
   await expect(page.getByText("Saved")).toBeVisible();
   await expect(page).toHaveURL(`/unu-unu/songs/${id}/edit`);
   await page.getByRole("button", { name: "Close" }).click();
-  await expect(page.getByText("Key: Em")).toBeVisible();
+  // The key with its icon instead of "Key:".
+  await expect(
+    page.getByRole("img", { name: "Key" }).first().locator(".."),
+  ).toHaveText("Em");
   await expect(page.getByText("har", { exact: true })).toBeVisible();
 });
 

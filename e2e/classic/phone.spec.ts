@@ -131,3 +131,38 @@ test("on a phone, the community's name sits above the bar, and the playlist's ti
     page.getByRole("heading", { name: /^Botez seara/ }),
   ).toBeVisible();
 });
+
+test("on a phone, the slide going live scrolls into view", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await logInAs(page, "ana@example.com");
+  const verses = Array.from(
+    { length: 16 },
+    (_, i) => `${i + 1}:\nVersul ${i + 1}, primul rând\nAl doilea rând`,
+  ).join("\n\n");
+  const song = await api(page, "POST", "/api/communities/clasic/songs", {
+    versions: [{ language: "ro", title: "Multe strofe", text: verses }],
+  });
+  await logInAs(page, "ioana@example.com");
+  const { body } = await api(page, "POST", base, { title: "Lungă" });
+  const id = (body as { id: string }).id;
+  const entry = await api(page, "POST", `${base}/${id}/entries`, {
+    kind: "song",
+    songId: (song.body as { id: string }).id,
+  });
+  await page.goto(`/clasic/playlists/${id}`);
+  await rows(page).filter({ hasText: "Multe strofe" }).click();
+  const last = slides(page).getByRole("listitem").last();
+  await expect(last).not.toBeInViewport();
+  await api(page, "POST", "/api/communities/clasic/live", {
+    type: "go",
+    entryId: (entry.body as { id: string }).id,
+    slide: 15,
+  });
+  await expect(last).toBeInViewport();
+  // Who controls live, beside Live, for members.
+  await expect(page.getByLabel("Ioana controls what's live")).toBeVisible();
+  await api(page, "POST", "/api/communities/clasic/live", {
+    type: "blank",
+    blank: true,
+  });
+});

@@ -7,11 +7,11 @@ Let anyone in the room follow the live songs on their own phone, in their langua
 
 ### Requirement: Follow-along page
 
-Each room SHALL have a follow-along page that anyone can open without logging in. It SHALL show the live song in the vocalists Whole song layout: every part in order, scrolling by itself to keep the live part in view, and the next part marked. It SHALL offer no controls, and following SHALL NOT record plays or appear in presence. Below the last part, it SHALL show the next song's title. It SHALL show while its feature (`followAlong`) is switched on. While the screens are blank or show a page, the follow-along page SHALL show only the song's title or nothing. A live Bible reference SHALL show the reference, and a live text slide SHALL be shown.
+Each room SHALL have a follow-along page that anyone can open without logging in. It SHALL show the live song in the vocalists Whole song layout: every part in order, scrolling by itself to keep the live part in view. It SHALL offer no controls, and following SHALL NOT record plays or appear in presence. Below the last part, it SHALL show the next song's title. It SHALL show while its feature (`followAlong`) is switched on. While the screens are blank or show a page, the follow-along page SHALL show only the song's title or nothing. A live Bible reference SHALL show the reference, and a live text slide SHALL be shown.
 
 #### Scenario: Visitor follows the refrain
 - **WHEN** a visitor opens the follow-along page during a song and the refrain goes live
-- **THEN** the page scrolls to the refrain and marks the next part
+- **THEN** the page scrolls to the refrain and marks it live
 
 #### Scenario: No controls
 - **WHEN** a visitor taps a part on the follow-along page

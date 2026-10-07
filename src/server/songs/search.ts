@@ -18,6 +18,8 @@ export type SongResult = {
   liked?: true;
   /** Sung in most of the last services: in how many, of how many. */
   recent?: { services: number; of: number };
+  /** How many recordings have it, when some do (rehearsal-recordings spec). */
+  recordings?: number;
   /** Why the empty box suggests it. */
   reason?: Reason;
 };
@@ -264,6 +266,11 @@ export function songResults(
   const titles = db.prepare(
     "SELECT language, title FROM song_versions WHERE song_id = ? AND deleted_at IS NULL",
   );
+  const recorded = db.prepare(
+    `SELECT count(*) FROM recordings r
+     WHERE r.deleted_at IS NULL AND r.status = 'ready'
+       AND EXISTS (SELECT 1 FROM recording_parts p WHERE p.recording_id = r.id AND p.song_id = ?)`,
+  );
   return ids.map((id) => {
     const row = song.get(id) as {
       key_signature: string;
@@ -273,6 +280,7 @@ export function songResults(
     };
     const versions = titles.all(id) as { language: string; title: string }[];
     const sung = services(id);
+    const recordings = recorded.pluck().get(id) as number;
     return {
       type: "song",
       id,
@@ -285,6 +293,7 @@ export function songResults(
       ...(sung >= MOST_SERVICES && {
         recent: { services: sung, of: days.length },
       }),
+      ...(recordings > 0 && { recordings }),
     };
   });
 }

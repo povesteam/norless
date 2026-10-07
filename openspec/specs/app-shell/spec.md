@@ -40,7 +40,7 @@ The app SHALL be installable as a PWA on phones, tablets and laptops (Windows, m
 ### Requirement: Feels like an app
 
 The app SHALL behave like an installed native app, not a website on a phone:
-- navigation without page reloads, with short transitions, and the system back gesture or button going back one step
+- navigation without page reloads, with short transitions, and the system back gesture or button going back one step: from a song's slides on a phone to the playlist, and closing a menu, dialog or the full-screen search before leaving the page; in the installed app, back on the first page it opened SHALL say "Press back again to close" and close only on a second back within 2 seconds
 - a layout that fits the screen and its safe areas (notches, home indicator), with no zooming into inputs, no pull-to-refresh and no rubber-band scrolling of the whole page
 - touch targets of at least 44 × 44 points, long-press menus instead of right-click on touch screens, and swiping between columns on phones
 - interface text that can't be selected by accident; lyrics and editors stay selectable
@@ -52,6 +52,18 @@ The app SHALL behave like an installed native app, not a website on a phone:
 #### Scenario: Swipe between playlist and slides
 - **WHEN** a musician swipes left on the playlist on a phone
 - **THEN** the slides of the selected entry slide in, and the back gesture returns to the playlist
+
+#### Scenario: Back from a song on an Android phone
+- **WHEN** a singer taps a song in the playlist on an Android phone and presses back
+- **THEN** the playlist shows again, and the app stays open
+
+#### Scenario: Back closes the menu
+- **WHEN** a member opens the menu on a phone and presses back
+- **THEN** the menu closes and the page stays
+
+#### Scenario: Closing the installed app
+- **WHEN** someone presses back on the playlist the installed app opened on
+- **THEN** it says "Press back again to close", and a second back within 2 seconds closes the app
 
 #### Scenario: Instant reorder
 - **WHEN** the operator drops an entry in a new position
@@ -282,11 +294,15 @@ Pressing `?` outside a text field SHALL show all keyboard shortcuts.
 
 ### Requirement: New versions reach open pages
 
-After a new version of Norless is deployed, every open page SHALL find it without a manual reload: when its live connection reconnects, and at least hourly. Controllers' and members' pages SHALL show a notice that a new version is ready, with a Reload button, and SHALL NOT reload by themselves. Screens and stage devices SHALL reload by themselves to the new version, but only while they show nothing: their room is blank, or no service or rehearsal is running by the schedule. A reload SHALL never interrupt a song on a screen.
+After a new version of Norless is deployed, every open page SHALL find it without a manual reload: when its live connection reconnects, and at least hourly. Controllers' and members' pages SHALL show a notice that a new version is ready, with a Reload button, and SHALL NOT reload by themselves; the notice SHALL close with ✕ and come back only with the next new version. Screens and stage devices SHALL reload by themselves to the new version, but only while they show nothing: their room is blank, or no service or rehearsal is running by the schedule. A reload SHALL never interrupt a song on a screen.
 
 #### Scenario: The operator's laptop during a service
 - **WHEN** a new version is deployed while the operator runs a service
 - **THEN** the laptop shows "A new version of Norless is ready" with Reload, and keeps working until the operator reloads
+
+#### Scenario: Not now
+- **WHEN** an operator closes the new-version notice with ✕ during a service
+- **THEN** it stays closed until another new version is deployed
 
 #### Scenario: The projector waits for blank
 - **WHEN** a new version is deployed while the projector shows a refrain
@@ -323,3 +339,83 @@ While the app frame is on, a community's pages SHALL start with one bar: the com
 #### Scenario: The playlist's title on a phone
 - **WHEN** a team member opens the playlist of 4 October on a phone, with the app frame on
 - **THEN** the community's name shows centered above the bar, which holds the menu button, "October 4" and their photo, and tapping the title opens the playlist's actions
+
+### Requirement: Start page
+
+The app's address without a path SHALL open the community this device opened last. On a device that has opened no community in this browser, it SHALL show a one-page presentation instead: in a card with the app's icon, one line on what Norless is; Install as the main button (the browser's install prompt, or the platform's steps where the browser has none, as in Safari on iOS); and the way into the community: a button "Open" with its name when there is one community, the list of communities when there are several. Log in SHALL be only in the page's header. Where the browser may offer to install, Install's place SHALL be kept, so nothing moves when the offer comes. While that one community has something live and follow-along is on, the page SHALL link its follow-along page at the top. The page SHALL link the manual. The install suggestion SHALL NOT show on the presentation, where Install is the main button. The installed app SHALL never show the presentation: it opens the playlist the home opens, or the list of communities when there are several, since an installed app doesn't share the browser's storage on every platform.
+
+#### Scenario: A new phone
+- **WHEN** a new team member opens `norless.com` in Chrome on an Android phone for the first time
+- **THEN** the presentation shows with Install as its main button, and once installed, the app opens on the community's playlist, where they log in
+
+#### Scenario: iPhone
+- **WHEN** someone opens `norless.com` in Safari on an iPhone for the first time
+- **THEN** Install shows how to add Norless to the home screen
+
+#### Scenario: Back on a known device
+- **WHEN** a singer who opened the community on this phone before opens `norless.com`
+- **THEN** the community's playlist opens, without the presentation
+
+#### Scenario: The installed app
+- **WHEN** someone opens the installed app from the home screen for the first time
+- **THEN** it opens on the playlist the home opens, never on the presentation
+
+#### Scenario: During a service
+- **WHEN** a visitor types `norless.com` while songs are live and follow-along is on
+- **THEN** the presentation links following along at the top
+
+#### Scenario: Several communities
+- **WHEN** there are two communities and a fresh device opens `norless.com`
+- **THEN** the presentation lists both
+
+#### Scenario: A browser that can't install
+- **WHEN** someone opens `norless.com` in Firefox on a laptop for the first time
+- **THEN** Open with the community's name is the button in the card, and Log in is in the header
+
+### Requirement: Window title
+
+The browser tab's and the installed app's window title SHALL say where one is: the place, then the community ("October 4 · Unu-Unu", "Amazing Grace · Unu-Unu", "Settings · Unu-Unu"), and "Norless" outside a community.
+
+#### Scenario: Two windows on a laptop
+- **WHEN** an operator has a playlist in one window and a song's page in another
+- **THEN** their titles name the playlist and the song, each with the community
+
+### Requirement: Links in menus
+
+On a laptop, a menu item that opens a page SHALL be a link, so that right-click, Cmd or Ctrl-click and middle-click work on it as on any link.
+
+#### Scenario: A new tab from the menu
+- **WHEN** a member Cmd-clicks Settings in the community's menu
+- **THEN** Settings opens in a new tab
+
+### Requirement: Not found
+
+An address that leads nowhere (an unknown page, community or record) SHALL say that the page doesn't exist, and SHALL offer Go back first, where there is a page to go back to, and the start page second.
+
+#### Scenario: A link to a page that's gone
+- **WHEN** a member follows a link from a playlist to a page that doesn't exist
+- **THEN** the page says so, and Go back returns to the playlist
+
+### Requirement: System bars in the app's colors
+
+On a phone, the status bar and, where the system lets the page color it, the navigation bar SHALL take the background of the page shown: the app's light or dark mode and the community's colors, and a view that fills the page its own background.
+
+#### Scenario: A light playlist after a dark stage view
+- **WHEN** a singer goes from the vocals view, which is dark, to the playlist in light mode
+- **THEN** the phone's status bar turns light with the page
+
+### Requirement: Phone menus as pages
+
+On a phone, the community's menu (the ☰, in Classic and with the app frame) SHALL take the screen below the bar, scroll on its own, and hold the page behind it still, so a scroll that reaches the menu's end doesn't move the page.
+
+#### Scenario: Scrolling a short menu
+- **WHEN** a member opens the menu on a phone and swipes up on it
+- **THEN** the menu stays where it is, and the playlist behind it doesn't move
+
+### Requirement: Who's online by the photo
+
+Who's online SHALL never include the person looking. On a phone, the others online SHALL stack small under the person's photo in the community's bar, instead of a row above the search box; the photo SHALL open the account menu as a page of its own, with a row as tall as the bar on top and who's online under it, each with their devices and the stage views they have open. On a laptop the row above the search box SHALL stay, without the person looking.
+
+#### Scenario: Two in the team online
+- **WHEN** Ioana opens a playlist on her phone while Maria has it open on hers
+- **THEN** Maria's photo sits small under Ioana's in the bar, and Ioana's own photo is in no row of who's online

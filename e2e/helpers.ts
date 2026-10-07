@@ -227,3 +227,27 @@ export async function pickLayout(page: Page, name: string) {
   await page.getByRole("button", { name: /^Layout: / }).click();
   await page.getByRole("menuitemradio", { name, exact: true }).click();
 }
+
+/** A one-finger swipe across the middle of the page: -1 to the left, 1 to the right. */
+export const swipe = (page: Page, direction: -1 | 1) =>
+  page.evaluate((direction) => {
+    const x = innerWidth / 2;
+    const y = innerHeight / 2;
+    const target = document.elementFromPoint(x, y) ?? document.body;
+    const touch = (dx: number) =>
+      new Touch({ identifier: 1, target, clientX: x + dx, clientY: y });
+    target.dispatchEvent(
+      new TouchEvent("touchstart", {
+        bubbles: true,
+        touches: [touch(0)],
+        changedTouches: [touch(0)],
+      }),
+    );
+    target.dispatchEvent(
+      new TouchEvent("touchend", {
+        bubbles: true,
+        touches: [],
+        changedTouches: [touch(direction * 120)],
+      }),
+    );
+  }, direction);

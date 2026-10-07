@@ -23,11 +23,13 @@ Why a community moves from Classic to the full interface one feature at a time, 
 - **A tap opens a dialog, the switch is inside**: in a dense graph a stray tap can't switch anything. The dialog says what the feature does, lists the path it also switches on under the switch, and holds the request for members. It is the one confirmation. `/features?feature=<id>` opens it.
 - **What's new is a bubble**: each feature switched on since the person last looked, by name, with what it does and a link to its node. Members' seen features are kept in their preferences (`seenSwitches`, per community), visitors' in the browser. The set only grows, so off and on again announces nothing. A first visit only notes what is on. Opening the dialog counts as seen at once, so closing it any way leaves nothing. Screen devices never render it.
 - **The bubble moves**: dragged, it snaps to the nearer side at the height it was let go, kept inside the window, and each device remembers its place. A press that moves under 6 pixels is a tap, and the click ending a drag is ignored. It starts at the left, over the playlist's times, away from the rows' actions and above a phone's live bar.
+- **Switch all on**: one confirmation switches every switchable feature on, for a community that wants the whole app at once; What's new lists them one by one, as it lists any feature switched on.
+- **The start page has no switch**: switches belong to a community, and the presentation at `/` belongs to none.
 
 ## Rejected
 
 - Interface steps (six preset groups): they only set the switches' defaults, and owners met them in two places (a row above the graph, What's new by step). One concept is enough.
-- A reset button ("Back to Classic", "Everything on"): owners switch features one by one, and switching off a parent already turns its children off.
+- Switching all off, or a reset to Classic: owners switch features off one by one, and switching off a parent already turns its children off.
 - Owners trying a feature alone before the team: plain on/off is enough, and the staging server is for trying.
 - Per-member opt-in: the team would see different apps.
 - A switch for every part: the graph had 60 features, 14 of them parts of another that nobody would switch on alone.

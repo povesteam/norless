@@ -5,6 +5,7 @@ import {
   buttonVariants,
   Input,
   Label,
+  Spinner,
   TextField,
 } from "@heroui/react";
 import { useState } from "react";
@@ -96,41 +97,58 @@ export function LoginPage() {
           </Alert.Content>
         </Alert>
       )}
-      {laptop && others ? (
-        // On a laptop the other ways take the QR's place, so all fits the window.
+      {others ? (
+        // The other ways take the main way's place, so all fits the window, and the
+        // main way is one tap back.
         <section className="flex flex-col gap-4">
           <h3 className="text-lg font-semibold">{t("auth.otherWays")}</h3>
-          {googleButton}
-          {emailForm}
-          <button
-            type="button"
-            className="link self-start underline"
-            onClick={() => setOthers(false)}
-          >
-            <Smartphone />
-            {t("deviceLogin.withPhone")}
-          </button>
+          {laptop ? (
+            <>
+              {googleButton}
+              {emailForm}
+            </>
+          ) : (
+            <>
+              {googleButton && emailForm}
+              <PhoneLogin target={target} />
+            </>
+          )}
+          {(laptop || phoneMain) && (
+            <button
+              type="button"
+              className="link self-start underline"
+              onClick={() => setOthers(false)}
+            >
+              {laptop ? (
+                <Smartphone />
+              ) : googleButton ? (
+                <GoogleLogo />
+              ) : (
+                <Mail />
+              )}
+              {t(
+                laptop
+                  ? "deviceLogin.withPhone"
+                  : googleButton
+                    ? "auth.google"
+                    : "auth.emailLink",
+              )}
+            </button>
+          )}
         </section>
       ) : (
         <>
           {laptop ? <PhoneLogin target={target} big /> : phoneMain}
-          {hasOthers &&
-            (others ? (
-              <section className="flex flex-col gap-4 border-t border-separator pt-4">
-                <h3 className="text-lg font-semibold">{t("auth.otherWays")}</h3>
-                {googleButton && emailForm}
-                <PhoneLogin target={target} />
-              </section>
-            ) : (
-              <button
-                type="button"
-                className="link self-start underline"
-                onClick={() => setOthers(true)}
-              >
-                <LogIn />
-                {t("auth.otherWays")}
-              </button>
-            ))}
+          {hasOthers && (
+            <button
+              type="button"
+              className="link self-start underline"
+              onClick={() => setOthers(true)}
+            >
+              <LogIn />
+              {t("auth.otherWays")}
+            </button>
+          )}
         </>
       )}
     </div>
@@ -202,8 +220,12 @@ function GoogleButton({
   onRefused: (why: string) => void;
 }) {
   const { t } = useTranslation();
+  // From the press until Google's card or page: loading Google took long enough on a
+  // phone to look broken.
+  const [waiting, setWaiting] = useState(false);
   const leave = () => window.location.assign(href);
   const press = async () => {
+    setWaiting(true);
     const [google, start] = await Promise.all([
       loadGis(),
       fetch("/api/auth/google/one-tap")
@@ -231,7 +253,10 @@ function GoogleButton({
           error?: string;
         } | null;
         if (response?.ok && body?.next) window.location.assign(body.next);
-        else onRefused(body?.error ?? "failed");
+        else {
+          setWaiting(false);
+          onRefused(body?.error ?? "failed");
+        }
       },
     });
     // Closed, or not shown (no Google account in this browser): Google's own page.
@@ -242,15 +267,23 @@ function GoogleButton({
   return (
     <a
       href={href}
+      aria-busy={waiting}
       onClick={(event) => {
         if (!signIn) return;
         event.preventDefault();
-        void press();
+        if (!waiting) void press();
       }}
       // Google's branding: white or near-black, a grey line, its G before the words.
       className="flex h-11 w-full items-center justify-center gap-3 rounded-full border border-[#747775] bg-white px-4 text-sm font-medium text-[#1F1F1F] outline-none focus-visible:ring-2 focus-visible:ring-focus dark:border-[#8E918F] dark:bg-[#131314] dark:text-[#E3E3E3]"
     >
-      <GoogleLogo />
+      {/* The spinner in the logo's place, so nothing moves. */}
+      <span className="grid size-5 place-items-center">
+        {waiting ? (
+          <Spinner color="current" size="sm" aria-hidden />
+        ) : (
+          <GoogleLogo />
+        )}
+      </span>
       {t("auth.google")}
     </a>
   );

@@ -121,7 +121,7 @@ type FeatureDef = {
 };
 const defs = features as Record<Feature, FeatureDef>;
 // Read on each call, so a test can add a feature.
-const names = () => Object.keys(features) as Feature[];
+export const names = () => Object.keys(features) as Feature[];
 export const featureNames = names();
 
 /** The features an owner can switch: all but Classic's. */
@@ -179,8 +179,6 @@ export const newlyOn = (seen: ReadonlySet<string>, on: ReadonlySet<Feature>) =>
 export const planned = {
   // After chord detection.
   chordHelper: { needs: "midiChords" },
-  // v1.2's rest.
-  melodia: {},
   // v2.
   webhooks: {},
 } as const satisfies Record<string, { needs?: string }>;

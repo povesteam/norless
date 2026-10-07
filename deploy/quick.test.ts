@@ -92,14 +92,12 @@ test("the commit checked out is checked, built for the VM, pushed, started and s
   expect(result.calls).toContain(
     `docker build --platform linux/arm64 --build-arg SOURCE_URL=https://github.com/pavel/norless`,
   );
-  expect(at(`docker push ghcr.io/pavel/norless:sha-${head}`)).toBeGreaterThan(
-    -1,
-  );
+  expect(at(`docker push ghcr.io/pavel/norless:${head}`)).toBeGreaterThan(-1);
   expect(
-    at(`docker push ghcr.io/pavel/norless-converter:sha-${head}`),
-  ).toBeLessThan(at(`production sha-${head} start`));
-  expect(at(`production sha-${head} start`)).toBeLessThan(
-    at(`production sha-${head} switch`),
+    at(`docker push ghcr.io/pavel/norless-converter:${head}`),
+  ).toBeLessThan(at(`production ${head} start`));
+  expect(at(`production ${head} start`)).toBeLessThan(
+    at(`production ${head} switch`),
   );
   expect(result.calls).toContain("runuser -u deploy -- ./deploy.sh");
 });
@@ -117,6 +115,6 @@ test("a new version that doesn't start isn't switched to", () => {
   const { head, run } = fakeMac();
   const result = run({ START: "1" });
   expect(result.status).toBe(1);
-  expect(result.calls).toContain(`production sha-${head} start`);
+  expect(result.calls).toContain(`production ${head} start`);
   expect(result.calls).not.toContain("switch");
 });

@@ -1,5 +1,9 @@
+import { buttonVariants } from "@heroui/react";
+import { ListMusic } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button as AriaButton } from "react-aria-components";
+import { Link } from "wouter";
+import { Tip } from "../ui/tip";
 import type { LiveView } from "../../server/live/live-view";
 import type { Slide } from "../../shared/song-text";
 import { SlidePage } from "../screens/SlidePage";
@@ -17,17 +21,49 @@ export function usePartName() {
   };
 }
 
-/** A part: highlighted when live, marked when next, and for controllers a tap sends it live. */
+/** Back to the community's playlist, as big as the toolbar's other buttons. */
+export function ToPlaylist({ slug }: { slug: string }) {
+  const { t } = useTranslation();
+  return (
+    <Tip label={t("stage.toPlaylist")}>
+      <Link
+        href={`~/${slug}`}
+        aria-label={t("stage.toPlaylist")}
+        className={`${buttonVariants({ isIconOnly: true, size: "sm", variant: "secondary" })} shrink-0`}
+      >
+        <ListMusic />
+      </Link>
+    </Tip>
+  );
+}
+
+/**
+ * A part's mark, faint in its box's top corner as the song map writes it (1, 2, R),
+ * instead of its name, which is only read out. The box is `relative` and keeps the room.
+ */
+export function PartMark({ mark, name }: { mark: string; name: string }) {
+  return (
+    <>
+      <span className="sr-only">{name}</span>
+      {/* Drawn from an attribute: a shadow of the name, not text to read. */}
+      <span
+        aria-hidden
+        data-mark={mark}
+        className="absolute end-3 top-2 text-3xl leading-none font-bold text-muted opacity-40 after:content-[attr(data-mark)]"
+      />
+    </>
+  );
+}
+
+/** A part: highlighted when live, and for controllers a tap sends it live. */
 export function PartBox({
   active,
-  next,
   onPress,
   children,
   after,
   standalone = false,
 }: {
   active: boolean;
-  next: boolean;
   onPress?: () => void;
   children: React.ReactNode;
   /** Shown under the box, outside the button: what has buttons of its own. */
@@ -35,14 +71,11 @@ export function PartBox({
   /** Shown alone (the live part, the next one), not as an item of a list of parts. */
   standalone?: boolean;
 }) {
-  // Live in the live color, next only dashed, so the two never look alike; one
-  // border width for all, so nothing moves on.
-  const look = `block w-full rounded-xl border-2 p-3 text-start ${
-    active
-      ? "border-live bg-live/10"
-      : next
-        ? "border-dashed border-muted"
-        : "border-separator"
+  // Live in the live color, the others alike; one border width for all, so nothing
+  // moves on.
+  // Room on the right for its mark (PartMark).
+  const look = `relative block w-full rounded-xl border-2 p-3 pe-10 text-start ${
+    active ? "border-live bg-live/10" : "border-separator"
   }`;
   return (
     <div

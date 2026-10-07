@@ -1,4 +1,5 @@
 import { Button, Drawer, Input, TextField } from "@heroui/react";
+import { NameAvatar } from "../ui/NameAvatar";
 import {
   ArrowLeft,
   FileClock,
@@ -16,18 +17,20 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
 import type { Entry } from "../../server/playlists/playlists";
 import { useCommunity, useShows } from "../data/community";
-import { GoLive } from "./ControllerViews";
+import { GoLive } from "./GoLive";
 import { FeedbackButton } from "../app/FeedbackDialog";
 import { LanguagePicker } from "../app/LanguagePicker";
 import { InstallLink } from "../app/Install";
 import { hasRole, useIsMember, useRoles } from "../data/me";
-import { OnlineMembers } from "./OnlineMembers";
+import { OnlineMembers, useOthersOnline } from "./OnlineMembers";
 import { PlaylistList, ShowArchived } from "../playlists/PlaylistsPage";
 import { NewPlaylistButton } from "../playlists/NewPlaylist";
 import type { Via } from "../../shared/usage";
 import { useHintAnchor } from "./hints";
 import { SlidesPanel } from "./SlidesPanel";
 import { UserMenu } from "../app/UserMenu";
+import { useBackCloses } from "../ui/back";
+import { usePageHeld } from "../ui/full-screen";
 import { Tip } from "../ui/tip";
 import { BarPlace, besideTitle, useNameAbove } from "../app/BarPlace";
 import { useDeviceType } from "../data/device";
@@ -42,7 +45,10 @@ import { useDeviceType } from "../data/device";
 export function ClassicBar() {
   const { t } = useTranslation();
   const { name } = useCommunity();
-  const above = useNameAbove(useDeviceType().deviceType === "phone");
+  const phone = useDeviceType().deviceType === "phone";
+  const above = useNameAbove(phone);
+  // Who's online, stacked under the photo on a phone.
+  const others = useOthersOnline();
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
   // Going to another page closes the menu.
@@ -51,6 +57,7 @@ export function ClassicBar() {
     setSeen(location);
     setOpen(false);
   }
+  usePageHeld(open);
   const menu = (
     <Button
       isIconOnly
@@ -82,14 +89,21 @@ export function ClassicBar() {
         <BarPlace place="title" />
         {!above && home}
         <div className="ms-auto flex shrink-0 items-center gap-2">
-          <UserMenu compact />
+          <UserMenu compact online={phone ? others : undefined} />
         </div>
       </div>
       {/* Gone at once when closed, so a page it opens can take the focus. */}
       {open && (
         <Drawer.Backdrop isOpen onOpenChange={setOpen}>
-          <Drawer.Content placement="left">
-            <Drawer.Dialog aria-label={t("app.menu")}>
+          {/* On a phone the whole screen, scrolling on its own. */}
+          <Drawer.Content
+            placement="left"
+            className="max-sm:w-full max-sm:max-w-none"
+          >
+            <Drawer.Dialog
+              aria-label={t("app.menu")}
+              className="max-sm:w-full max-sm:max-w-none"
+            >
               {/* A way to close it with the mouse, besides Escape and the backdrop. */}
               <Tip label={t("editor.close")}>
                 <Drawer.CloseTrigger aria-label={t("editor.close")} />
@@ -97,7 +111,7 @@ export function ClassicBar() {
               <Drawer.Header>
                 <Drawer.Heading>{name}</Drawer.Heading>
               </Drawer.Header>
-              <Drawer.Body>
+              <Drawer.Body className="overscroll-contain">
                 <ClassicMenu close={() => setOpen(false)} />
               </Drawer.Body>
             </Drawer.Dialog>
@@ -171,9 +185,9 @@ function ClassicMenu({ close }: { close: () => void }) {
       )}
       {/* Owners send theirs from the Ideas page, so the menu lists it once. */}
       {isMember && !hasRole(roles, "owner") && shows("feedback") && (
-        <FeedbackButton className="h-auto min-w-0 justify-start p-0" />
+        <FeedbackButton className="h-auto min-h-11 w-full min-w-0 justify-start p-0" />
       )}
-      <nav aria-label={t("classic.more")} className="flex flex-col gap-2">
+      <nav aria-label={t("classic.more")} className="menu-rows flex flex-col">
         {hasRole(roles, "owner") && (
           <>
             {shows("feedback") && (
@@ -268,6 +282,13 @@ export function ClassicColumns({
   const goLiveHint = useHintAnchor("goLive");
   const shown = editor ? "slides" : column;
   const narrow = (name: string) => (shown === name ? "" : "max-[749px]:hidden");
+  // On a narrow page, back from a song's slides goes to the playlist.
+  useBackCloses(
+    column === "slides" &&
+      !editor &&
+      window.matchMedia("(max-width: 749px)").matches,
+    onBack,
+  );
   return (
     <div className="gap-4 min-[750px]:grid min-[750px]:min-h-0 min-[750px]:flex-1 min-[750px]:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] min-[750px]:grid-rows-[minmax(0,1fr)]">
       <div className={`flex min-w-0 flex-col gap-3 ${narrow("playlist")}`}>
@@ -296,16 +317,17 @@ export function ClassicColumns({
               >
                 <ArrowLeft className="size-5" />
               </Button>
-              <div className="min-w-0 flex-1">
-                <h3 className="truncate text-xl font-semibold">{title}</h3>
-                {/* Members only; the line stays while empty, so the slides don't move. */}
-                {entry && "addedBy" in entry && (
-                  <p className="min-h-5 truncate text-sm text-muted">
-                    {entry.addedBy &&
-                      t("playlist.addedBy", { name: entry.addedBy })}
-                  </p>
-                )}
-              </div>
+              {/* Two lines before it's cut; who added it is their photo beside it. */}
+              <h3 className="line-clamp-2 min-w-0 flex-1 text-xl font-semibold">
+                {title}
+              </h3>
+              {entry?.addedBy && (
+                <NameAvatar
+                  name={entry.addedBy}
+                  avatar={entry.addedByAvatar}
+                  label={t("playlist.addedBy", { name: entry.addedBy })}
+                />
+              )}
               {canEditSongs && entry?.song && !entry.song.deleted && (
                 <Button
                   isIconOnly

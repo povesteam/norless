@@ -19,6 +19,8 @@ import {
   ToggleButtonGroup,
 } from "@heroui/react";
 import { useCallback, useEffect, useState } from "react";
+import { usePlace } from "../app/title";
+import { KeyMark } from "../stage/SongKey";
 import { useTranslation } from "react-i18next";
 import { lettersOnly } from "../../shared/song-render";
 import type { Song } from "../../server/songs/songs";
@@ -66,6 +68,13 @@ export function SongPage({ id }: { id: string }) {
     loads + useChanges(community.slug, "song_opinions", "tempo_checks"),
   );
   const [language, setLanguage] = useState<string>();
+  // The window's title names the song.
+  usePlace(
+    (
+      song?.versions.find((v) => v.language === (language ?? i18n.language)) ??
+      song?.versions[0]
+    )?.title,
+  );
   const [editing, setEditing] = useState<{
     language: string;
     index: number;
@@ -264,7 +273,7 @@ export function SongPage({ id }: { id: string }) {
       <div className="flex flex-wrap gap-2">
         {song.keySignature && (
           <Chip variant="secondary">
-            {t("song.key", { key: song.keySignature })}
+            <KeyMark shown={song.keySignature} />
           </Chip>
         )}
         {song.timeSignature && (

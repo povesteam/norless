@@ -116,7 +116,7 @@ export function MembersPage() {
       <InviteForm onInvite={inviteAs} />
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-140">
+        <table className={`${table} sm:min-w-140`}>
           <tbody className={rows}>
             {current.map((m) => (
               <CurrentRow
@@ -137,8 +137,8 @@ export function MembersPage() {
           <h3 className="text-xl font-semibold">{t("members.imported")}</h3>
           <p className="text-sm text-muted">{t("members.importedHelp")}</p>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-160">
-              <thead>
+            <table className={`${table} sm:min-w-160`}>
+              <thead className="max-sm:hidden">
                 <tr className="text-start text-sm text-muted">
                   <th className={`${cell} text-start font-medium`}>
                     {t("members.person")}
@@ -173,8 +173,13 @@ export function MembersPage() {
 
 type Change = () => Promise<Response | null>;
 
-const rows = "divide-y divide-separator border-y border-separator";
-const cell = "py-2 pe-4 align-middle";
+// On a phone each member's row wraps (the person, then the roles and actions), so the
+// page doesn't scroll sideways.
+const table = "w-full max-sm:block";
+const rows = "divide-y divide-separator border-y border-separator max-sm:block";
+const row =
+  "max-sm:flex max-sm:flex-wrap max-sm:items-center max-sm:gap-2 max-sm:py-3";
+const cell = "py-2 pe-4 align-middle max-sm:p-0";
 
 function CurrentRow({
   member,
@@ -189,18 +194,19 @@ function CurrentRow({
   const [changeRoles] = usePending(onRoles);
   const [remove, removing] = usePending(onRemove);
   return (
-    <tr>
-      <td className={cell}>
+    <tr className={row}>
+      <td className={`${cell} max-sm:basis-full`}>
         <PersonName member={member} />
       </td>
-      <td className={cell}>
+      {/* Empty, it takes no place in a phone's wrapped row. */}
+      <td className={`${cell} max-sm:empty:hidden`}>
         {member.status === "invited" && (
           <Chip size="sm" color="accent" variant="soft">
             {t("members.invited")}
           </Chip>
         )}
       </td>
-      <td className={`${cell} min-w-60`}>
+      <td className={`${cell} min-w-60 max-sm:min-w-0 max-sm:flex-1`}>
         <RolePicker
           label={t("members.roles", { name: member.name })}
           value={member.roles}
@@ -342,14 +348,21 @@ function ImportedRow({
   const [chosen, setChosen] = useState<Role[]>([]);
   const [invite, inviting] = usePending(onInvite);
   const [remove, removing] = usePending(onDelete);
+  // On a phone, without the header: each date says what it is.
+  const dated = (label: string, iso: string | null) => (
+    <td className={`${cell} max-sm:text-sm max-sm:text-muted`}>
+      <span className="sm:hidden">{label} </span>
+      {date(iso)}
+    </td>
+  );
   return (
-    <tr>
-      <td className={cell}>
+    <tr className={row}>
+      <td className={`${cell} max-sm:basis-full`}>
         <PersonName member={member} />
       </td>
-      <td className={cell}>{date(member.createdAt)}</td>
-      <td className={cell}>{date(member.lastActiveAt)}</td>
-      <td className={cell}>
+      {dated(t("members.created"), member.createdAt)}
+      {dated(t("members.lastActive"), member.lastActiveAt)}
+      <td className={`${cell} max-sm:basis-full`}>
         <div className="flex items-center gap-2">
           <RolePicker
             label={t("members.roles", { name: member.name })}

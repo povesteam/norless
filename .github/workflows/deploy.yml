@@ -61,7 +61,7 @@ jobs:
 
       - id: tag
         run: |
-          if [ "$GITHUB_REF_TYPE" = tag ]; then tag="$GITHUB_REF_NAME"; else tag="sha-${GITHUB_SHA::7}"; fi
+          if [ "$GITHUB_REF_TYPE" = tag ]; then tag="$GITHUB_REF_NAME"; else tag="${GITHUB_SHA::7}"; fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       # The app's image and its converter's, with the same tag.

@@ -53,6 +53,16 @@
   gap: 0.375rem;
 }
 
+/* A phone menu's links as rows a finger hits: 44 pixels high and the menu's width
+   (app-shell spec, Feels like an app). */
+@utility menu-rows {
+  & > a,
+  & > button {
+    min-height: 2.75rem;
+    width: 100%;
+  }
+}
+
 /* Feels like an installed app, not a website (app-shell spec). */
 html,
 body {

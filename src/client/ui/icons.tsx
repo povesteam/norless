@@ -61,7 +61,6 @@ import {
   Radio,
   TextCursor,
   FileImage,
-  Library,
   Webhook,
   WifiOff,
   ClipboardList,
@@ -274,6 +273,5 @@ export const featureIcons: Record<Feature, LucideIcon> = {
 /** Each planned feature's icon, for its node in the feature tree. */
 export const plannedIcons: Record<Planned, LucideIcon> = {
   chordHelper: TextCursor,
-  melodia: Library,
   webhooks: Webhook,
 };

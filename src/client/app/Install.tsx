@@ -6,7 +6,8 @@ import { Shown } from "../data/community";
 
 type InstallPrompt = Event & { prompt: () => Promise<void> };
 
-const installed = () =>
+/** Whether this is the installed app, in its own window. */
+export const installed = () =>
   window.matchMedia("(display-mode: standalone)").matches ||
   (navigator as { standalone?: boolean }).standalone === true;
 const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -14,6 +15,13 @@ const macSafari =
   /Macintosh/.test(navigator.userAgent) &&
   /Safari/.test(navigator.userAgent) &&
   !/Chrome|Chromium|Edg|Firefox/.test(navigator.userAgent);
+
+/** The steps to install, where the browser has no install prompt (Safari). */
+export const installSteps = ios
+  ? "install.ios"
+  : macSafari
+    ? "install.macSafari"
+    : null;
 
 const DISMISSED = "norless:install-dismissed";
 const dismissed = () => {
@@ -56,8 +64,7 @@ export function InstallSuggestion() {
   const { t } = useTranslation();
   const prompt = useInstallPrompt();
   const [hidden, setHidden] = useState(() => installed() || dismissed());
-  const steps = ios ? "install.ios" : macSafari ? "install.macSafari" : null;
-  if (hidden || (!prompt && !steps)) return null;
+  if (hidden || (!prompt && !installSteps)) return null;
   const dismiss = () => {
     try {
       localStorage.setItem(DISMISSED, "1");
@@ -72,7 +79,7 @@ export function InstallSuggestion() {
       aria-label={t("install.title")}
       className="flex flex-wrap items-center gap-2 rounded-xl border border-separator px-4 py-2 text-sm"
     >
-      <span className="flex-1">{t(steps ?? "install.why")}</span>
+      <span className="flex-1">{t(installSteps ?? "install.why")}</span>
       {prompt && (
         <Button
           size="sm"

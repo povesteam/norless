@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useRouter } from "wouter";
+import type { OnlineMember } from "../../shared/live";
 import { type DeviceType, deviceTypes } from "../../shared/preferences";
 import { useDeviceType } from "../data/device";
 import { DeviceIcon } from "../ui/icons";
@@ -31,31 +32,39 @@ import { Tip } from "../ui/tip";
 export function UserMenu({
   appLinks = false,
   compact = false,
+  online,
 }: {
   appLinks?: boolean;
   compact?: boolean;
+  /**
+   * On a phone's community bar: the others online, stacked under the photo, and at the
+   * top of the menu, which fills the screen.
+   */
+  online?: OnlineMember[];
 }) {
   const { t } = useTranslation();
   const { me } = useMe();
   // Inside a community's pages, the location is relative to the community.
-  const [location, navigate] = useLocation();
+  const [location] = useLocation();
   const { base } = useRouter();
   const { deviceType, setDeviceType } = useDeviceType();
   const install = useInstallPrompt();
   const shows = useShows();
   const canInstall = !!install && shows("install");
   const openLink = (key: unknown) => {
-    if (key === "about") navigate("~/about");
-    if (key === "privacy") navigate("~/privacy");
     if (key === "install") void install?.prompt();
   };
   const links = appLinks ? (
     <Dropdown.Section>
-      <Dropdown.Item id="about" textValue={t("about.title")}>
+      <Dropdown.Item id="about" href="/about" textValue={t("about.title")}>
         <Info />
         <Label>{t("about.title")}</Label>
       </Dropdown.Item>
-      <Dropdown.Item id="privacy" textValue={t("privacy.title")}>
+      <Dropdown.Item
+        id="privacy"
+        href="/privacy"
+        textValue={t("privacy.title")}
+      >
         <Shield />
         <Label>{t("privacy.title")}</Label>
       </Dropdown.Item>
@@ -100,17 +109,40 @@ export function UserMenu({
       </>
     );
 
+  const others = online ?? [];
+  const label = others.length
+    ? t("presence.meAndOthers", {
+        name: me.user.displayName,
+        count: others.length,
+      })
+    : me.user.displayName;
   return (
     <Dropdown>
       {compact ? (
-        <Tip label={me.user.displayName}>
+        <Tip label={label}>
           <Button
             isIconOnly
             variant="ghost"
-            aria-label={me.user.displayName}
-            className="rounded-full"
+            aria-label={label}
+            className="relative overflow-visible rounded-full"
           >
             <PersonAvatar name={me.user.displayName} avatar={me.user.avatar} />
+            {/* The others online, small, stacked under the photo. */}
+            {others.length > 0 && (
+              <span
+                aria-hidden
+                className="absolute start-1/2 -bottom-2.5 flex -translate-x-1/2 -space-x-2"
+              >
+                {others.slice(0, 3).map((person) => (
+                  <PersonAvatar
+                    key={person.userId}
+                    name={person.name}
+                    avatar={person.avatar}
+                    className="size-5 text-[0.5rem] ring-2 ring-background"
+                  />
+                ))}
+              </span>
+            )}
           </Button>
         </Tip>
       ) : (
@@ -127,28 +159,75 @@ export function UserMenu({
           {me.user.displayName}
         </Button>
       )}
-      <Dropdown.Popover placement="bottom end">
+      <Dropdown.Popover
+        placement="bottom end"
+        // With the others online, on a phone: a page of its own, who's online on top.
+        className={
+          online
+            ? "max-sm:!fixed max-sm:!inset-0 max-sm:!max-h-none max-sm:!w-screen max-sm:!max-w-none max-sm:overflow-y-auto max-sm:rounded-none"
+            : undefined
+        }
+      >
+        {/* As tall as the bar: the tap that opened it lands here, not on an item. */}
+        {online && (
+          <p className="flex h-16 items-center gap-2 px-3 font-semibold sm:hidden">
+            <PersonAvatar name={me.user.displayName} avatar={me.user.avatar} />
+            {me.user.displayName}
+          </p>
+        )}
+        {others.length > 0 && (
+          <section
+            aria-label={t("presence.online")}
+            className="flex flex-col gap-2 border-b border-separator p-3"
+          >
+            <h2 className="text-xs font-semibold tracking-wide text-muted uppercase">
+              {t("presence.online")}
+            </h2>
+            {others.map((person) => (
+              <p key={person.userId} className="flex items-center gap-2">
+                <PersonAvatar name={person.name} avatar={person.avatar} />
+                <span className="min-w-0 flex-1 truncate">{person.name}</span>
+                <span className="text-sm text-muted">
+                  {[
+                    ...person.devices.map((d) => t(`presence.${d}`)),
+                    ...person.views.map((v) => t(`${v.view}.title`)),
+                  ].join(", ")}
+                </span>
+              </p>
+            ))}
+          </section>
+        )}
         <Dropdown.Menu
           onAction={(key) => {
-            // Logging out, here or everywhere, and deleting the account are on that page.
-            if (key === "account") navigate("~/account");
-            if (key === "app-ideas") navigate("~/app-ideas");
-            if (key === "app-usage") navigate("~/app-usage");
+            // The pages are links (href); logging out, here or everywhere, and deleting
+            // the account are on My account.
             openLink(key);
           }}
         >
-          <Dropdown.Item id="account" textValue={t("account.title")}>
+          <Dropdown.Item
+            id="account"
+            href="/account"
+            textValue={t("account.title")}
+          >
             <UserCog />
             <Label>{t("account.title")}</Label>
           </Dropdown.Item>
           {me.appTeam ? (
-            <Dropdown.Item id="app-ideas" textValue={t("feedback.appMenu")}>
+            <Dropdown.Item
+              id="app-ideas"
+              href="/app-ideas"
+              textValue={t("feedback.appMenu")}
+            >
               <Lightbulb />
               <Label>{t("feedback.appMenu")}</Label>
             </Dropdown.Item>
           ) : null}
           {me.appTeam ? (
-            <Dropdown.Item id="app-usage" textValue={t("usage.menu")}>
+            <Dropdown.Item
+              id="app-usage"
+              href="/app-usage"
+              textValue={t("usage.menu")}
+            >
               <ChartColumn />
               <Label>{t("usage.menu")}</Label>
             </Dropdown.Item>

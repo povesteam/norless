@@ -90,13 +90,13 @@ esac
 
 test("a deploy backs up first, then starts the new image beside the running one, which keeps serving", () => {
   const server = fakeServer(["candidate", "service", "converter"]);
-  const result = server.run("production sha-1a2b3c4");
+  const result = server.run("production 1a2b3c4");
   expect(result.status).toBe(0);
   expect(result.stdout).toContain("confirm to switch");
   const calls = server.calls();
   expect(calls.indexOf("backup.js")).toBeLessThan(calls.indexOf("compose run"));
   expect(calls).toContain(
-    "PRODUCTION_TAG=sha-1a2b3c4 compose run -d --no-deps --name norless-candidate norless",
+    "PRODUCTION_TAG=1a2b3c4 compose run -d --no-deps --name norless-candidate norless",
   );
   // The running service wasn't touched.
   expect(server.tag()).toBe("old");
@@ -106,26 +106,26 @@ test("a deploy backs up first, then starts the new image beside the running one,
 
 test("a broken image is stopped, and never takes the running one's place", () => {
   const server = fakeServer(["service", "converter"]);
-  const result = server.run("production sha-broken");
+  const result = server.run("production broken");
   expect(result.status).toBe(1);
   expect(result.stderr).toContain("goes on as it was");
   expect(server.candidate()).toBe(false);
   expect(server.tag()).toBe("old");
   expect(server.calls()).not.toContain("compose up -d norless");
   // And it can't be switched to.
-  expect(server.run("production sha-broken switch").status).toBe(1);
+  expect(server.run("production broken switch").status).toBe(1);
   expect(server.tag()).toBe("old");
   expect(server.calls()).not.toContain("compose up -d norless");
 });
 
 test("confirmed, the service restarts on the new tag while the candidate stands in, then the candidate goes", () => {
   const server = fakeServer(["candidate", "service", "converter"]);
-  server.run("production sha-1a2b3c4");
+  server.run("production 1a2b3c4");
   // Another tag than the candidate's isn't switched to.
-  expect(server.run("production sha-other switch").status).toBe(1);
-  const result = server.run("production sha-1a2b3c4 switch");
+  expect(server.run("production other switch").status).toBe(1);
+  const result = server.run("production 1a2b3c4 switch");
   expect(result.status).toBe(0);
-  expect(server.tag()).toBe("sha-1a2b3c4");
+  expect(server.tag()).toBe("1a2b3c4");
   const calls = server.calls();
   expect(calls.indexOf("compose up -d norless")).toBeLessThan(
     calls.lastIndexOf("rm -f norless-candidate"),
@@ -135,8 +135,8 @@ test("confirmed, the service restarts on the new tag while the candidate stands 
 
 test("a service that isn't healthy on the new tag goes back to the old one", () => {
   const server = fakeServer(["candidate", "converter"]);
-  server.run("production sha-1a2b3c4");
-  const result = server.run("production sha-1a2b3c4 switch");
+  server.run("production 1a2b3c4");
+  const result = server.run("production 1a2b3c4 switch");
   expect(result.status).toBe(1);
   expect(result.stderr).toContain("goes back to old");
   expect(server.tag()).toBe("old");
@@ -145,24 +145,24 @@ test("a service that isn't healthy on the new tag goes back to the old one", () 
 
 test("not confirmed, the candidate is dropped", () => {
   const server = fakeServer(["candidate", "service", "converter"]);
-  server.run("production sha-1a2b3c4");
-  expect(server.run("production sha-1a2b3c4 stop").status).toBe(0);
+  server.run("production 1a2b3c4");
+  expect(server.run("production 1a2b3c4 stop").status).toBe(0);
   expect(server.candidate()).toBe(false);
   expect(server.tag()).toBe("old");
 });
 
 test("the converter is updated first, and a converter that isn't healthy goes back and stops the deploy", () => {
   const server = fakeServer(["candidate", "service", "converter"]);
-  expect(server.run("production sha-1a2b3c4").status).toBe(0);
+  expect(server.run("production 1a2b3c4").status).toBe(0);
   const calls = server.calls();
   expect(calls).toContain("PRODUCTION_TAG= compose up -d converter");
   expect(calls.indexOf("compose up -d converter")).toBeLessThan(
     calls.indexOf("compose run"),
   );
-  expect(server.converterTag()).toBe("sha-1a2b3c4");
+  expect(server.converterTag()).toBe("1a2b3c4");
 
   const broken = fakeServer(["candidate", "service"]);
-  const result = broken.run("production sha-broken");
+  const result = broken.run("production broken");
   expect(result.status).toBe(1);
   expect(result.stderr).toContain("the old one is back");
   expect(broken.converterTag()).toBe("old");

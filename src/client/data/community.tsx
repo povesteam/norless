@@ -39,8 +39,8 @@ export const switchesOf = (community: Pick<Community, "switches">) =>
   switchesOn(community.switches ?? {});
 
 /**
- * Whether the member's chords are colored: they switched colors on
- * and the community shows them.
+ * Whether chords are colored: the community shows the colors and the member didn't
+ * choose plain chords.
  */
 export function useChordColors(
   community: Pick<Community, "switches"> | null | undefined,
@@ -48,7 +48,7 @@ export function useChordColors(
   const { me } = useMe();
   const musician = me?.user ? me.preferences.musician : undefined;
   return !!(
-    musician?.chordColors &&
+    !musician?.plainChords &&
     community &&
     shows(switchesOf(community), "chordColors")
   );

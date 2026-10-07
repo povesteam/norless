@@ -14,10 +14,26 @@ export const usageFeatures = {
     "slide",
     "part",
     "song-page",
+    "song-map",
+    "swipe",
   ],
   /** Next and previous: arrow keys, a clicker (PageUp and PageDown), a key on the projector's window, a button, a media key. */
-  "live.next": ["key", "clicker", "projector-key", "button", "media-key"],
-  "live.previous": ["key", "clicker", "projector-key", "button", "media-key"],
+  "live.next": [
+    "key",
+    "clicker",
+    "projector-key",
+    "button",
+    "media-key",
+    "swipe",
+  ],
+  "live.previous": [
+    "key",
+    "clicker",
+    "projector-key",
+    "button",
+    "media-key",
+    "swipe",
+  ],
   "live.blank": ["key", "projector-key", "button", "media-key"],
   /** A view shown in a layout; the event's layout names it. */
   "layout.shown": [],

@@ -308,6 +308,7 @@ export function attachLiveState(
             changedBy: {
               userId,
               name: request.user.displayName,
+              avatar: request.user.avatar,
               device: deviceOf(request.headers["user-agent"] ?? ""),
             },
             changedAt: at.toISOString(),

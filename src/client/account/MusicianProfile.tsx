@@ -161,19 +161,19 @@ export function MusicianProfile({
       </RadioGroup>
       <Shown feature="chordColors">
         <Switch
-          isSelected={musician.chordColors ?? false}
-          onChange={(chordColors) => save({ chordColors })}
+          isSelected={musician.plainChords ?? false}
+          onChange={(plainChords) => save({ plainChords })}
         >
           <Switch.Content>
             <Switch.Control>
               <Switch.Thumb />
             </Switch.Control>
-            <Label>{t("instruments.chordColors")}</Label>
+            <Label>{t("instruments.plainChords")}</Label>
           </Switch.Content>
           <Description>{t("instruments.chordColorsHelp")}</Description>
         </Switch>
         {/* Each degree and suffix in its color, so the colors can be learned. */}
-        {musician.chordColors && (
+        {!musician.plainChords && (
           <div aria-hidden className="flex flex-col gap-1 text-sm text-muted">
             <span>
               {t("instruments.degrees")}{" "}

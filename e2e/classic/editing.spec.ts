@@ -29,7 +29,7 @@ test.describe("on a laptop", () => {
     await expect(rows(page)).toHaveCount(1);
     await expect(rows(page).first()).toContainText("Doar harul Tău");
     // Who added it, under the selected entry's title, and no browser tooltip.
-    await expect(page.getByText("Added by Ioana")).toBeVisible();
+    await expect(page.getByLabel("Added by Ioana")).toBeVisible();
     await expect(
       rows(page).first().locator("[data-entry]"),
     ).not.toHaveAttribute("title");

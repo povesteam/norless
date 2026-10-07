@@ -125,7 +125,8 @@ export function GuestPass({ onAccepted }: { onAccepted?: () => void }) {
         >
           <TextField value={guest} onChange={setGuest} maxLength={60}>
             <Label>{t("deviceLogin.guestName")}</Label>
-            <Input />
+            {/* A phone's keyboard starts each word of the name with a capital. */}
+            <Input autoCapitalize="words" />
           </TextField>
           <ActionButton
             type="submit"

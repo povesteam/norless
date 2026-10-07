@@ -64,7 +64,7 @@ esac`,
         PATH: `${join(dir, "bin")}:${process.env.PATH}`,
         HOME: dir,
         IMPORT_DIR: join(dir, "imports"),
-        TAG: `sha-${head}`,
+        TAG: `${head}`,
         ...env,
       },
       encoding: "utf8",
@@ -83,10 +83,10 @@ esac`,
 
 test("the import runs only on the commit production runs, and stops nothing otherwise", () => {
   const { run } = fakeMac();
-  const result = run({ TAG: "sha-1234567" });
+  const result = run({ TAG: "1234567" });
   expect(result.status).toBe(1);
   expect(result.stderr).toContain(
-    "Production runs sha-1234567: check out that commit first",
+    "Production runs 1234567: check out that commit first",
   );
   expect(result.calls).not.toContain("stop");
 });

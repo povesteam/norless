@@ -1,6 +1,8 @@
-import { RotateCw, Sparkles } from "lucide-react";
+import { RotateCw, Sparkles, X } from "lucide-react";
 import { Button } from "@heroui/react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Tip } from "../ui/tip";
 import { useLocation } from "wouter";
 import { takeNewVersion, useNewVersion } from "./update";
 
@@ -9,13 +11,15 @@ const screens = /^\/(pair$|s\/)|^\/[^/]+\/(projector|local)\/|^\/[^/]+\/stage$/;
 
 /**
  * Controllers' and members' pages: a new version is ready, with Reload. Nothing reloads
- * under them, so it waits, over the page and moving nothing, until they press it.
+ * under them, so it waits, over the page and moving nothing, until they press it, or
+ * close it until the next version.
  */
 export function NewVersionNotice() {
   const { t } = useTranslation();
   const [location] = useLocation();
   const waiting = useNewVersion();
-  if (!waiting || screens.test(location)) return null;
+  const [closed, setClosed] = useState(0);
+  if (waiting <= closed || screens.test(location)) return null;
   return (
     <section
       aria-label={t("update.label")}
@@ -27,6 +31,17 @@ export function NewVersionNotice() {
         <RotateCw />
         {t("update.reload")}
       </Button>
+      <Tip label={t("update.close")}>
+        <Button
+          isIconOnly
+          size="sm"
+          variant="ghost"
+          aria-label={t("update.close")}
+          onPress={() => setClosed(waiting)}
+        >
+          <X />
+        </Button>
+      </Tip>
     </section>
   );
 }

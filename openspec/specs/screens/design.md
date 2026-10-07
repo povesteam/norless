@@ -19,7 +19,7 @@ Why screens work as the spec says: the mechanisms, numbers and trade-offs behind
 - **Displays only after one explicit grant**: displays are listed through the Window Management API only when the permission is already granted. Only "Choose displays" asks, so nobody gets a prompt they didn't ask for; until then screens open in a new window. Without a choice, a screen uses the display chosen before for it on this device (browser storage), else the first that isn't the laptop's own.
 - **Local projection stays in one browser**: a tab keeps its own live state and sends it to the projector window it opened through a BroadcastChannel. No server, no login, and the room's live state is never touched.
 - **Parts are whole**: musicians, vocalists and the stage monitor show each part as one block, never a half. Most slides have no name, so an unnamed slide is its own part, numbered among the verses; a refrain named `R` returns between them in the song's order.
-- **Live and next never look alike**: the live part has a frame in the live color, the next part a dashed neutral one, in dark and in light.
+- **Only the live part is marked**: a frame in the live color, in dark and in light. A mark on the next part drew the eye away from the live one.
 - **Songs without chords still show something**: most songs have none, so the musicians view shows the lyrics, key and structure and invites members who may add chords to do so.
 - **Bar grid is measured**: the grid measures its width and the widest bar, before the first paint so nothing jumps. All bars go on one line when they fit; else one row per chord line (a phrase) when the longest fits; else the fewest equal rows (2 to 4) whose columns fit; past 4 rows, as many columns as fit. Every column has the same width, so bars align from row to row. Phrase rows read like the song: a verse on a phone went from 7 rows of 3, cut anywhere, to 5 rows of 4. On a phone the part's name goes above its bars to give them the width.
 - **Beats share a bar**: each chord is as wide as its beats (flex-grow), equal until set. Beats per bar come from the time signature's top number, 4 without one; a bar with more chords than beats splits equally. Chords over words keep their place along the line.
@@ -34,6 +34,11 @@ Why screens work as the spec says: the mechanisms, numbers and trade-offs behind
 - **Text slides use a small Markdown subset**: headings, paragraphs, bold, italic and lists, built in, with no dependency.
 - **Stage monitor on any device**: `/<community>/stage` opens one in the community's languages on a TV's browser or a phone, apart from the screens with secrets.
 - **Reconnect and catch up**: a screen keeps its last content while offline. The server sends the current state when a client subscribes, so a reconnected screen catches up within a second.
+- **The message to the stage is a box, without presets**: "5 minutes", "Wrap up" and "Time" went unused; typing is quicker than looking for a preset.
+- **Instruments and Vocals**: "Musicians" left the singers out, so the two stage views are named for their parts of the band, as a band lists vocals and instruments (ro "Voce" and "Instrumente", uk "Вокал" and "Інструменти"). Their addresses stay `/musicians` and `/vocalists`.
+- **A button each way between the playlist and one's own stage view** on a phone: the playlist's bar goes to the view of what the person plays, and the view's toolbar comes back.
+- **Swipes and the song map move live for the team**: team members may control live from any view; for anyone else they move only their own phone, which follows live again at the next change.
+- **Parts are marked by a faint numeral in the corner**: the 1, 2 or R the song map already uses, read out with the part's full name. "Verse 1" and "Refrain" took a line on every card.
 
 ## Rejected
 
@@ -46,3 +51,7 @@ Why screens work as the spec says: the mechanisms, numbers and trade-offs behind
 - Look ahead on screens: they follow the room.
 - Paging a slide two lines at a time on the overlay: the live state has no unit smaller than a slide.
 - Bible verse text inside Norless's own projector: left to the bible.com extension.
+- Presets for the stage message, or owners' own: nobody used them.
+- A mark on the next part (a dashed border, a "Next" label, a tint): it drew the eye away from the live part.
+- "Band", "Chords" or a singular "Vocal" for the stage views' names.
+- A bottom tab bar between the playlist and the stage views (a strip of screen on every page), or a swipe (nobody finds it, and the views already swipe through parts).

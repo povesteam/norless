@@ -104,6 +104,8 @@ export type LiveState = {
   changedBy: {
     userId: string;
     name: string;
+    /** Their photo, if any (users.avatar). */
+    avatar?: string | null;
     device: "phone" | "computer";
   } | null;
   changedAt: string | null;

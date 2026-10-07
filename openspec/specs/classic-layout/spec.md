@@ -71,11 +71,11 @@ For the team, typing a letter or digit anywhere outside a text field SHALL start
 
 ### Requirement: Classic entries
 
-Each entry SHALL show what the `playlists` spec lists (type icon, title, key, time signature, tags, played mark, live highlight). Who added the selected entry SHALL show under its title beside the slides, to members; no row shows it, and there is no hover tooltip. The live slide SHALL have the live color's frame, as wide as the other slides' border. The team SHALL be able to reorder entries by dragging the row (long-pressing on touch screens), and use the entry actions of the `playlists` spec, plus Add divider above, which asks for the divider's heading.
+Each entry SHALL show what the `playlists` spec lists (type icon, title, key, time signature, tags, played mark, live highlight). Who added the selected entry SHALL show as their avatar beside its title above the slides, to members, with "Added by" and their name in a styled tooltip; no row shows it. The title SHALL take up to two lines before it's cut. The live slide SHALL have the live color's frame, as wide as the other slides' border, and a slide going live SHALL scroll into view, as little as it takes. The team SHALL be able to reorder entries by dragging the row (long-pressing on touch screens), and use the entry actions of the `playlists` spec, plus Add divider above, which asks for the divider's heading.
 
 #### Scenario: Who added the song
 - **WHEN** a member selects a song Oti added
-- **THEN** "Added by Oti" shows under its title above the slides, and the row has no avatar or tooltip
+- **THEN** Oti's avatar shows beside its title above the slides, saying "Added by Oti", and the row has no avatar
 
 #### Scenario: Divider before the sermon
 - **WHEN** an operator right-clicks the song after the sermon and chooses Add divider above with "Predica"
@@ -115,15 +115,15 @@ Classic's bar SHALL hold, from the left, a menu button; on a playlist, its name 
 
 ### Requirement: Classic hints
 
-Classic SHALL show the team up to four hints, one at a time, each in a small bubble next to the control it's about, until the member presses "Got it", which hides it for good on their account: a double-click or Go live projects the selected entry; typing anywhere searches and Enter adds; Page Down or → goes next, Page Up or ← previous, and Esc blanks; and a projector's button opens it full screen on the second display. A hint SHALL NOT cover the control it points at, nor move anything on the page, and the one about going live SHALL wait until the playlist has an entry.
+Classic SHALL offer the team up to four hints as the page's tips in the What's new bubble (feature-switches spec), which counts them with what's new and lists them in its dialog, instead of showing them over the page; opening it marks them seen on the member's account: a double-click or Go live projects the selected entry; typing anywhere searches and Enter adds; Page Down or → goes next, Page Up or ← previous, and Esc blanks; and a projector's button opens it full screen on the second display. The tips are those whose control is on the page, and the one about going live SHALL wait until the playlist has an entry.
 
 #### Scenario: First Sunday
 - **WHEN** an operator opens Classic for the first time
-- **THEN** one hint points at Go live, and after "Got it" the next one shows, until all four were seen
+- **THEN** the What's new bubble offers the page's tips, nothing covers the page, and once the bubble was opened they aren't offered again
 
 #### Scenario: An empty playlist
 - **WHEN** an operator who hasn't seen the hints opens a playlist without entries
-- **THEN** the first hint is about searching, and the one about going live waits for an entry
+- **THEN** the tips are about searching and the rest, and the one about going live waits for an entry
 
 ### Requirement: Classic song editor
 
@@ -135,7 +135,7 @@ The Classic editor SHALL have the old app's fields: title, key signature, time s
 
 ### Requirement: Projecting from Classic
 
-For the team on a laptop, Classic SHALL offer a button for each projector screen of the room, named as the screen ("Projector RO"), or for each language, when no projector screen is set up ("Projector RO" too), which opens it full screen on the projector: on the display that isn't the laptop's, or the one chosen before on this laptop, where the browser lets pages choose (it asks once). Elsewhere, or until it's allowed, it SHALL open in a window that the operator moves to the projector. Pressing Project again SHALL bring that window forward instead of opening a second one, also after the controller's page reloads; and the live keys (Page Up and Down, arrows, Esc, Enter) pressed while the projector's window has the focus SHALL act as on the controller. Each projector SHALL show its language with its display settings (background, title, progress, key, next line, refrains in italics, the final mark). On touch devices, each projector's button SHALL show a preview of that projector in the page and hide it again.
+For the team on a laptop, Classic SHALL offer a button for each projector screen of the room, named as the screen ("Projector RO"), or for each language, when no projector screen is set up ("Projector RO" too), which opens it full screen on the projector: on the display that isn't the laptop's, or the one chosen before on this laptop, where the browser lets pages choose (it asks once). Elsewhere, or until it's allowed, it SHALL open in a window that the operator moves to the projector. Where the browser can tell the laptop has no other display, the button SHALL instead say that no projector is attached, with "Open anyway", which opens that window at half the screen's width and height, in its middle; a projector's window already open SHALL come forward without asking. Pressing Project again SHALL bring that window forward instead of opening a second one, also after the controller's page reloads; and the live keys (Page Up and Down, arrows, Esc, Enter) pressed while the projector's window has the focus SHALL act as on the controller. Each projector SHALL show its language with its display settings (background, title, progress, key, next line, refrains in italics, the final mark). On touch devices, each projector's button SHALL show a preview of that projector in the page and hide it again.
 
 #### Scenario: RO and UA projectors from one playlist
 - **WHEN** an operator opens the Romanian and the Ukrainian projector with their Project buttons, and sends a song live
@@ -144,6 +144,10 @@ For the team on a laptop, Classic SHALL offer a button for each projector screen
 #### Scenario: Preview on a tablet
 - **WHEN** a team member taps "Projector RO" on a tablet
 - **THEN** the projector's current slide is shown in the page, and a second tap hides it
+
+#### Scenario: No projector attached
+- **WHEN** an operator presses "Projector RO" on a laptop without a second display
+- **THEN** Norless says no projector is attached instead of covering the laptop with a black window, and "Open anyway" opens the projector in a window of half the screen, in its middle
 
 ### Requirement: The live title on a phone
 

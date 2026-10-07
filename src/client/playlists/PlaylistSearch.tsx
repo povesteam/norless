@@ -39,7 +39,7 @@ export function PlaylistSearch({
   onAddDivider: () => void;
   /** Uploads files as slides entries. */
   onAddSlides: (files: File[]) => Promise<unknown>;
-  /** Where the next pick goes, after "Song here". */
+  /** Where the next pick goes, after the + menu's Song. */
   place?: { after: string | null; label: string; onEnd: () => void };
 }) {
   const { t } = useTranslation();

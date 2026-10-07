@@ -59,7 +59,9 @@ test("the stage monitor shows the current and next part, messages, and the sermo
   // The note for singers shows on the stage, not on the projector.
   await expect(stage.getByText("unison").first()).toBeVisible();
 
-  await page.getByRole("button", { name: "5 minutes" }).click();
+  const message = page.getByRole("textbox", { name: "Message…" });
+  await message.fill("5 minutes");
+  await message.press("Enter");
   await expect(stage.getByRole("status")).toHaveText("5 minutes");
   // Inside a TV's title-safe area, 5% from each edge.
   await expectTitleSafe(stage, [
@@ -72,7 +74,7 @@ test("the stage monitor shows the current and next part, messages, and the sermo
       other.getByRole("status").filter({ hasText: "5 minutes" }),
     ).toBeVisible();
   // On its own line: the song moves down under it rather than being covered.
-  const message = await musicians
+  const shown = await musicians
     .getByRole("status")
     .filter({ hasText: "5 minutes" })
     .boundingBox();
@@ -80,7 +82,7 @@ test("the stage monitor shows the current and next part, messages, and the sermo
     .getByRole("heading", { level: 2 })
     .boundingBox();
   expect(title?.y).toBeGreaterThanOrEqual(
-    (message?.y ?? 0) + (message?.height ?? 0),
+    (shown?.y ?? 0) + (shown?.height ?? 0),
   );
   await expect(projector.getByText("5 minutes")).toHaveCount(0);
   await page.getByRole("button", { name: "Clear" }).click();
@@ -193,9 +195,27 @@ test("musicians see the chords as a bar grid or over the words, and the team tap
   await ro.goto("/unu-unu/projector/ro");
 
   await page.goto("/unu-unu/playlists/steady");
-  await openFromBar(page, "Musicians");
-  await expect(page.getByText("Key: G")).toBeVisible();
+  await openFromBar(page, "Instruments");
+  // The key with its icon instead of "Key:".
+  await expect(
+    page.getByRole("img", { name: "Key" }).first().locator(".."),
+  ).toHaveText("G");
   await expect(page.getByText("Time: 3/4")).toBeVisible();
+  // The team changes the key for this service from it, and back.
+  await page.getByRole("button", { name: "Key for this service: G" }).click();
+  const keyDialog = page.getByRole("dialog");
+  await keyDialog.locator('[data-key="A"]').click();
+  await keyDialog
+    .getByRole("button", { name: "Save for this service" })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Key for this service: A" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Key for this service: A" }).click();
+  await page.getByRole("button", { name: "Use the song’s key" }).click();
+  await expect(
+    page.getByRole("button", { name: "Key for this service: G" }),
+  ).toBeVisible();
   const grid = page.getByRole("list", { name: "Bar grid" });
   const verse = grid.getByRole("listitem").first();
   await expect(verse).toHaveAttribute("aria-current", "true");
@@ -229,7 +249,7 @@ test("vocalists see every part, the live one marked, in one or all languages", a
   const ro = await browser.newPage();
   await ro.goto("/unu-unu/projector/ro");
   await page.goto("/unu-unu/playlists/steady");
-  await openFromBar(page, "Vocalists");
+  await openFromBar(page, "Vocals");
 
   const parts = page.getByRole("list", { name: "Parts" });
   await expect(parts.getByRole("listitem")).toHaveCount(4);
@@ -238,7 +258,9 @@ test("vocalists see every part, the live one marked, in one or all languages", a
     "true",
   );
   await expect(page.getByText("Слава Тобі")).toHaveCount(0);
-  await page.getByRole("radio", { name: "All" }).click();
+  // One button for the languages, with the shown one's flag, that opens the choice.
+  await page.getByRole("button", { name: "Languages" }).click();
+  await page.getByRole("menuitemradio", { name: "All" }).click();
   await expect(page.getByText("Слава Тобі")).toBeVisible();
 
   await parts.getByRole("listitem").nth(3).getByRole("button").click();

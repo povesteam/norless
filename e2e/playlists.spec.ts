@@ -359,7 +359,7 @@ test("entries show titles in the community's first language while the interface 
   await expect(rows(page)).toHaveText([/Har minunat/]);
   // Above the selected entry's parts, not as an avatar or a tooltip on every row.
   await rows(page).first().click();
-  await expect(page.getByText("Added by Ioana")).toBeVisible();
+  await expect(page.getByLabel("Added by Ioana")).toBeVisible();
   await expect(rows(page).first().locator("[data-entry]")).not.toHaveAttribute(
     "title",
   );

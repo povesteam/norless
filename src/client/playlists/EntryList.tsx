@@ -20,7 +20,7 @@ import {
 import { useTranslation } from "react-i18next";
 import type { Entry, Playlist } from "../../server/playlists/playlists";
 import type { Problem } from "../../server/playlists/problems";
-import { sameKey, ServiceKeyDialog } from "../songs/KeyDialog";
+import { ServiceKeyDialog } from "../songs/KeyDialog";
 import { LedByDialog, LedByIcon, leaderOf } from "./LedBy";
 import { useCommunity, useShows } from "../data/community";
 import { live } from "../data/connection";
@@ -253,6 +253,19 @@ export function EntryList({
     y: number;
   } | null>(null);
   const hovering = canChange && !touch && between && !dragging;
+  // The + shows once the pointer rests on a gap for 300 ms, so passing over the rows
+  // doesn't flicker it; it goes at once.
+  const [restingAt, setRestingAt] = useState<number | null>(null);
+  useEffect(() => {
+    if (gapAt === null) return;
+    const timer = setTimeout(() => setRestingAt(gapAt), 300);
+    return () => clearTimeout(timer);
+  }, [gapAt]);
+  const shownGap = gapAt !== null && restingAt === gapAt ? gapAt : null;
+  const pointAt = (gap: number | null) => {
+    setGapAt(gap);
+    if (gap === null) setRestingAt(null);
+  };
   /** The gap within 10 pixels of the pointer, between two rows, if any. */
   const gapNear = (event: React.MouseEvent, index: number) => {
     const box = event.currentTarget.getBoundingClientRect();
@@ -309,18 +322,6 @@ export function EntryList({
     ),
   });
 
-  /** The key the song before an entry is played in, when it's another key. */
-  const keyBefore = (entry: Entry) => {
-    if (!entry.song || !shows("instruments")) return null;
-    const before = entries
-      .slice(0, entries.indexOf(entry))
-      .findLast((e) => e.song && !e.song.deleted);
-    if (!before?.song) return null;
-    const from = before.keySignature || before.song.keySignature;
-    const to = entry.keySignature || entry.song.keySignature;
-    return from && to && !sameKey(from, to) ? from : null;
-  };
-
   // How far the service is: what's above the live entry is done, and
   // while the screens are blank the live entry too, with a line under it.
   const liveAt = entries.findIndex((e) => e.id === liveEntryId);
@@ -331,7 +332,7 @@ export function EntryList({
       ref={list}
       // The gap a dragged entry would drop into is as tall as the entry.
       style={{ "--gap": `${gap}px` } as React.CSSProperties}
-      onMouseLeave={() => setGapAt(null)}
+      onMouseLeave={() => pointAt(null)}
       onKeyDown={(event) => {
         if (!canChange || touch) return;
         if (
@@ -360,7 +361,7 @@ export function EntryList({
           liveEntryId,
           liveBlank,
           JSON.stringify(problems),
-          hovering && gapAt,
+          hovering && shownGap,
           insertMenu?.after,
         ]}
         selectionMode="single"
@@ -397,7 +398,7 @@ export function EntryList({
                 data-glide={entry.id}
                 onMouseMove={
                   hovering
-                    ? (event) => setGapAt(gapNear(event, index))
+                    ? (event) => pointAt(gapNear(event, index))
                     : undefined
                 }
                 className={`relative rounded-xl border-2 group-data-[dragging]:opacity-50 group-data-[focus-visible]:ring-2 group-data-[focus-visible]:ring-focus group-data-[focus-visible]:ring-inset group-data-[selected]:bg-accent-soft ${
@@ -408,7 +409,7 @@ export function EntryList({
               >
                 {/* Also while its menu is open, where the entry will go. */}
                 {hovering &&
-                  (gapAt === index ||
+                  (shownGap === index ||
                     (!!insertMenu &&
                       insertMenu.after === entries[index - 1]?.id)) && (
                     <InsertLine
@@ -433,7 +434,6 @@ export function EntryList({
                       ? leaderOf(entry, leads)
                       : null
                   }
-                  keyBefore={keyBefore(entry)}
                   problems={problems.filter(
                     (p) => "entryId" in p && p.entryId === entry.id,
                   )}

@@ -1,4 +1,5 @@
 import { Radio } from "lucide-react";
+import { type RefObject, useEffect, useRef } from "react";
 import { Button } from "react-aria-components";
 import { useTranslation } from "react-i18next";
 import type { Entry } from "../../server/playlists/playlists";
@@ -18,6 +19,21 @@ import { PageThumbs } from "./PageThumbs";
  * The selected entry's slides, in the viewer's language; for the team each one sends its
  * slide live. `live` is the slide on the screens when this entry is live.
  */
+/**
+ * The live card of `list` scrolls into view when another goes live, as little as it takes,
+ * so following a song on a phone needs no scrolling.
+ */
+export function useLiveInView(
+  list: RefObject<HTMLElement | null>,
+  live: number | null,
+) {
+  useEffect(() => {
+    list.current
+      ?.querySelector('[aria-current="true"]')
+      ?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [list, live]);
+}
+
 export function SlidesPanel({
   entry,
   live,
@@ -30,6 +46,8 @@ export function SlidesPanel({
   const { t, i18n } = useTranslation();
   const community = useCommunity();
   const partName = usePartName();
+  const list = useRef<HTMLDivElement>(null);
+  useLiveInView(list, live);
   const song = useJson<Song>(
     entry?.song
       ? `/api/communities/${community.slug}/songs/${entry.song.id}`
@@ -73,6 +91,7 @@ export function SlidesPanel({
 
   return (
     <div
+      ref={list}
       role="list"
       aria-label={t("live.slides")}
       className="flex flex-col gap-2"
@@ -81,6 +100,7 @@ export function SlidesPanel({
         <SlideCard
           key={i}
           label={partName(slide, labels[i] ?? "")}
+          mark={labels[i] ?? ""}
           lines={slide.lines.filter((l) => !l.chordsOnly).map((l) => l.text)}
           isLive={live === i}
           italic={slide.type === "refrain"}
@@ -93,12 +113,15 @@ export function SlidesPanel({
 
 function SlideCard({
   label,
+  mark,
   lines,
   isLive,
   italic = false,
   onPress,
 }: {
   label: string;
+  /** For a song's parts: its mark instead of the label (CardLabel). */
+  mark?: string;
   lines: string[];
   isLive: boolean;
   italic?: boolean;
@@ -106,7 +129,7 @@ function SlideCard({
 }) {
   const body = (
     <>
-      <CardLabel label={label} isLive={isLive} />
+      <CardLabel label={label} mark={mark} isLive={isLive} />
       <span className={italic ? "italic" : undefined}>
         {formatLines(lines).map((segments, i) => (
           <span key={i} className="block min-h-[1.2em] whitespace-pre-wrap">
@@ -117,7 +140,7 @@ function SlideCard({
     </>
   );
   // A frame in the live color, as wide as the plain one, so nothing moves.
-  const look = `flex flex-col items-start gap-1 rounded-xl border-2 p-3 text-start ${
+  const look = `block rounded-xl border-2 p-3 text-start ${
     isLive ? "border-live" : "border-separator"
   }`;
   return (
@@ -145,12 +168,35 @@ function SlideCard({
  */
 export function CardLabel({
   label,
+  mark,
   isLive,
 }: {
   label: string;
+  /** A song's part as the song map writes it (1, 2, R): faint in the corner, instead of
+   * the label, which is only read out. */
+  mark?: string;
   isLive: boolean;
 }) {
   const { t } = useTranslation();
+  if (mark !== undefined)
+    return (
+      // Floated, so only the first lines make room for it.
+      <span className="float-end ms-3 flex items-center gap-2 text-xs font-semibold">
+        <span className="sr-only">{label}</span>
+        <span
+          className={`flex items-center gap-1 ${isLive ? "" : "invisible"}`}
+        >
+          <Radio className="size-3.5 text-live" />
+          {t("live.live")}
+        </span>
+        {/* Drawn from an attribute: it's a shadow of the label, not text to read. */}
+        <span
+          aria-hidden
+          data-mark={mark}
+          className="text-3xl leading-none font-bold text-muted opacity-40 after:content-[attr(data-mark)]"
+        />
+      </span>
+    );
   return (
     <span className="flex w-full items-center justify-between gap-2 text-xs font-semibold">
       <span className="text-muted">{label}</span>

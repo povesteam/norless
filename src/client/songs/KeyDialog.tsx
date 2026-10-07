@@ -1,6 +1,7 @@
 import { ArrowUpDown, Pin, Save, Undo2, X } from "lucide-react";
-import { Alert, Button, Label, ListBox, Modal, Select } from "@heroui/react";
-import { useState } from "react";
+import { Alert, Button, Modal } from "@heroui/react";
+import { useEffect, useRef, useState } from "react";
+import { Label as AriaLabel, Radio, RadioGroup } from "react-aria-components";
 import { useTranslation } from "react-i18next";
 import type { Entry } from "../../server/playlists/playlists";
 import type { Song } from "../../server/songs/songs";
@@ -24,7 +25,7 @@ function keysFor(songKey: Key | null): Key[] {
 }
 
 /** Whether two written keys are the same key, e.g. "Re" and "D". */
-export function sameKey(a: string, b: string) {
+function sameKey(a: string, b: string) {
   const x = keyOf(a);
   const y = keyOf(b);
   return !!x && !!y && x.minor === y.minor && halfSteps(x, y) === 0;
@@ -102,7 +103,12 @@ export async function changeSongKey(
   return !!saved?.ok;
 }
 
-function KeyPicker({
+/**
+ * The keys on a wheel: a strip that scrolls sideways and snaps the key under its middle,
+ * the song's key in the middle and each key with how far it moves (+2, −3). A tap, the
+ * arrow keys or a swipe chooses; the chosen key comes to the middle.
+ */
+function KeyWheel({
   songKey,
   value,
   onChange,
@@ -113,30 +119,78 @@ function KeyPicker({
   onChange: (key: string) => void;
   label: string;
 }) {
-  const change = useKeyChange();
   const from = keyOf(songKey);
+  const keys = from
+    ? keysFor(from).sort((a, b) => halfSteps(from, a) - halfSteps(from, b))
+    : keysFor(null);
+  const strip = useRef<HTMLDivElement>(null);
+  // The chosen key comes to the middle.
+  useEffect(() => {
+    strip.current?.querySelector("[data-selected]")?.scrollIntoView({
+      inline: "center",
+      block: "nearest",
+      behavior: "smooth",
+    });
+  }, [value]);
+  // A swipe that stops chooses the key under the middle.
+  const settle = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const onScroll = () => {
+    clearTimeout(settle.current);
+    settle.current = setTimeout(() => {
+      const box = strip.current;
+      if (!box) return;
+      const middle = box.getBoundingClientRect().left + box.clientWidth / 2;
+      let nearest: HTMLElement | undefined;
+      let distance = Infinity;
+      for (const item of box.querySelectorAll<HTMLElement>("[data-key]")) {
+        const rect = item.getBoundingClientRect();
+        const off = Math.abs(rect.left + rect.width / 2 - middle);
+        if (off < distance) [nearest, distance] = [item, off];
+      }
+      const key = nearest?.dataset.key;
+      if (key && key !== value) onChange(key);
+    }, 150);
+  };
   return (
-    <Select
+    <RadioGroup
       value={value}
-      onChange={(key) => onChange(String(key))}
-      className="w-72"
+      onChange={onChange}
+      orientation="horizontal"
+      className="flex flex-col gap-2"
     >
-      <Label>{label}</Label>
-      <Select.Trigger>
-        <Select.Value />
-        <Select.Indicator />
-      </Select.Trigger>
-      <Select.Popover>
-        <ListBox>
-          {keysFor(from).map((key) => (
-            <ListBox.Item key={name(key)} id={name(key)} textValue={name(key)}>
-              {from ? `${name(key)} · ${change(from, key)}` : name(key)}
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-          ))}
-        </ListBox>
-      </Select.Popover>
-    </Select>
+      <AriaLabel className="text-sm font-medium">{label}</AriaLabel>
+      <div className="relative">
+        {/* The marker the chosen key sits under. */}
+        <span
+          aria-hidden
+          className="absolute start-1/2 -top-1 size-2 -translate-x-1/2 rotate-45 bg-accent"
+        />
+        <div
+          ref={strip}
+          onScroll={onScroll}
+          className="flex snap-x snap-mandatory gap-2 overflow-x-auto px-[calc(50%-2rem)] py-2 [scrollbar-width:none]"
+        >
+          {keys.map((key) => {
+            const steps = from ? halfSteps(from, key) : 0;
+            return (
+              <Radio
+                key={name(key)}
+                value={name(key)}
+                data-key={name(key)}
+                className="flex w-16 shrink-0 cursor-pointer snap-center flex-col items-center rounded-xl border-2 border-separator py-2 outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[selected]:border-accent data-[selected]:bg-accent-soft"
+              >
+                <span className="text-xl font-semibold">{name(key)}</span>
+                {from && (
+                  <span className="text-xs text-muted tabular-nums">
+                    {steps > 0 ? `+${steps}` : steps < 0 ? `−${-steps}` : "0"}
+                  </span>
+                )}
+              </Radio>
+            );
+          })}
+        </div>
+      </div>
+    </RadioGroup>
   );
 }
 
@@ -199,7 +253,7 @@ export function ServiceKeyDialog({
                 </Alert.Content>
               </Alert>
             )}
-            <KeyPicker
+            <KeyWheel
               songKey={songKey}
               value={key}
               onChange={setKey}
@@ -213,9 +267,20 @@ export function ServiceKeyDialog({
                 {t("keys.useSongKey")}
               </Button>
             )}
+            <Button variant="secondary" onPress={onClose}>
+              <X />
+              {t("editor.close")}
+            </Button>
+            {/* The two ways to save, alike: for this service, or for good. */}
+            <ActionButton
+              isPending={saving}
+              onPress={() => void save(sameAsSong ? null : key)}
+            >
+              <Save />
+              {t("keys.saveForService")}
+            </ActionButton>
             {!sameAsSong && (
               <ActionButton
-                variant="secondary"
                 isPending={making}
                 onPress={() => void makeSongKey()}
               >
@@ -223,17 +288,6 @@ export function ServiceKeyDialog({
                 {t("keys.makePermanent")}
               </ActionButton>
             )}
-            <Button variant="secondary" onPress={onClose}>
-              <X />
-              {t("editor.close")}
-            </Button>
-            <ActionButton
-              isPending={saving}
-              onPress={() => void save(sameAsSong ? null : key)}
-            >
-              <Save />
-              {t("editor.save")}
-            </ActionButton>
           </Modal.Footer>
         </Modal.Dialog>
       </Modal.Container>
@@ -282,7 +336,7 @@ export function SongKeyDialog({
                 </Alert.Content>
               </Alert>
             )}
-            <KeyPicker
+            <KeyWheel
               songKey={song.keySignature}
               value={key}
               onChange={setKey}

@@ -7,6 +7,7 @@ import { type Feature, newlyOn } from "../../shared/features";
 import { switchesOf, useCommunity } from "../data/community";
 import { featureIcons } from "../ui/icons";
 import { useMe } from "../data/me";
+import { type HintId, usePageTips } from "../live/hints";
 
 const key = (slug: string) => `norless:seen-switches:${slug}`;
 // Storage can be unavailable (private windows, blocked site data).
@@ -62,23 +63,35 @@ export function WhatsNew() {
     else writeSeen(slug, [...on]);
   });
 
-  const news =
-    me && seen !== undefined ? newlyOn(new Set(seen), on) : undefined;
-  const count = news?.length ?? 0;
+  const news = me && seen !== undefined ? newlyOn(new Set(seen), on) : [];
+  // This page's hints for the team wait here too, as its tips.
+  const tips = usePageTips();
+  const count = news.length + tips.length;
   // What the dialog shows, kept while it's open: opening it counts as seen.
-  const [shown, setShown] = useState<News | null>(null);
+  const [shown, setShown] = useState<{ news: News; tips: readonly HintId[] }>();
   return (
     <>
-      {news && count > 0 && !shown && (
+      {count > 0 && !shown && (
         <Bubble
           count={count}
           onOpen={() => {
-            setShown(news);
-            remember([...new Set([...(seen ?? []), ...on])]);
+            setShown({ news, tips });
+            if (news.length) remember([...new Set([...(seen ?? []), ...on])]);
+            if (tips.length && me?.user)
+              savePreferences({
+                ...me.preferences,
+                hints: [...(me.preferences.hints ?? []), ...tips],
+              });
           }}
         />
       )}
-      {shown && <NewsDialog news={shown} onClose={() => setShown(null)} />}
+      {shown && (
+        <NewsDialog
+          news={shown.news}
+          tips={shown.tips}
+          onClose={() => setShown(undefined)}
+        />
+      )}
     </>
   );
 }
@@ -173,8 +186,17 @@ function Bubble({ count, onOpen }: { count: number; onOpen: () => void }) {
   );
 }
 
-/** What's new: each feature with what it adds, and where it is in the graph. */
-function NewsDialog({ news, onClose }: { news: News; onClose: () => void }) {
+/** What's new: each feature with what it adds, and where it is in the graph; then this
+ * page's tips. */
+function NewsDialog({
+  news,
+  tips,
+  onClose,
+}: {
+  news: News;
+  tips: readonly HintId[];
+  onClose: () => void;
+}) {
   const { t } = useTranslation();
   const names = news.map((f) => t(`features.${f}.name`));
   return (
@@ -184,9 +206,11 @@ function NewsDialog({ news, onClose }: { news: News; onClose: () => void }) {
           <Modal.CloseTrigger />
           <Modal.Header>
             <Modal.Heading>
-              {names.length > 2
-                ? t("whatsNew.many", { count: names.length })
-                : t("whatsNew.new", { names: names.join(", ") })}
+              {names.length === 0
+                ? t("whatsNew.tips")
+                : names.length > 2
+                  ? t("whatsNew.many", { count: names.length })
+                  : t("whatsNew.new", { names: names.join(", ") })}
             </Modal.Heading>
           </Modal.Header>
           <Modal.Body>
@@ -210,6 +234,21 @@ function NewsDialog({ news, onClose }: { news: News; onClose: () => void }) {
                 );
               })}
             </ul>
+            {tips.length > 0 && (
+              <section
+                aria-label={t("whatsNew.tips")}
+                className="flex flex-col gap-2"
+              >
+                {names.length > 0 && (
+                  <h3 className="font-semibold">{t("whatsNew.tips")}</h3>
+                )}
+                <ul className="flex list-disc flex-col gap-2 ps-5">
+                  {tips.map((id) => (
+                    <li key={id}>{t(`hints.${id}`)}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button onPress={onClose}>

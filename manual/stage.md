@@ -1,11 +1,11 @@
 # On stage
 
 For the musicians and singers. Once switched on, the community's bar has
-**Musicians**, **Vocalists** and **Stage monitor**. Each follows what's live, by itself.
+**Instruments**, **Vocals** and **Stage monitor**. Each follows what's live, by itself.
 
-## Musicians
+## Instruments
 
-![The musicians view on a phone](../screenshots/phone-musicians.png)
+![The Instruments view on a phone](../screenshots/phone-musicians.png)
 
 - **Bar grid** (the default): the whole song as rows of bars, the live part highlighted
   and the next one marked.
@@ -37,9 +37,9 @@ In the bar grid, a part's bars line up in rows, one per line of the song when th
 don't fit on one. Two chords in a bar share it by their beats, which the Chords mode
 sets.
 
-## Vocalists
+## Vocals
 
-![The vocalists view on a phone](../screenshots/phone-vocalists.png)
+![The Vocals view on a phone](../screenshots/phone-vocalists.png)
 
 - **Whole song:** every part in order, scrolling by itself to the live part.
 - **Sideways:** for a phone on a microphone stand, the live part and the next one.

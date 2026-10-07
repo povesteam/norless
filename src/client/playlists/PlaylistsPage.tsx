@@ -1,4 +1,5 @@
 import { Checkbox, Chip } from "@heroui/react";
+import { NameAvatar } from "../ui/NameAvatar";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -72,7 +73,7 @@ export function PlaylistList({
   query?: string;
   archived?: boolean;
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { slug } = useCommunity();
   const [pages, setPages] = useState(1);
   const [version, setVersion] = useState(0);
@@ -104,7 +105,6 @@ export function PlaylistList({
     ) : (
       <NoPlaylists />
     );
-  const date = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium" });
   // The playlist of the service under way or next.
   const { next } = data;
 
@@ -134,12 +134,21 @@ export function PlaylistList({
                 {!creators && playlist.songs !== undefined && (
                   <span>{t("playlists.songs", { count: playlist.songs })}</span>
                 )}
-                <span>
-                  {(creators && playlist.createdBy) ||
-                    t("playlists.created", {
-                      date: date.format(new Date(playlist.createdAt)),
-                    })}
-                </span>
+                {/* Who made it, by name in the menu's list, else as their photo; its
+                    date is in its name. */}
+                {creators
+                  ? playlist.createdBy && <span>{playlist.createdBy}</span>
+                  : playlist.createdBy && (
+                      <span className="self-center">
+                        <NameAvatar
+                          name={playlist.createdBy}
+                          avatar={playlist.createdByAvatar}
+                          label={t("playlists.createdBy", {
+                            name: playlist.createdBy,
+                          })}
+                        />
+                      </span>
+                    )}
               </span>
             </Link>
           </li>

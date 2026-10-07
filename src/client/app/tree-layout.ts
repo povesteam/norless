@@ -71,7 +71,6 @@ export const branchOf = {
   fileSlides: "screens",
   bigScreen: "live",
   welcome: "screens",
-  melodia: "songs",
   webhooks: "app",
   offline: "app",
   churchCalendar: "team",

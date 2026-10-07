@@ -17,7 +17,10 @@ test("a song's page shows its slides with chords, notes and details", async ({
   await expect(
     page.getByRole("heading", { name: "Har minunat" }),
   ).toBeVisible();
-  await expect(page.getByText("Key: G")).toBeVisible();
+  // The key with its icon instead of "Key:".
+  await expect(
+    page.getByRole("img", { name: "Key" }).first().locator(".."),
+  ).toHaveText("G");
   await expect(page.getByText("Time: 3/4")).toBeVisible();
   await expect(page.getByText("har", { exact: true })).toBeVisible();
 

@@ -1,4 +1,5 @@
 import { FollowQr } from "./Follow";
+import { useBackCloses } from "../ui/back";
 import { FullScreenButton, useBarColor, useStill } from "../ui/full-screen";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -70,18 +71,16 @@ export function InPageProjector() {
   const local = useLocal();
   const shown = useShownInPage() && !!local;
   const frame = useRef<HTMLDivElement>(null);
+  // Back hides it, rather than leaving the page.
+  useBackCloses(shown, hideInPage);
   useEffect(() => {
     if (!shown) return;
     void frame.current?.requestFullscreen().catch(() => {});
-    // Back hides it, rather than leaving the page.
-    history.pushState(history.state, "");
     const leftFullScreen = () => {
-      if (!document.fullscreenElement) history.back();
+      if (!document.fullscreenElement) hideInPage();
     };
-    window.addEventListener("popstate", hideInPage);
     document.addEventListener("fullscreenchange", leftFullScreen);
     return () => {
-      window.removeEventListener("popstate", hideInPage);
       document.removeEventListener("fullscreenchange", leftFullScreen);
       if (document.fullscreenElement) void document.exitFullscreen();
     };

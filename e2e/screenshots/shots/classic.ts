@@ -1,4 +1,5 @@
 import en from "../../../src/client/locales/en.json" with { type: "json" };
+import type { Page } from "@playwright/test";
 import { api } from "../../helpers";
 import {
   slug,
@@ -11,6 +12,16 @@ import {
   open,
   menu,
 } from "../views";
+
+/** As Chrome on Android does: it offers to install, so the start page's main button is Install. */
+const offerInstall = (page: Page) =>
+  page.evaluate(() =>
+    window.dispatchEvent(
+      Object.assign(new Event("beforeinstallprompt"), {
+        prompt: async () => {},
+      }),
+    ),
+  );
 
 export const classic: View[] = [
   {
@@ -167,13 +178,23 @@ export const classic: View[] = [
     go: open(`/${slug}/songs/light`),
   },
   {
+    // The bare address on a browser that never opened a community.
+    name: "start",
+    sizes: ["phone", "laptop"],
+    go: async (page) => {
+      await page.goto("/");
+      await page.getByText(en.about.what).waitFor();
+      await offerInstall(page);
+    },
+  },
+  {
     name: "login",
     sizes: ["phone", "laptop"],
     go: open(`/login?next=${encodeURIComponent(playlist)}`),
   },
   {
     name: "login-other-ways",
-    sizes: ["laptop"],
+    sizes: ["phone", "laptop"],
     go: async (page) => {
       await open(`/login?next=${encodeURIComponent(playlist)}`)(page);
       await page.getByRole("button", { name: en.auth.otherWays }).click();
@@ -225,7 +246,7 @@ export const classic: View[] = [
   {
     name: "members",
     as: owner,
-    sizes: ["laptop"],
+    sizes: ["phone", "laptop"],
     go: open(`/${slug}/members`),
   },
   {

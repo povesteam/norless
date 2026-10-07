@@ -56,3 +56,11 @@ A band member SHALL be able to show a QR on their phone that logs a guest musici
 #### Scenario: Vlad is in
 - **WHEN** Vlad logs in
 - **THEN** Dan's phone says "Vlad (guest of Dan) is in, until" a time 4 hours later, and lists Vlad among his devices
+
+### Requirement: After logging a device in
+
+Once a member logged a device in from their phone, the page SHALL say what was logged in (as them, as the community's laptop, or as the guest musician by name), link to their logged-in devices on My account, and offer the way back to where they were, or to the start page when there's nothing to go back to. Back on that page later, it SHALL say the same, not that its code ran out.
+
+#### Scenario: Back after logging the laptop in
+- **WHEN** a member logs the church laptop in from their phone, opens another page, then goes back
+- **THEN** the page says the laptop is logged in as the community's laptop, with the link to their devices

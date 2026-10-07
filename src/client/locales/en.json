@@ -5,7 +5,8 @@
   },
   "notFound": {
     "message": "This page doesn't exist.",
-    "home": "Go to the start page"
+    "home": "Go to the start page",
+    "back": "Go back"
   },
   "song": {
     "key": "Key: {{key}}",
@@ -139,7 +140,9 @@
     "online": "Online",
     "phone": "phone",
     "computer": "computer",
-    "lastChange": "last live change"
+    "lastChange": "last live change",
+    "meAndOthers": "{{name}}, and {{count}} others online",
+    "meAndOthers_one": "{{name}}, and 1 other online"
   },
   "states": {
     "loading": "Loading…",
@@ -167,7 +170,7 @@
     "nextService": "Next service",
     "songs": "{{count}} songs",
     "songs_one": "{{count}} song",
-    "created": "Created {{date}}"
+    "createdBy": "Made by {{name}}"
   },
   "playlist": {
     "title": "Playlist title",
@@ -209,9 +212,9 @@
     "restore": "Restore",
     "actionsOf": "Actions: {{title}}",
     "insertHere": "Add here",
-    "songHere": "Song here",
-    "dividerHere": "Divider here",
-    "textHere": "Text slide here",
+    "songHere": "Song",
+    "dividerHere": "Divider",
+    "textHere": "Text slide",
     "songAbove": "Add song above",
     "textAbove": "Add text slide above"
   },
@@ -296,7 +299,8 @@
     },
     "moreControls": "More controls",
     "fewerControls": "Fewer controls",
-    "thisDevice": "This device"
+    "thisDevice": "This device",
+    "controlledBy": "{{name}} controls what's live"
   },
   "screen": {
     "fullscreen": "Fullscreen",
@@ -321,8 +325,8 @@
     "columns": "Side by side",
     "types": {
       "projector": "Projector",
-      "musicians": "Musicians",
-      "vocalists": "Vocalists",
+      "musicians": "Instruments",
+      "vocalists": "Vocals",
       "stage": "Stage monitor",
       "overlay": "Broadcast overlay"
     },
@@ -353,11 +357,6 @@
     "toStage": "To the stage:",
     "message": "Message…",
     "clear": "Clear",
-    "presets": {
-      "fiveMinutes": "5 minutes",
-      "wrapUp": "Wrap up",
-      "time": "Time"
-    },
     "look": "Display",
     "colors": "Colors",
     "dark": "Dark",
@@ -365,7 +364,8 @@
     "system": "Like this device",
     "textSize": "Text size: {{percent}}%",
     "larger": "Larger text",
-    "smaller": "Smaller text"
+    "smaller": "Smaller text",
+    "toPlaylist": "The playlist"
   },
   "pages": {
     "title": "Pages",
@@ -383,7 +383,7 @@
     "showing": "Pages: {{name}} on the screens"
   },
   "musicians": {
-    "title": "Musicians",
+    "title": "Instruments",
     "layout": "Layout",
     "layouts": {
       "bar-grid": "Bar grid",
@@ -401,11 +401,10 @@
     "noSong": "No song is live.",
     "noChords": "This song has no chords yet.",
     "addChords": "Add chords",
-    "structure": "Structure",
-    "back": "Back"
+    "structure": "Structure"
   },
   "vocalists": {
-    "title": "Vocalists",
+    "title": "Vocals",
     "languages": "Languages",
     "all": "All",
     "parts": "Parts",
@@ -456,7 +455,7 @@
     "screen": "{{name}} isn't connected",
     "translation": "No {{language}} version",
     "small": "Slides {{slides}} too small to read in {{language}}",
-    "key": "No key, and the band has a musicians screen",
+    "key": "No key, and the band has an Instruments screen",
     "smallInEditor": "Slides {{slides}} are too long to read on a projector: split them or shorten their lines.",
     "excluded": "Excluded: {{reason}}",
     "slides": {
@@ -510,7 +509,8 @@
     "more": "More",
     "stage": "Stage",
     "team": "Team",
-    "backTo": "Back to {{name}}"
+    "backTo": "Back to {{name}}",
+    "backAgain": "Press back again to close"
   },
   "shortcuts": {
     "title": "Keyboard shortcuts",
@@ -590,7 +590,11 @@
     "macSafari": "Install Norless: in Safari, choose File, then Add to Dock."
   },
   "start": {
-    "communities": "Communities"
+    "communities": "Communities",
+    "open": "Open {{name}}",
+    "follow": "Live now: follow along",
+    "followLater": "During services, follow the songs here.",
+    "manual": "The manual"
   },
   "privacy": {
     "title": "Privacy",
@@ -734,15 +738,19 @@
     "guestDone": "Done",
     "scan": "Scan with your phone",
     "cantScan": "Can't scan? Type a code instead",
-    "typeCode": "On your phone, under Log in another device on My account, type:"
+    "typeCode": "On your phone, under Log in another device on My account, type:",
+    "doneMe": "It's logged in as you.",
+    "doneLaptop": "It's logged in as the community's laptop.",
+    "doneGuest": "It's logged in as {{name}}, a guest musician.",
+    "goBack": "Go back to where you were",
+    "home": "Open Norless",
+    "manage": "Your logged-in devices, to log any out"
   },
   "hints": {
-    "label": "Hint",
     "goLive": "Double-click an entry, or select it and press Go live, to project it.",
     "search": "Type anywhere to search for a song; Enter adds the first one to the playlist.",
     "keys": "Page Down or → goes to the next slide, Page Up or ← back, and Esc blanks the screens. A clicker works too.",
-    "project": "A projector's button opens it full screen on the second display.",
-    "gotIt": "Got it"
+    "project": "A projector's button opens it full screen on the second display."
   },
   "export": {
     "print": "Print",
@@ -759,7 +767,8 @@
   "update": {
     "label": "New version",
     "ready": "A new version of Norless is ready.",
-    "reload": "Reload"
+    "reload": "Reload",
+    "close": "Not now"
   },
   "chords": {
     "title": "Chords: {{title}}",
@@ -825,7 +834,7 @@
     "songIn": "The song is in {{key}}. The key you choose here is for this playlist only.",
     "songWithout": "The song has no key yet.",
     "useSongKey": "Use the song’s key",
-    "makePermanent": "Make it the song’s key",
+    "makePermanent": "Save as the song’s key",
     "notSaved": "The key wasn’t saved. Check the connection and try again.",
     "same": "same key",
     "up": "up {{count}} half steps",
@@ -836,7 +845,7 @@
     "changeHelp": "The chords move with the key, in every language.",
     "newKey": "New key",
     "serviceChip": "{{key}} (song: {{song}})",
-    "fromBefore": "{{from}} → {{to}}, {{change}}"
+    "saveForService": "Save for this service"
   },
   "instruments": {
     "capo": "Capo {{fret}}",
@@ -859,7 +868,7 @@
     "diagrams": "Shapes in this song",
     "ask": "What do you play?",
     "profile": "Musician",
-    "profileHelp": "What you play chooses your musicians layouts; the guitar shapes you like choose the capo.",
+    "profileHelp": "What you play chooses your Instruments layouts; the guitar shapes you like choose the capo.",
     "play": "I play",
     "names": {
       "guitar": "Guitar",
@@ -872,8 +881,8 @@
     "main": "Main instrument",
     "guitarShapes": "Guitar shapes I like",
     "noteNames": "Chord names",
-    "chordColors": "Color chords by their degree in the key",
-    "chordColorsHelp": "Each chord shares its color with its relative (C and Am, F and Dm, G and Em), the minor one softer, and each degree keeps its color in every key: G in D and B♭ in F are both 4. The tonic stays plain, chords outside the key are magenta, and a bass note after the slash takes its own degree's color.",
+    "plainChords": "Plain chords (one color)",
+    "chordColorsHelp": "Chords in one color. Otherwise, each chord shares its color with its relative (C and Am, F and Dm, G and Em), the minor one softer, and each degree keeps its color in every key: G in D and B♭ in F are both 4. The tonic stays plain, chords outside the key are magenta, and a bass note after the slash takes its own degree's color.",
     "naming": {
       "community": "As the community chooses",
       "letters": "Letters: C D E",
@@ -881,7 +890,7 @@
       "numbers": "Numbers: 1 4 5"
     },
     "settingsTitle": "Music",
-    "settingsHelp": "How musicians layouts name chords for members who didn’t choose. Songs keep their chords in letters.",
+    "settingsHelp": "How the Instruments layouts name chords for members who didn’t choose. Songs keep their chords in letters.",
     "whatIPlay": "What I play",
     "done": "Done",
     "degrees": "Degrees:",
@@ -914,7 +923,7 @@
     "on": "Recording",
     "onBy": "Recording · {{name}}",
     "empty": "No recordings yet",
-    "emptyHelp": "Record a rehearsal or a service from the musicians view or the live bar: each song gets a file you can play from any part.",
+    "emptyHelp": "Record a rehearsal or a service from the Instruments view or the live bar: each song gets a file you can play from any part.",
     "by": "by {{name}}",
     "from": "from {{device}}",
     "mode": {
@@ -954,7 +963,9 @@
     "download": "Download",
     "noticeTitle": "Everyone in the room is recorded",
     "notice": "The band, the singers and anyone near the microphone are recorded. Tell them before you start; the stage screens show that recording is on.",
-    "continue": "Continue"
+    "continue": "Continue",
+    "count": "{{count}} recordings",
+    "count_one": "1 recording"
   },
   "tempo": {
     "listen": "Listen for tempo",
@@ -1291,7 +1302,10 @@
       "new": "New"
     },
     "pan": "Drag to see the whole graph",
-    "onTheirOwn": "Features on their own"
+    "onTheirOwn": "Features on their own",
+    "allOn": "Switch all on",
+    "allOnConfirm": "Switch on all {{count}} features that are off, for everyone? What's new will list them for each member.",
+    "allOnConfirm_one": "Switch on the one feature that is off, for everyone? What's new will show it to each member."
   },
   "features": {
     "feedback": {
@@ -1339,7 +1353,7 @@
       "adds": "A keyboard's next, previous and play keys move the slides."
     },
     "stageViews": {
-      "name": "Stage and musicians",
+      "name": "Stage, vocals and instruments",
       "adds": "The stage monitor with messages and a countdown, and views for musicians and vocalists."
     },
     "screenMenu": {
@@ -1445,10 +1459,6 @@
     "fileSlides": {
       "name": "Slides from files",
       "adds": "PDF and pictures in a playlist, a page per slide, with a file per language and a timer."
-    },
-    "melodia": {
-      "name": "melodia.ro songs",
-      "adds": "Search and import songs from melodia.ro."
     },
     "webhooks": {
       "name": "Webhooks",
@@ -1628,7 +1638,8 @@
     "new": "New in Norless: {{names}}",
     "gotIt": "Got it",
     "many": "New in Norless: {{count}} features",
-    "many_one": "New in Norless: 1 feature"
+    "many_one": "New in Norless: 1 feature",
+    "tips": "Tips for this page"
   },
   "calendar": {
     "title": "In the church's calendar",
@@ -1704,7 +1715,7 @@
   "bigScreen": {
     "screens": "The room's screens",
     "people": "Musicians' and vocalists' devices",
-    "nobody": "No musicians or vocalists view is open now.",
+    "nobody": "No Vocals or Instruments view is open now.",
     "device": "{{name}} · {{layout}} · {{device}}",
     "open": "Open {{name}} larger",
     "screenSettings": "This screen's settings",

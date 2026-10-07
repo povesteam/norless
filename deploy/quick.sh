@@ -26,7 +26,7 @@ if [ -n "$(git status --porcelain -- src migrations package.json package-lock.js
 fi
 npm run check
 
-tag=sha-$(git rev-parse --short=7 HEAD)
+tag=$(git rev-parse --short=7 HEAD)
 image=$(on_vm "sed -n 's/^IMAGE=//p' .env")
 case "$(on_vm "uname -m")" in
   aarch64) platform=linux/arm64 ;;

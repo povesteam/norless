@@ -311,7 +311,7 @@ A team member SHALL be able to start a practice room from the live bar, with a p
 
 ### Requirement: Playlist title row
 
-While the app frame is on, a playlist's title SHALL be in the community bar (`app-shell` spec), and the row above the search box SHALL hold, for controllers, the problems indicator and the estimated end, for members, who is online, and the layout, chosen from a menu that names the current one, so the entries start near the top of the page. On a phone the row SHALL fit one line: the problems as their count, the layout as its icon, and no link to all playlists, which the menu has; Add text slide SHALL be an icon beside the search box. In the Classic layout the layout menu SHALL stay above the columns.
+While the app frame is on, a playlist's title SHALL be in the community bar (`app-shell` spec), and the row above the search box SHALL hold, for controllers, the problems indicator and the estimated end, for members, who is online, and the layout, chosen from a menu that names the current one, so the entries start near the top of the page. On a phone the row SHALL fit one line: the problems as their count, the layout as its icon, and no link to all playlists, which the menu has; Add text slide SHALL be an icon beside the search box. In the Classic layout the layout menu SHALL stay above the columns. The playlist's menu (the title's on a phone, ⋯ on a laptop) SHALL end with the 5 newest other playlists and All playlists, to go to another one.
 
 #### Scenario: One row
 - **WHEN** an operator opens a playlist with problems in the Controller layout on a laptop
@@ -386,3 +386,11 @@ While its feature (`welcome`) is on, the Pages menu SHALL offer a built-in Welco
 #### Scenario: The service starts
 - **WHEN** the countdown reaches zero and nothing has gone live yet
 - **THEN** the countdown goes, and the name and announcements stay until the first song goes live
+
+### Requirement: Who controls live
+
+Beside the Live mark of the entry that's live, members SHALL see the avatar of the person who changed what's live last, with their name in a styled tooltip ("Ioana controls what's live"). Visitors SHALL NOT see it.
+
+#### Scenario: Two operators
+- **WHEN** Ioana sends the next part live from her phone, and Andrei looks at the playlist
+- **THEN** Andrei sees Ioana's avatar beside Live

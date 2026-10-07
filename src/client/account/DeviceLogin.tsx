@@ -161,7 +161,10 @@ export function ApprovedDevices({ loads = 0 }: { loads?: number }) {
     hourCycle: "h23",
   });
   return (
-    <section className="flex w-full flex-col items-start gap-2 border-t border-separator pt-4">
+    <section
+      id="devices"
+      className="flex w-full flex-col items-start gap-2 border-t border-separator pt-4"
+    >
       <h3 className="text-lg font-semibold">{t("deviceLogin.devicesTitle")}</h3>
       {failed && <ErrorNotice message={t("states.actionFailed")} />}
       <ul className="flex w-full flex-col gap-2">

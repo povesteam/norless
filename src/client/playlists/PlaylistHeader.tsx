@@ -1,4 +1,4 @@
-import { Button, Chip, Dropdown, Label, Modal } from "@heroui/react";
+import { Button, Chip, Dropdown, Label, Modal, Separator } from "@heroui/react";
 import {
   Archive,
   ArchiveRestore,
@@ -11,11 +11,16 @@ import {
 import { type ReactElement, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
-import type { Playlist } from "../../server/playlists/playlists";
+import type {
+  Playlist,
+  PlaylistSummary,
+} from "../../server/playlists/playlists";
+import { playlistName } from "../../shared/playlist-name";
+import { useChanges } from "../data/changes";
 import type { PlaylistTimes } from "../../server/playlists/times";
 import type { PlaylistActivity } from "../../shared/live";
 import { useCommunity, useShows } from "../data/community";
-import { send } from "../data/fetch";
+import { send, useJson } from "../data/fetch";
 import { useIsMember } from "../data/me";
 import { useDeviceType } from "../data/device";
 import { ExportDialog, type ExportKind, ExportIcon } from "./PlaylistExport";
@@ -56,7 +61,17 @@ export function PlaylistHeader({
   const [exporting, setExporting] = useState<ExportKind | null>(null);
   const [chaptering, setChaptering] = useState(false);
   const [telling, setTelling] = useState(false);
-  const member = useIsMember(useCommunity().slug);
+  const { slug } = useCommunity();
+  const member = useIsMember(slug);
+  // The newest other playlists, to go to one from the title's menu.
+  const others = (
+    useJson<{ playlists: PlaylistSummary[] }>(
+      `/api/communities/${slug}/playlists?limit=6`,
+      useChanges(slug, "playlists"),
+    ).data?.playlists ?? []
+  )
+    .filter((p) => p.id !== playlist.id)
+    .slice(0, 5);
   const chapters = member && shows("chapters");
   // The team tells the service's people it's ready.
   const ready =
@@ -65,6 +80,7 @@ export function PlaylistHeader({
     !!playlist.service &&
     shows("playlistNews");
   const hasActions =
+    others.length > 0 ||
     shows("export") ||
     chapters ||
     ready ||
@@ -82,7 +98,8 @@ export function PlaylistHeader({
             else if (key === "rename") setEditing(true);
             else if (key === "chapters") setChaptering(true);
             else if (key === "ready") setTelling(true);
-            else setExporting(key as ExportKind);
+            else if (key !== "all" && !String(key).startsWith("open:"))
+              setExporting(key as ExportKind);
           }}
         >
           {canChange ? (
@@ -123,6 +140,32 @@ export function PlaylistHeader({
               <Label>{t("playlist.archive")}</Label>
             </Dropdown.Item>
           ) : null}
+          {/* Another playlist: the newest, then all of them. */}
+          {others.length > 0 ? <Separator /> : null}
+          {others.map((p) => {
+            const name = playlistName(p, i18n.language);
+            return (
+              <Dropdown.Item
+                key={p.id}
+                id={`open:${p.id}`}
+                href={`/${slug}/playlists/${p.id}`}
+                textValue={name}
+              >
+                <ListMusic />
+                <Label>{name}</Label>
+              </Dropdown.Item>
+            );
+          })}
+          {others.length > 0 ? (
+            <Dropdown.Item
+              id="all"
+              href={`/${slug}/playlists`}
+              textValue={t("playlists.all")}
+            >
+              <ListMusic />
+              <Label>{t("playlists.all")}</Label>
+            </Dropdown.Item>
+          ) : null}
         </Dropdown.Menu>
       </Dropdown.Popover>
     </Dropdown>
@@ -142,56 +185,59 @@ export function PlaylistHeader({
     );
 
   return (
-    // Its line is kept for members, so problems or people coming and going move nothing.
-    // On a phone one row, sideways if it must, so people coming online move nothing
-    //.
-    <div
-      className={`flex items-center gap-2 ${
-        phone ? "overflow-x-auto py-0.5 *:shrink-0" : "flex-wrap"
-      } ${member ? "min-h-8" : "empty:hidden"}`}
-    >
-      <InBar place="title">
-        <PlaylistTitle
-          playlist={playlist}
-          canChange={canChange}
-          editing={editing}
-          onEditing={setEditing}
-          onRename={onRename}
-          asMenu={hasActions && phone ? actions : undefined}
-        />
-        {menu}
-      </InBar>
-      {shows("shortLinks") && (
-        <ShareLink kind="playlist" id={playlist.id} compact={phone} />
-      )}
-      {/* A phone has its playlists in the menu. */}
-      {shows("appFrame") && !phone && (
-        <Link href="/playlists" className="link text-sm">
-          <ListMusic />
-          {t("playlists.all")}
-        </Link>
-      )}
-      {viewers}
-      {status}
-      {telling && (
-        <TellReadyDialog
-          playlist={playlist}
-          onClose={() => setTelling(false)}
-        />
-      )}
-      {chaptering && (
-        <ChaptersDialog
-          playlist={playlist}
-          onClose={() => setChaptering(false)}
-        />
-      )}
-      {exporting && (
-        <ExportDialog
-          kind={exporting}
-          playlist={playlist}
-          onClose={() => setExporting(null)}
-        />
-      )}
+    <>
+      {/* Its line is kept for members, so problems or people coming and going move
+        nothing. On a phone one row, sideways if it must, so people coming online move
+        nothing. */}
+      <div
+        className={`flex items-center gap-2 ${
+          phone ? "overflow-x-auto py-0.5 *:shrink-0" : "flex-wrap"
+        } ${member ? "min-h-8" : "empty:hidden"}`}
+      >
+        <InBar place="title">
+          <PlaylistTitle
+            playlist={playlist}
+            canChange={canChange}
+            editing={editing}
+            onEditing={setEditing}
+            onRename={onRename}
+            asMenu={hasActions && phone ? actions : undefined}
+          />
+          {menu}
+        </InBar>
+        {shows("shortLinks") && (
+          <ShareLink kind="playlist" id={playlist.id} compact={phone} />
+        )}
+        {/* A phone has its playlists in the menu. */}
+        {shows("appFrame") && !phone && (
+          <Link href="/playlists" className="link text-sm">
+            <ListMusic />
+            {t("playlists.all")}
+          </Link>
+        )}
+        {viewers}
+        {status}
+        {telling && (
+          <TellReadyDialog
+            playlist={playlist}
+            onClose={() => setTelling(false)}
+          />
+        )}
+        {chaptering && (
+          <ChaptersDialog
+            playlist={playlist}
+            onClose={() => setChaptering(false)}
+          />
+        )}
+        {exporting && (
+          <ExportDialog
+            kind={exporting}
+            playlist={playlist}
+            onClose={() => setExporting(null)}
+          />
+        )}
+      </div>
+      {/* Under the row, so it wraps on a phone. */}
       {playlist.archivedAt && (
         <div className="flex w-full flex-wrap items-center gap-2">
           <Chip variant="soft">
@@ -214,7 +260,7 @@ export function PlaylistHeader({
           )}
         </div>
       )}
-    </div>
+    </>
   );
 }
 

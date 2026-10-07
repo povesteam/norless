@@ -34,8 +34,9 @@ export type Entry = {
   slides?: Slides;
   /** For songs: the key for this service, set by the team; the song keeps its own. */
   keySignature: string | null;
-  /** Who added it, by name; only for members. */
+  /** Who added it, by name, and their photo; only for members. */
   addedBy?: string | null;
+  addedByAvatar?: string | null;
   /** What the host says around it, per language; only for members, when there are some. */
   hostWords?: Record<string, string>;
   /** For songs, members only: who the team chose to lead it, else the service's lead leads. */
@@ -54,8 +55,9 @@ export type PlaylistSummary = {
   /** Its service's day, else the day it was made, in the community. */
   date: string;
   createdAt: string;
-  /** Who created it, for members. */
+  /** Who created it, and their photo, for members. */
   createdBy?: string | null;
+  createdByAvatar?: string | null;
   /** In the list: how many songs it has, and the day of the service it plans. */
   songs?: number;
   serviceDate?: string | null;
@@ -151,7 +153,8 @@ export function getPlaylist(
     .prepare(
       `SELECT e.id, e.kind, e.song_id, e.bible_book, e.bible_chapter, e.bible_verse_from,
          e.bible_verse_to, e.text, e.planned_minutes, e.key_signature, e.host_words, e.slide_seconds,
-         nullif(u.display_name, '') AS added_by, e.led_by, l.display_name AS led_by_name,
+         nullif(u.display_name, '') AS added_by, u.avatar AS added_by_avatar, e.led_by,
+         l.display_name AS led_by_name,
          s.deleted_at IS NOT NULL AS song_deleted,
          EXISTS (SELECT 1 FROM plays p WHERE p.song_id = e.song_id AND p.played_at > @since) AS played_recently
        FROM entries e
@@ -175,6 +178,7 @@ export function getPlaylist(
     host_words: string | null;
     slide_seconds: number | null;
     added_by: string | null;
+    added_by_avatar: string | null;
     led_by: string | null;
     led_by_name: string | null;
     song_deleted: number;
@@ -216,7 +220,9 @@ export function getPlaylist(
             },
           }
         : {}),
-      ...(names ? { addedBy: row.added_by } : {}),
+      ...(names
+        ? { addedBy: row.added_by, addedByAvatar: row.added_by_avatar }
+        : {}),
       ...(names && row.host_words
         ? { hostWords: JSON.parse(row.host_words) as Record<string, string> }
         : {}),
@@ -399,7 +405,8 @@ export function listPlaylists(
   const rows = db
     .prepare(
       `SELECT p.id, p.title, p.created_at AS createdAt,
-         nullif(u.display_name, '') AS createdBy, p.service_date AS serviceDate,
+         nullif(u.display_name, '') AS createdBy, u.avatar AS createdByAvatar,
+         p.service_date AS serviceDate,
          (SELECT count(*) FROM entries e WHERE e.playlist_id = p.id
             AND e.kind = 'song' AND e.deleted_at IS NULL) AS songs
        FROM playlists p LEFT JOIN users u ON u.id = p.created_by
@@ -411,12 +418,12 @@ export function listPlaylists(
     .all(communityId, ...(query ? [] : [limit + 1, offset])) as (Omit<
     PlaylistSummary,
     "date"
-  > & { createdBy: string | null })[];
+  > & { createdBy: string | null; createdByAvatar: string | null })[];
   const day = playlistDay(db, communityId);
-  const dated = rows.map(({ createdBy, ...row }) => ({
+  const dated = rows.map(({ createdBy, createdByAvatar, ...row }) => ({
     ...row,
     date: day(row.serviceDate ?? null, row.createdAt),
-    ...(names && { createdBy }),
+    ...(names && { createdBy, createdByAvatar }),
   }));
   // ponytail: a scan of every playlist while searching; a few thousand at most.
   const words = query.toLocaleLowerCase();

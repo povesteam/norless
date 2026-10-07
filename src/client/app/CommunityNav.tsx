@@ -1,6 +1,7 @@
-import { Button, Dropdown, Label } from "@heroui/react";
+import { Button, buttonVariants, Dropdown, Label } from "@heroui/react";
+import { useOthersOnline } from "../live/OnlineMembers";
 import { RequestCount } from "../stage/RequestCount";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Guitar,
   Info,
@@ -29,10 +30,13 @@ import { useCommunity, useShows } from "../data/community";
 import { useDeviceType } from "../data/device";
 import { InstallLink } from "./Install";
 import { LanguagePicker } from "./LanguagePicker";
-import { hasRole, useIsMember, useRoles } from "../data/me";
+import { hasRole, useIsMember, useMe, useRoles } from "../data/me";
 import { FeedbackDialog } from "./FeedbackDialog";
 import { UserMenu } from "./UserMenu";
 import { HostIcon, ScreenIcon } from "../ui/icons";
+import { useBackCloses } from "../ui/back";
+import { Tip } from "../ui/tip";
+import { usePageHeld } from "../ui/full-screen";
 
 /** About, Privacy and Install, in a phone's menu (on a laptop, the account menu has them). */
 function AppLinks() {
@@ -49,6 +53,30 @@ function AppLinks() {
       </Link>
       <InstallLink />
     </>
+  );
+}
+
+/**
+ * On a phone's bar, one tap to the stage view of what the person plays (Vocals for
+ * singers, Instruments for the others); the view's toolbar leads back.
+ */
+function MyStageView() {
+  const { t } = useTranslation();
+  const shows = useShows();
+  const main = useMe().me?.preferences.musician?.main;
+  if (!main || !shows("stageViews")) return null;
+  const view = main === "vocals" ? "vocalists" : "musicians";
+  const label = t(`${view}.title`);
+  return (
+    <Tip label={label}>
+      <Link
+        href={`/${view}`}
+        aria-label={label}
+        className={buttonVariants({ isIconOnly: true, variant: "ghost" })}
+      >
+        <ScreenIcon type={view} className="size-5" />
+      </Link>
+    </Tip>
   );
 }
 
@@ -191,20 +219,27 @@ function useBarGroups(): BarGroup[] {
  */
 export function CommunityNav() {
   const { t } = useTranslation();
-  const { name, theme } = useCommunity();
+  const { name, theme, slug } = useCommunity();
   const shows = useShows();
   const groups = useBarGroups();
   const phone = useDeviceType().deviceType === "phone";
   const above = useNameAbove(phone);
   const [open, setOpen] = useState(false);
   const [feedback, setFeedback] = useState(false);
-  const [location, navigate] = useLocation();
+  const [location] = useLocation();
   // Going to another page closes the menu.
   const [seen, setSeen] = useState(location);
   if (location !== seen) {
     setSeen(location);
     setOpen(false);
   }
+  // Who's online, stacked under the photo on a phone.
+  const others = useOthersOnline();
+  // Back closes the phone's menu, a page of its own under the bar.
+  useBackCloses(open, () => setOpen(false));
+  usePageHeld(open);
+  const row = useRef<HTMLDivElement>(null);
+  const [top, setTop] = useState(0);
   const home = (
     <Link
       href="/"
@@ -225,8 +260,6 @@ export function CommunityNav() {
       {t("playlists.title")}
     </Link>
   );
-  const go = (id: string) =>
-    id === FEEDBACK ? setFeedback(true) : navigate(id);
   const link = (item: BarItem) =>
     item.id === FEEDBACK ? (
       <Button
@@ -279,12 +312,18 @@ export function CommunityNav() {
                 <Dropdown.Popover placement="bottom start">
                   <Dropdown.Menu
                     aria-label={t(`app.${group.id}`)}
-                    onAction={(key) => go(String(key))}
+                    // Pages are links (href); the idea's dialog opens here.
+                    onAction={(key) => key === FEEDBACK && setFeedback(true)}
                   >
                     {group.items.map((item) => (
                       <Dropdown.Item
                         key={item.id}
                         id={item.id}
+                        href={
+                          item.id === FEEDBACK
+                            ? undefined
+                            : `/${slug}${item.id}`
+                        }
                         textValue={item.label}
                       >
                         {item.icon}
@@ -317,32 +356,44 @@ export function CommunityNav() {
         </Link>
       )}
       {/* ☰ first, the photo last, as in Classic's bar. */}
-      <div className="group/bar flex items-center gap-2">
+      <div ref={row} className="group/bar flex items-center gap-2">
         <Button
           isIconOnly
           variant="ghost"
           aria-label={t("app.menu")}
           aria-expanded={open}
           aria-controls="phone-menu"
-          onPress={() => setOpen(!open)}
+          onPress={() => {
+            setTop((row.current?.getBoundingClientRect().bottom ?? 0) + 8);
+            setOpen(!open);
+          }}
         >
           <Menu className="size-6" />
         </Button>
         <BarPlace place="title" />
         {!above && home}
         <div className="ms-auto flex shrink-0 items-center gap-2">
-          <UserMenu compact />
+          <MyStageView />
+          <UserMenu compact online={others} />
         </div>
       </div>
       {open && (
-        <div id="phone-menu" className="flex flex-col gap-4 pb-2">
-          <nav aria-label={name} className="flex flex-col gap-3 text-lg">
+        <div
+          id="phone-menu"
+          // The rest of the screen, scrolling on its own.
+          className="fixed inset-x-0 bottom-0 z-20 flex flex-col gap-4 overflow-y-auto overscroll-contain bg-background px-4 pb-4"
+          style={{ top }}
+        >
+          <nav
+            aria-label={name}
+            className="menu-rows flex flex-col gap-1 text-lg"
+          >
             {playlists}
             {groups.map((group) => (
               <section
                 key={group.id}
                 aria-label={t(`app.${group.id}`)}
-                className="flex flex-col gap-3"
+                className="menu-rows flex flex-col"
               >
                 <h2 className="text-xs font-semibold tracking-wide text-muted uppercase">
                   {t(`app.${group.id}`)}
@@ -354,7 +405,7 @@ export function CommunityNav() {
           <LanguagePicker />
           <nav
             aria-label={t("app.more")}
-            className="flex flex-col gap-3 text-muted"
+            className="menu-rows flex flex-col text-muted"
           >
             <AppLinks />
           </nav>

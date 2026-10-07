@@ -113,5 +113,5 @@ export function useLookAhead(
     </div>
   ) : null;
 
-  return { shown, looking, bar };
+  return { shown, looking, bar, songs, index, step };
 }

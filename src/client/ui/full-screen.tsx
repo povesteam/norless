@@ -81,3 +81,51 @@ export function useBarColor(
     return () => meta.remove();
   }, [view, key]);
 }
+
+/**
+ * The phone's status and navigation bars in the app's own background, which its light or
+ * dark mode and the community's colors set, not only the system's mode (app-shell spec).
+ * Rendered once in the app's frame; a view that fills the page puts its own color first.
+ */
+export function AppBarColor() {
+  useEffect(() => {
+    const meta = document.createElement("meta");
+    meta.name = "theme-color";
+    const paint = () => {
+      const color = getComputedStyle(document.body).backgroundColor;
+      if (color && color !== "rgba(0, 0, 0, 0)") meta.content = color;
+    };
+    paint();
+    // Before index.html's, which follow only the system's mode.
+    document.querySelector('meta[name="theme-color"]')?.before(meta);
+    // The mode and the community's colors change classes on the page and styles in it.
+    const watch = new MutationObserver(paint);
+    watch.observe(document.documentElement, { attributes: true });
+    watch.observe(document.head, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    return () => {
+      watch.disconnect();
+      meta.remove();
+    };
+  }, []);
+  return null;
+}
+
+/**
+ * While `locked`, the page behind a full-page menu holds still: a scroll that reaches the
+ * menu's end doesn't move it.
+ */
+export function usePageHeld(locked: boolean) {
+  useEffect(() => {
+    if (!locked) return;
+    const html = document.documentElement;
+    const before = html.style.overflow;
+    html.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = before;
+    };
+  }, [locked]);
+}

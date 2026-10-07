@@ -18,13 +18,15 @@ export function PersonAvatar({
   name,
   avatar,
   size = "sm",
+  className,
 }: {
   name: string;
   avatar?: string | null;
   size?: "sm" | "md" | "lg";
+  className?: string;
 }) {
   return (
-    <Avatar size={size}>
+    <Avatar size={size} className={className}>
       {avatar && <Avatar.Image src={avatarUrl(avatar)} alt="" />}
       <Avatar.Fallback>{initials(name)}</Avatar.Fallback>
     </Avatar>

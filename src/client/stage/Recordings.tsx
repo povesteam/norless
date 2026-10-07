@@ -8,7 +8,7 @@ import {
   X,
 } from "lucide-react";
 import { Button, Chip } from "@heroui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
 import type {
@@ -309,10 +309,20 @@ export function SongRecordings({ songId }: { songId: string }) {
     );
     if (response?.ok) setLoads((n) => n + 1);
   });
+  // Opened from a song's recordings mark: to them, once they're there.
+  const shown = !!data?.length;
+  useEffect(() => {
+    if (shown && location.hash === "#recordings")
+      document.getElementById("recordings")?.scrollIntoView();
+  }, [shown]);
   if (!data?.length) return null;
   const order = [i18n.language, ...languages];
   return (
-    <section className="flex flex-col gap-3" aria-labelledby="song-recordings">
+    <section
+      id="recordings"
+      className="flex scroll-mt-4 flex-col gap-3"
+      aria-labelledby="song-recordings"
+    >
       <h3
         id="song-recordings"
         className="flex items-center gap-2 text-lg font-semibold"

@@ -47,11 +47,35 @@ test("built files are kept for good, the page and its worker asked for again", a
     );
 });
 
+test("the icons: a tile installed, the ribbon alone in the tab and on the splash", async ({
+  page,
+}) => {
+  const { icons } = (await (
+    await page.request.get("/manifest.webmanifest")
+  ).json()) as { icons: { src: string; purpose?: string }[] };
+  // Plain (the splash and the taskbar), maskable (home screens) and monochrome (themed).
+  expect(new Set(icons.map((icon) => icon.purpose ?? "any"))).toEqual(
+    new Set(["any", "maskable", "monochrome"]),
+  );
+  for (const { src } of icons) {
+    const file = await page.request.get(src);
+    expect(file.ok()).toBe(true);
+    expect(file.headers()["content-type"]).toContain("image/png");
+  }
+  await page.goto("/");
+  await expect(
+    page.locator('link[rel="icon"][type="image/svg+xml"]'),
+  ).toHaveAttribute("href", "/favicon.svg");
+  expect((await page.request.get("/favicon.svg")).ok()).toBe(true);
+});
+
 test("the start page opens the community this device opened last", async ({
   page,
 }) => {
   const manifest = await page.request.get("/manifest.webmanifest");
   expect(await manifest.json()).toMatchObject({
+    // The app is the root, whatever page it was installed from.
+    id: "/",
     start_url: "/",
     display: "standalone",
     // A dark splash screen, so opening it in a dark room doesn't flash white.
@@ -87,6 +111,26 @@ test.describe("on an iPhone", () => {
     await expect(page.getByRole("grid", { name: "Entries" })).toBeVisible();
     await expect(suggestion).toHaveCount(0);
   });
+});
+
+test("the phone's bars take the page's own background, in light and dark", async ({
+  page,
+}) => {
+  // A stage view first, which paints the bars black, then the app's pages.
+  await page.goto("/unu-unu/vocalists");
+  for (const colorScheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme });
+    await page.goto("/unu-unu/playlists");
+    await expect(
+      page.getByRole("heading", { name: "Playlists" }),
+    ).toBeVisible();
+    const [bar, background] = await page.evaluate(() => [
+      document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+        ?.content,
+      getComputedStyle(document.body).backgroundColor,
+    ]);
+    expect(bar).toBe(background);
+  }
 });
 
 test("before its styles load, the page has the system's light or dark background", async ({

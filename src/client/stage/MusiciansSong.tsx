@@ -13,7 +13,9 @@ import {
 } from "../../shared/song-text";
 import { InstrumentLayout } from "./Instruments";
 import { isInstrumentLayout, type Profile } from "./instrument-layouts";
-import { PartBox, usePartName } from "./parts";
+import { PartBox, PartMark, usePartName } from "./parts";
+import { SongKey } from "./SongKey";
+import { RecordingsMark } from "../songs/RecordingsMark";
 import {
   chordColors,
   playedKey,
@@ -38,6 +40,7 @@ function musiciansVersion(song: Song, languages: string[]) {
 export function Song({
   slug,
   leader: showsLeader = false,
+  recordings = false,
   profile,
   view,
   song,
@@ -48,6 +51,8 @@ export function Song({
 }: {
   slug: string;
   leader?: boolean;
+  /** For the team, with the recordings on: the song's recordings marked. */
+  recordings?: boolean;
   profile: Profile;
   view: LiveView;
   song: Song;
@@ -78,6 +83,22 @@ export function Song({
     languages,
   );
   const part = (i: number) => partName(slides[i], labels[i] ?? "");
+  // The key with its icon; the team changes it for this service from here.
+  // With the song's recordings marked beside it, for the team.
+  const keyMark = (shown: string) => (
+    <>
+      {shown && (
+        <SongKey slug={slug} view={view} shown={shown} canChange={!!onPart} />
+      )}
+      {recordings && (
+        <RecordingsMark
+          slug={slug}
+          songId={song.id}
+          count={view.entry?.song?.recordings}
+        />
+      )}
+    </>
+  );
   const shownKey = serviceKey || song.keySignature;
   const hasBlocks = slides.some((s) => s.blocks.length > 0);
   // Drums need no chords, nor keys with notation; the other instruments fall back to
@@ -126,6 +147,7 @@ export function Song({
           languages={languages}
           profile={profile}
           onPart={onPart}
+          keyMark={keyMark}
         />
       </div>
     );
@@ -134,12 +156,7 @@ export function Song({
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <h2 className="text-2xl font-semibold">{title}</h2>
-        {shownKey && (
-          // Key, time and tempo alike, each kept on one line.
-          <span className="text-lg font-semibold whitespace-nowrap">
-            {t("song.key", { key: shownKey })}
-          </span>
-        )}
+        {keyMark(shownKey)}
         {song.timeSignature && (
           <span className="text-lg font-semibold whitespace-nowrap">
             {t("song.time", { time: song.timeSignature })}
@@ -179,10 +196,10 @@ export function Song({
               <PartBox
                 key={i}
                 active={i === live}
-                next={i === live + 1}
                 onPress={onPart && (() => onPart(i))}
               >
-                <SlideView slide={{ ...slide, name: part(i) }} />
+                <PartMark mark={labels[i] ?? ""} name={part(i)} />
+                <SlideView slide={{ ...slide, name: null }} />
               </PartBox>
             ))}
           </div>
@@ -197,14 +214,11 @@ export function Song({
             <PartBox
               key={i}
               active={i === live}
-              next={i === live + 1}
               onPress={onPart && (() => onPart(i))}
             >
-              {/* On a phone the part's name goes above, so its bars have the width. */}
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-2">
-                <span className="shrink-0 font-semibold sm:w-24 sm:pt-2.5">
-                  {part(i)}
-                </span>
+              {/* The part's mark in the corner, so its bars have the width. */}
+              <PartMark mark={labels[i] ?? ""} name={part(i)} />
+              <div className="flex flex-col gap-1">
                 <div className="min-w-0 flex-1">
                   <BarGrid
                     lines={gridLines(
@@ -226,14 +240,14 @@ export function Song({
       ) : (
         <>
           {colored[live] && (
-            <PartBox active next={false} standalone>
-              <SlideView slide={{ ...colored[live], name: part(live) }} />
+            <PartBox active standalone>
+              <PartMark mark={labels[live] ?? ""} name={part(live)} />
+              <SlideView slide={{ ...colored[live], name: null }} />
             </PartBox>
           )}
           {slides[live + 1] && (
             <PartBox
               active={false}
-              next
               standalone
               onPress={onPart && (() => onPart(live + 1))}
             >

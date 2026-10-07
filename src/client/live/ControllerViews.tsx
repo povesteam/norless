@@ -1,13 +1,9 @@
-import {
-  ListMusic,
-  MonitorPlay,
-  Music,
-  Pencil,
-  Play,
-  Radio,
-} from "lucide-react";
+import { ListMusic, MonitorPlay, Music, Pencil } from "lucide-react";
 import { Button } from "@heroui/react";
-import { useEffect, useRef } from "react";
+import { GoLive } from "./GoLive";
+import { Scaled } from "../ui/scaled";
+import { NameAvatar } from "../ui/NameAvatar";
+import { useEffect, useRef, useState } from "react";
 import { Button as AriaButton } from "react-aria-components";
 import { useTranslation } from "react-i18next";
 import type { LiveView } from "../../server/live/live-view";
@@ -24,8 +20,9 @@ import { usePartName } from "../stage/parts";
 import { ProjectorScreen, SlideText } from "../screens/Projector";
 import { sendLive } from "../data/room";
 import { Placeholder } from "../ui/states";
+import { useBackCloses } from "../ui/back";
 import { PageThumbs } from "./PageThumbs";
-import { CardLabel } from "./SlidesPanel";
+import { CardLabel, useLiveInView } from "./SlidesPanel";
 import { SlidePage } from "../screens/SlidePage";
 
 /** The ways the team can show a playlist, per device type. */
@@ -60,37 +57,6 @@ function useSongSlides(songId: string | null | undefined) {
 }
 
 /**
- * Go live, or the Live mark once it is: both in one cell, the other hidden, so going live
- * moves nothing (Classic's selected entry, and the parts of the Phone and Operator layouts).
- */
-export function GoLive({
-  isLive,
-  onGo,
-}: {
-  isLive: boolean;
-  onGo: () => void;
-}) {
-  const { t } = useTranslation();
-  return (
-    <span className="grid *:[grid-area:1/1]">
-      <Button className={isLive ? "invisible" : undefined} onPress={onGo}>
-        <Play />
-        {t("classic.goLive")}
-      </Button>
-      {/* A status, not a button: no frame or fill. */}
-      <span
-        className={`inline-flex h-10 items-center justify-center gap-2 px-4 text-sm font-semibold md:h-9 ${
-          isLive ? "" : "invisible"
-        }`}
-      >
-        <Radio className="size-4 text-live" />
-        {t("live.live")}
-      </span>
-    </span>
-  );
-}
-
-/**
  * An entry's parts in full, each language side by side, the live one marked. A click
  * or tap sends a part live; `big` makes cards for touch.
  */
@@ -113,6 +79,11 @@ export function EntryParts({
   const community = useCommunity();
   const partName = usePartName();
   const versions = useSongSlides(entry?.song?.id);
+  const list = useRef<HTMLDivElement>(null);
+  useLiveInView(
+    list,
+    entry && view?.entryId === entry.id && !view.blank ? view.slide : null,
+  );
   if (!entry || (entry.kind === "divider" && entry.plannedMinutes === null))
     return null;
   const go = (slide: number) =>
@@ -126,11 +97,15 @@ export function EntryParts({
   const goLive = canGo && !entry.song?.deleted && (
     <GoLive isLive={view?.entryId === entry.id} onGo={() => go(0)} />
   );
-  // For members, above the parts, as Classic shows it under the title.
+  // For members, above the parts: who added it, as their photo, as in Classic.
   const addedBy = entry.addedBy && (
-    <p className="min-w-0 flex-1 truncate text-sm text-muted">
-      {t("playlist.addedBy", { name: entry.addedBy })}
-    </p>
+    <span className="min-w-0 flex-1">
+      <NameAvatar
+        name={entry.addedBy}
+        avatar={entry.addedByAvatar}
+        label={t("playlist.addedBy", { name: entry.addedBy })}
+      />
+    </span>
   );
 
   if (entry.kind === "slides")
@@ -192,6 +167,7 @@ export function EntryParts({
         </div>
       )}
       <div
+        ref={list}
         role="list"
         aria-label={t("live.slides")}
         className={big ? "grid grid-cols-2 gap-3" : "flex flex-col gap-2"}
@@ -201,6 +177,7 @@ export function EntryParts({
             <PartCard isLive={liveSlide === i} big={big} onPress={() => go(i)}>
               <CardLabel
                 label={partName(slide, labels[i] ?? "")}
+                mark={labels[i] ?? ""}
                 isLive={liveSlide === i}
               />
               <span
@@ -249,7 +226,8 @@ function PartCard({
     <AriaButton
       aria-current={isLive || undefined}
       onPress={onPress}
-      className={`flex w-full cursor-pointer flex-col items-start gap-1 rounded-xl border-2 text-start outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[focus-visible]:ring-inset data-[hovered]:bg-default ${
+      // A block, so a part's mark floats to its corner (CardLabel).
+      className={`block w-full cursor-pointer rounded-xl border-2 text-start outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus data-[focus-visible]:ring-inset data-[hovered]:bg-default ${
         big ? "p-4 text-lg" : "p-3"
       } ${isLive ? "border-live" : "border-separator"}`}
     >
@@ -280,18 +258,22 @@ export function Previews({
       {shown.map((language) => (
         <div
           key={language}
-          className="relative aspect-video overflow-hidden rounded-lg"
+          className="relative"
           aria-label={t("controller.preview", {
             language: languageCode(language),
           })}
         >
-          <ProjectorScreen
-            slug={community.slug}
-            languages={[language]}
-            fallback={community.languages}
-            settings={{}}
-            preview
-          />
+          {/* Drawn at a projector's size and made small, so its text fits as it does
+              there: fitted to a small card, it stayed too big and was cut off. */}
+          <Scaled width={1920} height={1080}>
+            <ProjectorScreen
+              slug={community.slug}
+              languages={[language]}
+              fallback={community.languages}
+              settings={{}}
+              preview
+            />
+          </Scaled>
           <span className="absolute start-1 top-1 rounded bg-black/60 px-1 text-xs text-white">
             <LanguageMark language={language} />
           </span>
@@ -386,7 +368,7 @@ export function BigNowNext({ view }: { view: LiveView | undefined }) {
       {view?.entry?.kind === "slides" && (
         <>
           {view.slide + 1 < view.slides && (
-            <div className="flex flex-col gap-1 rounded-xl border border-dashed border-accent p-3">
+            <div className="flex flex-col gap-1 rounded-xl border border-separator p-3">
               <p className="text-sm font-semibold text-muted">
                 {t("slides.nextPage")}
               </p>
@@ -403,7 +385,7 @@ export function BigNowNext({ view }: { view: LiveView | undefined }) {
         </>
       )}
       {next && view && (
-        <div className="rounded-xl border border-dashed border-accent p-3 text-lg">
+        <div className="rounded-xl border border-separator p-3 text-lg">
           <p className="text-sm font-semibold text-muted">
             {t("stage.next", {
               part: partName(next, labels[view.slide + 1] ?? ""),
@@ -453,6 +435,8 @@ export function PhoneViews({
 }) {
   const { t } = useTranslation();
   const strip = useRef<HTMLDivElement>(null);
+  // Which view is in the strip; back from Song or Screens goes to Order.
+  const [at, setAt] = useState(0);
   const views = [
     ["order", order],
     ["song", song],
@@ -464,6 +448,7 @@ export function PhoneViews({
       inline: "start",
       block: "nearest",
     });
+  useBackCloses(at > 0, () => show(0));
   useEffect(() => {
     if (!opened) return;
     // After the list keeps the tapped row in view, which would scroll back to Order.
@@ -493,7 +478,16 @@ export function PhoneViews({
       </div>
       <div
         ref={strip}
-        className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]"
+        onScroll={(event) =>
+          setAt(
+            Math.round(
+              event.currentTarget.scrollLeft / event.currentTarget.clientWidth,
+            ),
+          )
+        }
+        // Relative, so what's placed absolutely in its views (the names read out beside
+        // the parts' marks) is clipped with them instead of widening the page.
+        className="relative flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]"
       >
         {views.map(([id, content]) => (
           <section

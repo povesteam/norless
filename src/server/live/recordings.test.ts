@@ -16,6 +16,7 @@ import { type Db, migrate, openDatabase } from "../db/db.js";
 import { type Recording } from "./recording-view.js";
 import { cut, stretches } from "./recording-finish.js";
 import { stubConverter } from "../test-helpers.js";
+import { songResults } from "../songs/search.js";
 
 let db: Db;
 let dir: string;
@@ -238,6 +239,8 @@ describe("recording", () => {
       },
     ]);
     expect(song.json()[0].recording).not.toHaveProperty("requests");
+    // Its playlist rows and search results count its recordings.
+    expect(songResults(db, ["s1"])[0]).toMatchObject({ recordings: 1 });
     expect((await call("ed", "GET", "/songs/s1/recordings")).statusCode).toBe(
       403,
     );

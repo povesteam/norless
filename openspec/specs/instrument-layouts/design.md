@@ -22,7 +22,7 @@ Why the musicians' layouts, note names, keys and chord colors work as the spec s
 - **Live chord, best source wins**: a MIDI piano knows the chord, the mixer hears one instrument, a microphone hears the room, so the ranking is MIDI, mixer, microphone, the latest among equals. A device shares on each change and every 5 seconds, and one silent for 15 seconds stops counting.
 - **Live chord is held in memory, on its own topic**: it is of the moment, and a separate topic keeps the live view from being republished for every chord.
 - **Live chord is a layout, not a box in every layout**: the chord is the whole layout, big, in its degree's color in the played key whatever the member's chord-colors switch.
-- **Chord colors are per member, off by default**: the switch reaches only the member's own devices. Screens and projectors have no member, so they show none.
+- **Chord colors are what a musician meets, plain chords a choice**: once an owner switches the feature on, chords are colored; a member who wants them plain says so (`plainChords`, off by default), and that reaches only their own devices. Screens and projectors have no member, so they show none.
 - **Color by the root's degree, taken from the letters**: the degree comes from the chord in letters, in the key it is played in (service key, else the song's), before any renaming. Numbers, Do-Re-Mi and guitar shapes then color alike, and a capo moves a shape and its key together. G in D and B♭ in F are both 4. Without a key there is no tonic, so nothing is colored.
 - **Relative pairs**: chords that can stand in for each other look alike. The tonic is plain (the text color), so color means "away from home". 1, 4 and 5 each share a hue with their relative (6, 2 and 3 in major; 3, 6 and 7 in minor), the relative softer. 4 and its relative are blue, 5 and its relative green, the tonic's relative a faint lavender, the leftover degree cyan. Warm hues are kept for the suffix ramp, so letters and suffixes don't look alike.
 - **Color science**: each color is an OKLCH color at lightness 0.62, mixed 75/25 toward the text color in OKLab. Only hue and chroma vary, so every color reaches 4.5:1 in light and dark; axe checks it in the end-to-end test.
@@ -33,6 +33,7 @@ Why the musicians' layouts, note names, keys and chord colors work as the spec s
 - **Where colors apply**: chords over the words, chords-only lines, the bars' beats, guitar shapes (by the degree of the chord they stand for) and the Chords mode while editing. The picker's buttons stay plain, since they are choices, not the song. The lines that join chords into a sentence ("ends on … starts on", the next song's chords) stay plain, since a color per word reads badly.
 - **Each chord carries its CSS colors** (letter, suffix, bass) rather than a degree number, so a view paints what it is given.
 - **My account shows a legend** of the degrees and the suffix ramp (mixed with the text color), so the colors can be learned without a chart elsewhere.
+- **Keys on a horizontal wheel**: the keys in a strip that scrolls and snaps under a marker, like a phone's time picker.
 
 ## Rejected
 
@@ -42,3 +43,5 @@ Why the musicians' layouts, note names, keys and chord colors work as the spec s
 - **Text color for chords outside the key**: it looked like the tonic.
 - **The relative major's tonic as 1 for minor keys**: Am in A minor is 1, as the numbers already say.
 - **The letter H**: nobody in the band reads it.
+- **Colors as a member's opt-in**: nobody found the switch, so nobody saw them.
+- **A − / + stepper or a dial for the key.**

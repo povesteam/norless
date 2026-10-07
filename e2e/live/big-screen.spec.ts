@@ -41,9 +41,7 @@ test("a big window opens Big screen: the room's screens, the band's devices, mor
   const people = page.getByRole("region", {
     name: "Musicians' and vocalists' devices",
   });
-  await expect(
-    people.getByText(/No musicians or vocalists view/),
-  ).toBeVisible();
+  await expect(people.getByText(/No Vocals or Instruments view/)).toBeVisible();
 
   // Radu opens the musicians view on his phone: a tile draws it.
   const phone = await (

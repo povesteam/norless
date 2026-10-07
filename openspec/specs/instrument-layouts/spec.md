@@ -42,7 +42,7 @@ For a guitarist, each song SHALL get a capo fret and shapes computed from the so
 
 A guitarist SHALL be able to choose among:
 - **Shapes over the words** (phone): the live part with shapes over the lyrics, the next part as chords only, and the change between them
-- **Bar grid with shapes** (phone): the whole song as bars, without lyrics, the live part highlighted and the next one marked
+- **Bar grid with shapes** (phone): the whole song as bars, without lyrics, the live part highlighted
 - **Chart and chord diagrams** (tablet): every part with shapes over the lyrics, a diagram of each shape used in the song, and the next song with its capo and first chords
 
 #### Scenario: Chord diagrams
@@ -99,14 +99,6 @@ Instrument layouts SHALL show the notes without a prefix, and the notes whose pr
 - **WHEN** verse 2 has `! drums: rim and hats` and `! all: softer`
 - **THEN** the drummer sees both notes, and the keys player sees only "softer"
 
-### Requirement: Key changes in the playlist
-
-The playlist SHALL show the key change between each song and the next one, e.g. "A → C, up 3 half steps", with a shortcut to change the next song's key for this service.
-
-#### Scenario: Big jump
-- **WHEN** "Sângele Tău" in A is followed by "Mare ești Tu" in C
-- **THEN** the playlist shows "A → C, up 3 half steps" between them
-
 ### Requirement: Controls on instrument layouts
 
 For members who can control live, every instrument layout SHALL keep previous and next visible, and a tap on a part SHALL send it live, as on vocalists layouts.
@@ -117,16 +109,16 @@ For members who can control live, every instrument layout SHALL keep previous an
 
 ### Requirement: Key for a service
 
-The team SHALL be able to set the key of a song for one service, on its playlist entry, without changing the song. The service key SHALL apply wherever that entry's song shows a key or chords: musicians layouts (transposing its chords), the stage monitor, the projector's key line, the bible.com header and the playlist. Key changes SHALL be named in half steps.
+The team SHALL be able to set the key of a song for one service, on its playlist entry, without changing the song. The service key SHALL apply wherever that entry's song shows a key or chords: musicians layouts (transposing its chords), the stage monitor, the projector's key line, the bible.com header and the playlist. Key changes SHALL be named in half steps. The key SHALL be chosen on a wheel: the song's 12 keys in a strip that scrolls sideways and snaps the chosen one under its middle, the song's key in the middle and each key with how far it moves (+2, −3); a tap, the arrow keys or a swipe chooses. Saving for this service and saving as the song's key SHALL look alike. The team SHALL also open it from the song's key in the Vocals and Instruments views. Wherever a song's key shows in those views and on its page, it SHALL show with a key icon instead of "Key:", read out as "Key".
 
 #### Scenario: Lower for a guest singer
 - **WHEN** the team sets "Sângele Tău", in A, to G for Sunday's playlist
-- **THEN** Sunday's musicians layouts show its chords a whole step lower, the projector's key line shows G, and the playlist shows "A → G, down 2 half steps"
+- **THEN** Sunday's musicians layouts show its chords a whole step lower, the projector's key line shows G, and the playlist shows "G (song: A)"
 - **AND** the song itself is still in A
 
 ### Requirement: Changing a song's key
 
-The team and editors SHALL be able to change a song's key permanently, from its page or from a service key ("Make it the song's key"). Its chords SHALL move by the same half steps in every language, and the change SHALL be a revision with their name.
+The team and editors SHALL be able to change a song's key permanently, from its page or from a service key ("Save as the song's key"). Its chords SHALL move by the same half steps in every language, and the change SHALL be a revision with their name.
 
 #### Scenario: The band plays it in G now
 - **WHEN** a team member makes Sunday's key G the key of "Sângele Tău", in A with the chords A, D and E
@@ -146,10 +138,10 @@ A team member SHALL be able to share the chord played with the other musicians f
 
 ### Requirement: Chord colors in relative pairs
 
-A member SHALL be able to switch on chord colors in the Musician section of My account, once the `chordColors` feature is on. With it on, the musicians view on their devices SHALL show each chord in a color given by its degree in the key it's played in, by its root: the same degree SHALL have the same color in every key, so G in D and B♭ in F, both 4, look alike. A minor key's tonic SHALL be 1, as for numbers. The colors SHALL be Relative pairs: the tonic in the text color; 1, 4 and 5 each a hue shared with its relative (6, 2 and 3 in major; 3, 6 and 7 in minor), the relative softer and the tonic's relative a faint tint, and the degree left over its own hue. A chord's suffix after a minor's "m" SHALL take its own color, on a ramp by tension (maj7, add and sixths grey, sus yellow, sevenths and extensions orange, diminished, augmented and altered red), mixed halfway with its letter's color, so it stands apart from the letter yet belongs to it. A slash chord's bass letter SHALL take the color of its own degree in the key. A chord or bass whose root is outside the key's scale, and a chord that isn't the key's own on its degree (D or D7 in C, a secondary dominant; in minor, 5 may be major or minor), SHALL take one color for outside the key, and without a key no chord SHALL be colored. The colors SHALL apply to chords over the words and to the bars of every musicians layout, whatever the member's note names, and to guitar shapes by the degree of the chord they play, and to the chords in the Chords mode, while the member edits. Each color SHALL reach a 4.5:1 contrast in light and dark. My account SHALL show the colors with their degrees, and the suffixes' ramp. Screens, projectors and members who didn't switch it on SHALL see no colors.
+Once the `chordColors` feature is on, chords SHALL be colored for everyone reading them, and a member SHALL be able to switch on plain chords (one color) in the Musician section of My account instead. With colors, the musicians view on their devices SHALL show each chord in a color given by its degree in the key it's played in, by its root: the same degree SHALL have the same color in every key, so G in D and B♭ in F, both 4, look alike. A minor key's tonic SHALL be 1, as for numbers. The colors SHALL be Relative pairs: the tonic in the text color; 1, 4 and 5 each a hue shared with its relative (6, 2 and 3 in major; 3, 6 and 7 in minor), the relative softer and the tonic's relative a faint tint, and the degree left over its own hue. A chord's suffix after a minor's "m" SHALL take its own color, on a ramp by tension (maj7, add and sixths grey, sus yellow, sevenths and extensions orange, diminished, augmented and altered red), mixed halfway with its letter's color, so it stands apart from the letter yet belongs to it. A slash chord's bass letter SHALL take the color of its own degree in the key. A chord or bass whose root is outside the key's scale, and a chord that isn't the key's own on its degree (D or D7 in C, a secondary dominant; in minor, 5 may be major or minor), SHALL take one color for outside the key, and without a key no chord SHALL be colored. The colors SHALL apply to chords over the words and to the bars of every musicians layout, whatever the member's note names, and to guitar shapes by the degree of the chord they play, and to the chords in the Chords mode, while the member edits. Each color SHALL reach a 4.5:1 contrast in light and dark. My account SHALL show the colors with their degrees, and the suffixes' ramp. Screens, projectors and members who switched on plain chords SHALL see no colors.
 
 #### Scenario: Same degree, same color
-- **WHEN** a musician with chord colors on reads a song in D with a G chord, and then one in F with a B♭ chord
+- **WHEN** a musician with chord colors reads a song in D with a G chord, and then one in F with a B♭ chord
 - **THEN** both chords have the color of degree 4
 
 #### Scenario: Outside the key
@@ -161,11 +153,15 @@ A member SHALL be able to switch on chord colors in the Musician section of My a
 - **THEN** D7 is in the outside color and Dm7 in degree 2's
 
 #### Scenario: Off by default
-- **WHEN** a musician who never switched chord colors on opens the musicians view
-- **THEN** the chords show as before, in the chord color
+- **WHEN** an owner switched the chord colors on and a musician who never chose opens the musicians view
+- **THEN** plain chords are off: the chords are colored by their degree
+
+#### Scenario: Plain chords
+- **WHEN** a musician switches on plain chords in My account
+- **THEN** their chords show in the chord color, without degrees
 
 #### Scenario: Relative pairs
-- **WHEN** a musician with chord colors on reads a song in C with C, Am, F, Dm, G and Em
+- **WHEN** a musician with chord colors reads a song in C with C, Am, F, Dm, G and Em
 - **THEN** C is in the text color, F and Dm share a hue, G and Em share another, and Dm and Em are softer than F and G
 
 #### Scenario: Suffixes apart, blended with their chord

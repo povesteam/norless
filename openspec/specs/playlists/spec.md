@@ -27,7 +27,7 @@ A team member SHALL be able to create a playlist. A playlist SHALL have a date: 
 
 ### Requirement: Current playlist and permalinks
 
-Every playlist SHALL have a permanent URL. Opening the app without a playlist URL SHALL open the playlist of the service under way or next (`service-schedule` spec), and without one the most recently created playlist. The list of playlists SHALL be ordered newest first, each with how many songs it has and when it was created, said as such, and the playlist of the service under way or next SHALL be marked.
+Every playlist SHALL have a permanent URL. Opening the app without a playlist URL SHALL open, for members, the playlist of the service under way or next (`service-schedule` spec), and for visitors the playlist of the service under way or, between services, of the last one held; without one, the most recently created playlist. The list of playlists SHALL be ordered newest first, each with how many songs it has and, for members, who made it, as their avatar (its day is in its name), and the playlist of the service under way or next SHALL be marked.
 
 #### Scenario: Share a playlist link
 - **WHEN** an operator copies the URL of a playlist and a musician opens it on a phone
@@ -40,6 +40,10 @@ Every playlist SHALL have a permanent URL. Opening the app without a playlist UR
 #### Scenario: The next service's playlist first
 - **WHEN** Sunday's playlist exists, someone creates another playlist on Wednesday, and a member opens the home URL
 - **THEN** Sunday's playlist is shown, until Sunday's service ends
+
+#### Scenario: A visitor between services
+- **WHEN** Sunday's service has ended, next Sunday's playlist is being prepared, and a visitor opens the home URL on Wednesday
+- **THEN** last Sunday's playlist is shown, while members see next Sunday's
 
 ### Requirement: Entry types
 
@@ -66,14 +70,14 @@ A divider or a text slide MAY have planned minutes, e.g. 45 for the divider "Pre
 
 ### Requirement: Add entries
 
-A new entry SHALL be added at the end of the playlist, or where it was asked for between two entries, and SHALL become the selected entry. With the `insertBetween` feature on, whoever changes entries SHALL see on a laptop, between two entries under the mouse, a line with a + that offers Song here, Divider here and Text slide here; Song here SHALL focus the search box, which says where the next pick will land until it's chosen or cancelled. A row's actions SHALL then also offer Add song above and, with `textSlides` on, Add text slide above, on a touch screen in its ⋯ menu. The same song MAY be added more than once, and each copy SHALL be an independent entry.
+A new entry SHALL be added at the end of the playlist, or where it was asked for between two entries, and SHALL become the selected entry. With the `insertBetween` feature on, whoever changes entries SHALL see on a laptop, between two entries where the mouse rests for 300 ms, a + in the rows' column of icons, without a line, that offers Song, Divider and Text slide; Song SHALL focus the search box, which says where the next pick will land until it's chosen or cancelled. A row's actions SHALL then also offer Add song above and, with `textSlides` on, Add text slide above, on a touch screen in its ⋯ menu. The same song MAY be added more than once, and each copy SHALL be an independent entry.
 
 #### Scenario: Song added twice
 - **WHEN** a song is added twice and one copy is removed
 - **THEN** the other copy stays in the playlist
 
 #### Scenario: A song between two others
-- **WHEN** an operator hovers between "Lumina lumii" and "Sunt iertat", chooses + then Song here, and picks "Har minunat"
+- **WHEN** an operator hovers between "Lumina lumii" and "Sunt iertat", chooses + then Song, and picks "Har minunat"
 - **THEN** "Har minunat" is added between them and selected
 
 ### Requirement: Reorder entries

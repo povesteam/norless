@@ -139,13 +139,13 @@ An owner SHALL be able to change a member's roles and remove a member. Removing 
 
 ### Requirement: Attribution
 
-The system SHALL record who created and who last changed every song, playlist and playlist entry, and who made each live change. Members SHALL see who added a playlist entry with the selected entry ("Added by …" under its title in Classic, above its parts in the other layouts), not on every row, and who created and last edited each song as small avatars with the name in a styled tooltip. Visitors who aren't logged in SHALL NOT see names or avatars.
+The system SHALL record who created and who last changed every song, playlist and playlist entry, and who made each live change. Members SHALL see who added a playlist entry with the selected entry, as their avatar with "Added by …" in a styled tooltip (beside its title in Classic, above its parts in the other layouts), not on every row, and who created and last edited each song as small avatars with the name in a styled tooltip. Visitors who aren't logged in SHALL NOT see names or avatars.
 
 A member's avatar SHALL be their photo, else their initials. At each Google login, the photo of their Google account SHALL be copied into Norless, and again every week from where Google gave it, unless they uploaded their own or chose initials; a photo that didn't change SHALL stay as it is. On My account a member SHALL be able to upload a photo, use their initials (no photo kept), or go back to their Google photo, at once when Norless knows where it is, else from the next Google login. Where Google's photo is SHALL go with a deleted account. Norless SHALL keep each photo as a 256-pixel square JPEG and serve it itself, so that no browser contacts Google to show it; a replaced photo SHALL be deleted, and so SHALL a deleted account's. A device logged in from a member's phone (a laptop or a guest musician) SHALL NOT change the member's photo. Avatars SHALL show the photo wherever they show: a song's creator and last editor, a playlist's other viewers, who is online, and the account button.
 
 #### Scenario: Who added this song to the playlist
 - **WHEN** a member selects an entry in today's playlist
-- **THEN** "Added by" and the name of the member who added it show with its slides
+- **THEN** the avatar of the member who added it shows with its slides, saying "Added by" and their name
 
 #### Scenario: Visitor sees no names
 - **WHEN** a visitor who isn't logged in opens the same playlist

@@ -5,6 +5,7 @@ import {
   expect,
   logInAs,
   pickLayout,
+  swipe,
   test,
 } from "../helpers";
 
@@ -100,9 +101,11 @@ test("a key for the service moves the musicians' chords and shows on the project
     .click({ button: "right" });
   await page.getByRole("menuitem", { name: "Key for this service" }).click();
   const dialog = page.getByRole("dialog");
-  await dialog.getByRole("button", { name: /Key$/ }).click();
-  await page.getByRole("option", { name: "D · down 2 half steps" }).click();
-  await dialog.getByRole("button", { name: "Save" }).click();
+  // On the wheel the song's key, E, is in the middle, each key with how far it moves.
+  await expect(dialog.getByRole("radio", { name: /^E\s*0$/ })).toBeChecked();
+  await dialog.locator('[data-key="D"]').click();
+  await expect(dialog.getByRole("radio", { name: /^D\s*−2$/ })).toBeChecked();
+  await dialog.getByRole("button", { name: "Save for this service" }).click();
   await expect(page.getByText("D (song: E)")).toBeVisible();
 
   // Down a whole step for the band, at once.
@@ -115,7 +118,7 @@ test("a key for the service moves the musicians' chords and shows on the project
     .getByRole("row", { name: "Cântați Domnului" })
     .click({ button: "right" });
   await page.getByRole("menuitem", { name: "Key for this service" }).click();
-  await page.getByRole("button", { name: "Make it the song’s key" }).click();
+  await page.getByRole("button", { name: "Save as the song’s key" }).click();
   await expect(page.getByRole("dialog")).toBeHidden();
   const song = await api(
     page,
@@ -126,19 +129,16 @@ test("a key for the service moves the musicians' chords and shows on the project
   expect(JSON.stringify(song.body)).toContain("| D    | A/C#");
 });
 
-test("a musician who chose chord colors sees each chord in its degree's color", async ({
+test("a musician sees each chord in its degree's color, unless they chose plain chords", async ({
   page,
 }) => {
   await page.goto("/formatia");
   const { songId, entryId } = await liveSongInE(page);
   await page.goto("/account");
-  const colors = page.getByRole("switch", {
-    name: "Color chords by their degree in the key",
+  const plainChords = page.getByRole("switch", {
+    name: "Plain chords (one color)",
   });
-  await expect(colors).not.toBeChecked();
-  const saved = page.waitForResponse("/api/me/preferences");
-  await page.getByText("Color chords by their degree in the key").click();
-  expect((await saved).status()).toBe(204);
+  await expect(plainChords).not.toBeChecked();
   // Relative pairs only, no scheme to pick; the colors' legend.
   await expect(page.getByRole("radio", { name: /Relative pairs/ })).toHaveCount(
     0,
@@ -183,6 +183,16 @@ test("a musician who chose chord colors sees each chord in its degree's color", 
   // While editing too (decision review).
   await page.goto(`/formatia/songs/${songId}/chords`);
   await expect(chord("C#m")).toHaveAttribute("data-degree", "6");
+
+  // Plain chords: one color, no legend.
+  await page.goto("/account");
+  const saved = page.waitForResponse("/api/me/preferences");
+  await page.getByText("Plain chords (one color)").click();
+  expect((await saved).status()).toBe(204);
+  await expect(page.getByText("Suffixes:")).toHaveCount(0);
+  await page.goto("/formatia/musicians");
+  await expect(page.getByText("C#m").first()).toBeVisible();
+  await expect(page.locator("[data-degree]")).toHaveCount(0);
 });
 
 test("the bar grid's rows are equal and aligned, a bar's chords as long as their beats", async ({
@@ -309,4 +319,221 @@ test("the musicians view asks once what you play, and its icons name themselves 
   await expect(page.getByRole("tooltip")).toHaveText("Listen for tempo");
   await tempo.dispatchEvent("pointerup", touch);
   await expect(page.getByRole("dialog")).toHaveCount(0);
+});
+
+test("a song without chords links an editor to its Chords mode", async ({
+  page,
+}) => {
+  await logInAs(page, "maria@example.com");
+  const song = await api(page, "POST", "/api/communities/formatia/songs", {
+    versions: [
+      { language: "ro", title: "Fără acorduri", text: "1:\nDoar cuvinte" },
+    ],
+  });
+  const songId = (song.body as { id: string }).id;
+  await logInAs(page, "radu@example.com");
+  const playlist = await api(
+    page,
+    "POST",
+    "/api/communities/formatia/playlists",
+    { title: "Fără acorduri" },
+  );
+  const playlistId = (playlist.body as { id: string }).id;
+  const entry = await api(
+    page,
+    "POST",
+    `/api/communities/formatia/playlists/${playlistId}/entries`,
+    { kind: "song", songId },
+  );
+  const live = await api(page, "POST", "/api/communities/formatia/live", {
+    type: "go",
+    entryId: (entry.body as { id: string }).id,
+  });
+  expect(live.status).toBe(200);
+  await logInAs(page, "maria@example.com");
+  await page.goto("/formatia/musicians");
+  await pickLayout(page, "Chords over words");
+  await expect(page.getByText("This song has no chords yet.")).toBeVisible();
+  await page.getByRole("link", { name: "Add chords" }).click();
+  await expect(page).toHaveURL(new RegExp(`/formatia/songs/${songId}/chords`));
+  await expect(page.getByText("This page doesn't exist.")).toHaveCount(0);
+
+  // Without the Chords mode switched on, nothing to lead to.
+  await page.route("**/api/communities/formatia", async (route) => {
+    const community = (await (await route.fetch()).json()) as {
+      switches: object;
+    };
+    await route.fulfill({
+      json: {
+        ...community,
+        switches: { ...community.switches, chords: false },
+      },
+    });
+  });
+  await page.goto("/formatia/musicians");
+  await expect(page.getByText("This song has no chords yet.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Add chords" })).toHaveCount(0);
+});
+
+test("the playlist shows each song's key, without the change from the song before", async ({
+  page,
+}) => {
+  await logInAs(page, "maria@example.com");
+  const ids: string[] = [];
+  for (const [title, key] of [
+    ["În E", "E"],
+    ["În D", "D"],
+  ]) {
+    const song = await api(page, "POST", "/api/communities/formatia/songs", {
+      keySignature: key,
+      versions: [{ language: "ro", title, text: "1:\n.| C |\n Cuvinte" }],
+    });
+    ids.push((song.body as { id: string }).id);
+  }
+  await logInAs(page, "radu@example.com");
+  const playlist = await api(
+    page,
+    "POST",
+    "/api/communities/formatia/playlists",
+    { title: "Două tonalități" },
+  );
+  const playlistId = (playlist.body as { id: string }).id;
+  for (const songId of ids)
+    await api(
+      page,
+      "POST",
+      `/api/communities/formatia/playlists/${playlistId}/entries`,
+      { kind: "song", songId },
+    );
+  await page.goto(`/formatia/playlists/${playlistId}`);
+  const entries = page.getByRole("grid", { name: "Entries" });
+  await expect(entries.getByRole("row", { name: /În D/ })).toContainText("D");
+  await expect(entries).not.toContainText("half step");
+});
+
+test("Whole song enlarges the live part without wrapping its lines", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await logInAs(page, "maria@example.com");
+  const song = await api(page, "POST", "/api/communities/formatia/songs", {
+    versions: [
+      {
+        language: "ro",
+        title: "Rânduri lungi",
+        text: "1:\nEste un rând mai lung decât\nȘi încă unul la fel de lung\n\n2:\nScurt",
+      },
+    ],
+  });
+  await logInAs(page, "radu@example.com");
+  const playlist = await api(
+    page,
+    "POST",
+    "/api/communities/formatia/playlists",
+    { title: "Rânduri lungi" },
+  );
+  const entry = await api(
+    page,
+    "POST",
+    `/api/communities/formatia/playlists/${(playlist.body as { id: string }).id}/entries`,
+    { kind: "song", songId: (song.body as { id: string }).id },
+  );
+  await api(page, "POST", "/api/communities/formatia/live", {
+    type: "go",
+    entryId: (entry.body as { id: string }).id,
+  });
+  await page.goto("/formatia/vocalists");
+  const live = page
+    .getByRole("list", { name: "Parts" })
+    .locator('[aria-current="true"] [lang]')
+    .first();
+  await expect(live).toContainText("Este un rând");
+  const { fits, size } = await live.evaluate((el) => ({
+    fits: el.scrollWidth <= el.clientWidth,
+    size: parseFloat(getComputedStyle(el).fontSize),
+  }));
+  expect(fits).toBe(true);
+  // Bigger than the other parts' 18 pixels, at most 24.
+  expect(size).toBeGreaterThan(18);
+  expect(size).toBeLessThanOrEqual(24);
+});
+
+test("Sideways leaves out the bar to look at other songs, which Whole song keeps", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  // A song is live in a playlist since the tests above.
+  await logInAs(page, "maria@example.com");
+  await page.goto("/formatia/vocalists");
+  const earlier = page.getByRole("button", { name: "Earlier song" });
+  await expect(earlier).toBeVisible();
+  // Each part's mark, faint in its corner, its name only read out.
+  const first = page
+    .getByRole("list", { name: "Parts" })
+    .getByRole("listitem")
+    .first();
+  await expect(first.locator("[data-mark]")).toHaveAttribute("data-mark", "1");
+  await expect(first.getByText("Verse 1")).toHaveClass(/sr-only/);
+  await page.getByRole("radio", { name: "Sideways" }).click();
+  await expect(earlier).toHaveCount(0);
+});
+
+test("in Vocals, swipes and the map of the parts move the team's live part, and a singer's own view", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+  });
+  const page = await context.newPage();
+  await logInAs(page, "radu@example.com");
+  const { entryId } = await liveSongInE(page);
+  const slide = async () =>
+    (
+      (await api(page, "GET", "/api/communities/formatia/live")).body as {
+        slide: number;
+      }
+    ).slide;
+
+  // The team, Sideways: a swipe to the left sends the next part live.
+  await page.goto("/formatia/vocalists");
+  await page.getByRole("radio", { name: "Sideways" }).click();
+  await swipe(page, -1);
+  await expect.poll(slide).toBe(1);
+  await swipe(page, 1);
+  await expect.poll(slide).toBe(0);
+
+  // Whole song: the map moves live at a tap.
+  await page.getByRole("radio", { name: "Whole song" }).click();
+  await page
+    .getByRole("navigation", { name: "Map of the parts" })
+    .getByText("R", { exact: true })
+    .click();
+  await expect.poll(slide).toBe(1);
+
+  // A singer who doesn't control live swipes on their own phone only.
+  await api(page, "POST", "/api/communities/formatia/live", {
+    type: "go",
+    entryId,
+    slide: 0,
+  });
+  const singer = await (
+    await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      hasTouch: true,
+    })
+  ).newPage();
+  await logInAs(singer, "maria@example.com");
+  await singer.goto("/formatia/vocalists");
+  await singer.getByRole("radio", { name: "Sideways" }).click();
+  await expect(singer.locator("[data-mark]").first()).toHaveAttribute(
+    "data-mark",
+    "1",
+  );
+  await swipe(singer, -1);
+  await expect(singer.locator("[data-mark]").first()).toHaveAttribute(
+    "data-mark",
+    "R",
+  );
+  expect(await slide()).toBe(0);
 });

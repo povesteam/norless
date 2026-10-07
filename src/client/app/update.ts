@@ -13,7 +13,8 @@ import { useLiveView, useLocalProjection } from "../data/room";
  * while they show nothing.
  */
 
-let ready = false;
+/** How many new versions came while this page was open; 0 until one waits. */
+let waiting = 0;
 const listeners = new Set<() => void>();
 let registration: ServiceWorkerRegistration | undefined;
 let registered = false;
@@ -26,13 +27,22 @@ function register() {
   if (registered || !import.meta.env.PROD || !("serviceWorker" in navigator))
     return;
   registered = true;
+  const anotherWaits = () => {
+    waiting += 1;
+    for (const listener of listeners) listener();
+  };
   registerSW({
-    onNeedRefresh() {
-      ready = true;
-      for (const listener of listeners) listener();
-    },
+    onNeedRefresh: anotherWaits,
     onRegisteredSW(_url, found) {
       registration = found;
+      // The plugin tells of the first waiting version only; each later one counts too,
+      // so a notice closed for one comes back for the next.
+      found?.addEventListener("updatefound", () => {
+        const next = found.installing;
+        next?.addEventListener("statechange", () => {
+          if (next.state === "installed" && waiting > 0) anotherWaits();
+        });
+      });
     },
   });
   // A deploy restarts the server, so every open page reconnects: a good time to ask.
@@ -79,14 +89,14 @@ window.addEventListener("vite:preloadError", (event) => {
   location.reload();
 });
 
-/** Whether a new version is waiting for this page to take it. */
+/** Which new version waits for this page to take it (each later one counts up); 0 for none. */
 export const useNewVersion = () =>
   useSyncExternalStore(
     (listener) => {
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
-    () => ready,
+    () => waiting,
   );
 
 /**

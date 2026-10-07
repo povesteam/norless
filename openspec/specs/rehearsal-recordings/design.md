@@ -14,10 +14,12 @@ Why recordings are made, cut, stored and shared the way the spec says.
 - **Kept on the VM's own disk until deleted**: about 25 MB an hour, and the disk alert at 80% covers running out. There is no automatic deletion. The Mac's backup copies new recordings with the same restricted key as the database.
 - **A recording belongs to whoever made it**: voices are personal data, so the privacy notice names recordings, who can hear them and how to get them deleted. A recording from a laptop or a guest's phone belongs to the member who logged that device in, since the device's session ends.
 - **Access requests live in the app**: a count beside Recordings in the menu, and the requests at the top of the recording with Grant and Refuse.
+- **The person recording is told to let the room know, once per device**: a recording records everyone near the microphone, not only members, and it's the one recording who can tell them. The device remembers it in the browser, since a laptop that records every Sunday needn't ask every Sunday. It's the first step, before the input, so the browser asks for the microphone only once the person knows what recording means here; its button says Continue, as the input's dialog after it has Start recording.
 - **Guest musicians may record**, like the rest of the team.
 - **On stage, names only to members**: stage screens show "Recording" with the name for members and without it on screens open to visitors, as for who changed the slide.
 - **Download names**: the recording's date on the device and the song's title in the interface language, with the community's languages after it. Characters that file systems refuse are dropped, and a part that isn't a song uses its kind ("Prayer").
 - **A song's recordings are the files cut for that song**: a song played twice in one recording counts twice, newest first, for the team and owners.
+- **Recordings are marked where the song is met**: its playlist row, the search results, and the Vocals and Instruments views, each a microphone with the count that opens the song's recordings.
 
 ## Rejected
 
@@ -25,3 +27,5 @@ Why recordings are made, cut, stored and shared the way the spec says.
 - **ffmpeg in the app's image**: it is too large, and the app should not read untrusted audio itself.
 - **Automatic deletion after a fixed time**: recordings are kept until someone deletes them.
 - **Multitrack recording and mixing**: that is the sound desk's job.
+- **The notice before every recording**: a click every service.
+- **Each member agreeing to be recorded on their account**: the people recorded aren't all members.

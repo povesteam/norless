@@ -287,7 +287,7 @@ function SongParts({
           const first = lines(s);
           const others = texts.slice(1).map((other) => lines(other[i]));
           return (
-            <PartBox key={i} active={i === live} next={i === live + 1}>
+            <PartBox key={i} active={i === live}>
               <p className="text-[0.8em] font-semibold text-chord">
                 {partName(s, labels[i] ?? "")}
               </p>

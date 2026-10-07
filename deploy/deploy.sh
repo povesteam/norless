@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Deploys an image tag to production while the running version keeps serving (see
 # README.md), its converter first. The deploy key may only run this:
-#   ssh deploy@vm "production sha-1a2b3c4"         a checked backup, then the new image as
+#   ssh deploy@vm "production 1a2b3c4"         a checked backup, then the new image as
 #                                                 a candidate beside the running one;
 #                                                 stopped if it isn't healthy within a minute
-#   ssh deploy@vm "production sha-1a2b3c4 switch"  once a maintainer confirms: the candidate
+#   ssh deploy@vm "production 1a2b3c4 switch"  once a maintainer confirms: the candidate
 #                                                 stands in while the service restarts on it
-#   ssh deploy@vm "production sha-1a2b3c4 stop"    drops the candidate
+#   ssh deploy@vm "production 1a2b3c4 stop"    drops the candidate
 set -euo pipefail
 
 usage() {

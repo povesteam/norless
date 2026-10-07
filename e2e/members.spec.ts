@@ -126,20 +126,24 @@ test("members see who is online, and on which device", async ({
   await openSteadyPage(page);
   // Avatars only, the name and devices in a tooltip.
   const online = page.getByRole("group", { name: "Online" });
-  const maria = online.getByLabel(/^Maria.* · phone$/);
+  // Other tests may have Maria online on a computer too.
+  const maria = online.getByLabel(/^Maria · (.+, )?phone/);
   await expect(maria).toBeVisible();
   await expect(maria).toHaveText(/^[A-Z]{1,2}$/);
-  // Other tests may have Ana online on another computer too.
-  await expect(online.getByLabel(/^Ana.*computer/).first()).toBeVisible();
+  // Never oneself, even on another computer.
+  await expect(online.getByLabel(/^Ana/)).toHaveCount(0);
   // React Aria shows tooltips on hover once a pointer was used on the page.
   await page.mouse.click(0, 0);
   // Others' tests bring Ana or Ioana online or offline, moving Maria from under the
   // mouse before her tooltip opens: hover her again until it does.
   await expect(async () => {
     await maria.hover();
-    await expect(page.getByRole("tooltip")).toHaveText(/^Maria.* · phone$/, {
-      timeout: 1000,
-    });
+    await expect(page.getByRole("tooltip")).toHaveText(
+      /^Maria · (.+, )?phone/,
+      {
+        timeout: 1000,
+      },
+    );
   }).toPass();
 
   await context.close();

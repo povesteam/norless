@@ -24,6 +24,11 @@ import { OfflineKeeper } from "./Offline";
 import { ConnectionStatus } from "./ConnectionStatus";
 import { useDeviceType } from "../data/device";
 import { InstallSuggestion } from "./Install";
+import { StartPage } from "./StartPage";
+import { useWindowTitle } from "./title";
+import { BackToClose } from "./BackToClose";
+import { BackClosesOverlays } from "../ui/back";
+import { AppBarColor } from "../ui/full-screen";
 import { LanguagePicker } from "./LanguagePicker";
 import { hasRole, useIsMember, useMe, useRoles } from "../data/me";
 import { NotFound } from "./NotFound";
@@ -102,8 +107,8 @@ export function App() {
           live ? "" : "max-w-7xl"
         } ${phone ? "pb-4" : "py-8"}`}
       >
-        {/* The login page keeps to logging in. */}
-        {top !== "login" && (
+        {/* The login page keeps to logging in; the start page has Install itself. */}
+        {top !== "login" && top !== "" && (
           <Shown feature="install">
             <InstallSuggestion />
           </Shown>
@@ -233,6 +238,9 @@ export function App() {
         </Suspense>
       </div>
       <ConnectionStatus />
+      <BackClosesOverlays />
+      <AppBarColor />
+      <BackToClose />
       <InPageProjector />
       <Shown feature="appFrame">
         <Shortcuts />
@@ -289,6 +297,7 @@ function CommunityFrame() {
   if (!shows("appFrame"))
     return (
       <>
+        <CommunityTitle />
         <ClassicBar />
         <MembershipNote />
         <WhatsNew />
@@ -296,6 +305,7 @@ function CommunityFrame() {
     );
   return (
     <>
+      <CommunityTitle />
       <CommunityNav />
       <MembershipNote />
       <WhatsNew />
@@ -305,6 +315,29 @@ function CommunityFrame() {
       </Shown>
     </>
   );
+}
+
+/**
+ * The window's title in a community: what the page names (a playlist, a song), else the
+ * page's name, then the community; "Norless" outside one (index.html's).
+ */
+function CommunityTitle() {
+  const { t } = useTranslation();
+  const { name } = useCommunity();
+  const [location] = useLocation();
+  const names: Record<string, string> = {
+    playlists: t("playlists.title"),
+    settings: t("settings.title"),
+    statistics: t("statistics.title"),
+    members: t("members.title"),
+    features: t("featureTree.title"),
+    recordings: t("recordings.title"),
+    ideas: t("feedback.title"),
+    changes: t("changes.title"),
+    host: t("host.title"),
+  };
+  useWindowTitle(names[location.split("/")[1] ?? ""] ?? null, name);
+  return null;
 }
 
 /**
@@ -408,31 +441,6 @@ function MembershipNote() {
         <Alert.Title>{t("auth.notInvited")}</Alert.Title>
       </Alert.Content>
     </Alert>
-  );
-}
-
-/**
- * /: the community this device opened last, or the only one, which opens its newest
- * playlist; otherwise the list of communities. The installed app starts here.
- */
-function StartPage() {
-  const { t } = useTranslation();
-  const last = lastCommunity();
-  const communities = useJson<{ slug: string; name: string }[]>(
-    last ? null : "/api/communities",
-  ).data;
-  const only = communities?.length === 1 ? communities[0]?.slug : undefined;
-  const target = last ?? only;
-  if (target) return <Redirect to={`/${target}`} replace />;
-  if (!communities) return null;
-  return (
-    <nav aria-label={t("start.communities")} className="flex flex-col gap-2">
-      {communities.map((c) => (
-        <Link key={c.slug} href={`/${c.slug}`} className="link text-lg">
-          {c.name}
-        </Link>
-      ))}
-    </nav>
   );
 }
 

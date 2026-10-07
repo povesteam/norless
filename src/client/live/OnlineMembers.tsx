@@ -4,10 +4,28 @@ import { useTranslation } from "react-i18next";
 import type { OnlineMember } from "../../shared/live";
 import { useCommunity, useShows } from "../data/community";
 import { live } from "../data/connection";
-import { useIsMember } from "../data/me";
+import { useIsMember, useMe } from "../data/me";
 import { PersonAvatar } from "../ui/NameAvatar";
 import { Tip } from "../ui/tip";
 import { useLiveView } from "../data/room";
+
+/** The other members online in this community, for members; never oneself. */
+export function useOthersOnline() {
+  const { slug } = useCommunity();
+  const isMember = useIsMember(slug);
+  const self = useMe().me?.user?.id;
+  const [online, setOnline] = useState<OnlineMember[]>([]);
+  useEffect(
+    () =>
+      isMember
+        ? live.subscribe(`presence:${slug}`, (data) =>
+            setOnline(data as OnlineMember[]),
+          )
+        : undefined,
+    [slug, isMember],
+  );
+  return isMember ? online.filter((person) => person.userId !== self) : [];
+}
 
 /**
  * Members online right now, each as their photo or initials, with their devices in a
@@ -20,16 +38,7 @@ export function OnlineMembers() {
   const isMember = useIsMember(slug);
   const lastChange = useLiveView(isMember ? slug : null)?.changedBy?.userId;
   const shows = useShows();
-  const [online, setOnline] = useState<OnlineMember[]>([]);
-  useEffect(
-    () =>
-      isMember
-        ? live.subscribe(`presence:${slug}`, (data) =>
-            setOnline(data as OnlineMember[]),
-          )
-        : undefined,
-    [slug, isMember],
-  );
+  const online = useOthersOnline();
 
   if (!isMember) return null;
   return (

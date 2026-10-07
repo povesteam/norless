@@ -170,3 +170,38 @@ test("the live panel folds this device's setup, remembers it, and says while it 
   await page.getByRole("button", { name: /^Stop/ }).click();
   await expect(record).toBeVisible({ timeout: 20_000 });
 });
+
+test("a song's recordings are marked on its row, leading to them", async ({
+  page,
+}) => {
+  await logInAs(page, "ioana@example.com");
+  // As if the first song had two recordings, with the recordings switched on.
+  await page.route(
+    "**/api/communities/unu-unu/playlists/steady",
+    async (route) => {
+      const playlist = (await (await route.fetch()).json()) as {
+        entries: { song: { recordings?: number } | null }[];
+      };
+      const first = playlist.entries.find((e) => e.song);
+      if (first?.song) first.song.recordings = 2;
+      await route.fulfill({ json: playlist });
+    },
+  );
+  await page.route("**/api/communities/unu-unu", async (route) => {
+    const community = (await (await route.fetch()).json()) as {
+      switches: object;
+    };
+    await route.fulfill({
+      json: {
+        ...community,
+        switches: { ...community.switches, recordings: true },
+      },
+    });
+  });
+  await page.goto("/unu-unu/playlists/steady");
+  const mark = page.getByRole("link", { name: "2 recordings" });
+  await expect(mark).toHaveAttribute(
+    "href",
+    /\/unu-unu\/songs\/.+#recordings$/,
+  );
+});

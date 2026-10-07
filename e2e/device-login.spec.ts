@@ -31,6 +31,17 @@ test("a phone on the same wifi is offered the laptop's login, and logs it in as 
     .getByRole("button", { name: "As the community's laptop" })
     .click();
   await expect(phone.getByText("The device is logged in.")).toBeVisible();
+  // What was logged in, where to manage it, and the way back.
+  await expect(
+    phone.getByText("It's logged in as the community's laptop."),
+  ).toBeVisible();
+  await expect(
+    phone.getByRole("link", { name: /Your logged-in devices/ }),
+  ).toHaveAttribute("href", "/account#devices");
+  // Back to it later, it says so again, not that its code ran out.
+  await phone.goto("/account");
+  await phone.goBack();
+  await expect(phone.getByText("The device is logged in.")).toBeVisible();
 
   // The laptop opens the community, logged in as its laptop, with the team role only.
   await expect(laptop).toHaveURL(/\/sala-mica$/);
@@ -60,7 +71,10 @@ test("a guest musician: the band member's guest QR logs the guest's phone in, an
   const dan = await (await browser.newContext(small)).newPage();
   await logInAs(dan, "dan@example.com");
   await dan.goto("/account");
-  await dan.getByRole("textbox", { name: "The guest's name" }).fill("Vlad");
+  const name = dan.getByRole("textbox", { name: "The guest's name" });
+  // A phone's keyboard starts each word with a capital.
+  await expect(name).toHaveAttribute("autocapitalize", "words");
+  await name.fill("Vlad");
   const created = dan.waitForResponse(
     "/api/communities/sala-mica/guest-passes",
   );
@@ -121,7 +135,9 @@ test("a guest musician: the band member's guest QR logs the guest's phone in, an
   await expect(
     dan.getByText(await number.innerText(), { exact: true }),
   ).toBeVisible();
-  await dan.getByRole("textbox", { name: "The guest's name" }).fill("Ilie");
+  const guestName = dan.getByRole("textbox", { name: "The guest's name" });
+  await expect(guestName).toHaveAttribute("autocapitalize", "words");
+  await guestName.fill("Ilie");
   await dan.getByRole("button", { name: "As a guest musician" }).click();
   await expect(dan.getByText("The device is logged in.")).toBeVisible();
   await expect(ilie).toHaveURL(/\/$/);

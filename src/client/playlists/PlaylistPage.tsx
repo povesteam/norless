@@ -1,4 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import { usePlace } from "../app/title";
+import { playlistName } from "../../shared/playlist-name";
+import { useDeviceType } from "../data/device";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "wouter";
 import type { Entry, Playlist } from "../../server/playlists/playlists";
@@ -79,6 +82,8 @@ export function PlaylistPage({ id }: { id: string }) {
     failed,
     retry,
   } = useJson<Playlist>(url, version + slots);
+  // The window's title names the playlist.
+  usePlace(playlist ? playlistName(playlist, i18n.language) : null);
   // An archived playlist is read, and can go live, but isn't changed until restored.
   const canChange = isTeam && !playlist?.archivedAt;
   const [selected, setSelected] = useState<string | null>(null);
@@ -89,9 +94,10 @@ export function PlaylistPage({ id }: { id: string }) {
     kind: "text" | "divider";
     after?: string | null;
   } | null>(null);
-  // Where the next pick in the search box goes, after "Song here".
+  // Where the next pick in the search box goes, after the + menu's Song.
   const [place, setPlace] = useState<{ after: string | null } | null>(null);
   const shows = useShows();
+  const phone = useDeviceType().deviceType === "phone";
   // On a narrow page, Classic shows the playlist or the selected entry's slides.
   const [column, setColumn] = useState<"playlist" | "slides">("playlist");
   // Taps on entries, so a phone shows the tapped entry's parts.
@@ -262,7 +268,8 @@ export function PlaylistPage({ id }: { id: string }) {
       canArchive={isTeam}
       onRename={(title) => change("PATCH", "", { title })}
       onArchive={(archived) => change("PUT", "/archived", { archived })}
-      viewers={<Viewers viewers={viewers} />}
+      // On a phone, who's here is under the photo in the bar.
+      viewers={!phone && <Viewers viewers={viewers} />}
       // The title row (live-control spec): problems, the end, who's online, the layout.
       status={
         <>
@@ -272,7 +279,7 @@ export function PlaylistPage({ id }: { id: string }) {
           {canChange && shows("times") && entries.length > 0 && (
             <PlaylistEnd times={times} />
           )}
-          {shows("appFrame") && <OnlineMembers />}
+          {shows("appFrame") && !phone && <OnlineMembers />}
           {layout !== "classic" && layout !== "list" && picker}
         </>
       }

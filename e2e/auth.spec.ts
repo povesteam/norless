@@ -160,13 +160,48 @@ test.describe("on a phone", () => {
       page.getByRole("img", { name: "QR code to log in from your phone" }),
     ).toHaveCount(0);
 
-    await page.getByRole("button", { name: "Other ways to log in" }).click();
+    // The other ways take Google's place, and Google is a tap back.
+    const otherWays = page.getByRole("button", {
+      name: "Other ways to log in",
+    });
+    await otherWays.click();
+    await expect(
+      page.getByRole("link", { name: "Continue with Google" }),
+    ).toHaveCount(0);
+    await page.getByRole("button", { name: "Continue with Google" }).click();
+    await expect(page.getByLabel("Email")).toHaveCount(0);
+    await otherWays.click();
     await page.getByLabel("Email").fill("ana@example.com");
     await page.getByRole("button", { name: "Email me a login link" }).click();
     await expect(page.getByText(/link Norless would email/)).toBeVisible();
     await page.getByRole("link", { name: "Open the link" }).click();
     await page.getByRole("button", { name: "Log in" }).click();
     await expect(page).toHaveURL("/unu-unu/playlists/steady");
+  });
+});
+
+test.describe("on a phone, with Google set up", () => {
+  const { viewport, isMobile, hasTouch, userAgent } = devices["Pixel 7"];
+  test.use({ viewport, isMobile, hasTouch, userAgent });
+
+  test("Continue with Google shows it's loading until Google comes", async ({
+    page,
+  }) => {
+    await withoutPhoneLogin(page);
+    // As in production, with Google's script held back, as on a slow phone.
+    await page.route("**/api/auth/methods", async (route) => {
+      const methods = (await (await route.fetch()).json()) as object;
+      await route.fulfill({
+        json: { ...methods, google: true, fakeGoogle: false },
+      });
+    });
+    await page.route("https://accounts.google.com/**", () => {});
+    await page.goto("/login");
+    const google = page.getByRole("link", { name: "Continue with Google" });
+    await expect(google).not.toHaveAttribute("aria-busy", "true");
+    await google.click();
+    await expect(google).toHaveAttribute("aria-busy", "true");
+    await expect(page).toHaveURL(/\/login/);
   });
 });
 

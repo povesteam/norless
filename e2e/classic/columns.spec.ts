@@ -37,7 +37,9 @@ test.describe("on a laptop", () => {
     ])
       await expect(page.getByRole("button", { name })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /^Layout/ })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "Musicians" })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Instruments" })).toHaveCount(
+      0,
+    );
     await expect(page.getByRole("link", { name: "All playlists" })).toHaveCount(
       0,
     );

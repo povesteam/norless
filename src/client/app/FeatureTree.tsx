@@ -6,7 +6,7 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import { HandHelping, ListTree, Undo2, X } from "lucide-react";
+import { HandHelping, ListTree, ToggleRight, Undo2, X } from "lucide-react";
 import { useState } from "react";
 import { Button as TileButton } from "react-aria-components";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,7 @@ import type { FeatureRequests } from "../../server/community/feature-requests";
 import {
   type Feature,
   isNew,
+  names,
   ownOn,
   pathTo,
   planned,
@@ -103,6 +104,11 @@ export function FeatureTree() {
     if (response?.ok) reload();
     else setPending(undefined);
   };
+  // Every feature an owner hasn't switched on yet, for Switch all on.
+  const off = names().filter((n) => switchable(n) && !set[n]);
+  const allOn = () =>
+    window.confirm(t("featureTree.allOnConfirm", { count: off.length })) &&
+    void save({ ...set, ...Object.fromEntries(off.map((n) => [n, true])) });
   /** Switches a feature on, with the path it needs, or off. */
   const turn = (name: Feature, value: boolean) => {
     const next = { ...set };
@@ -144,6 +150,12 @@ export function FeatureTree() {
           <ListTree />
           {t("featureTree.title")}
         </h2>
+        {owner && off.length > 0 && (
+          <Button size="sm" variant="secondary" onPress={allOn}>
+            <ToggleRight />
+            {t("featureTree.allOn")}
+          </Button>
+        )}
       </div>
       <p className="text-sm text-muted">
         {t(owner ? "featureTree.helpOwner" : "featureTree.help")}

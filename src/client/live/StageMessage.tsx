@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useCommunity } from "../data/community";
 import { sendLive } from "../data/room";
 
-/** A message to the stage monitors: a preset with one tap, or a short text; it stays until cleared. */
+/** A message to the stage monitors, a short text; it stays until cleared. */
 export function StageMessage({ message }: { message: string | null }) {
   const { t } = useTranslation();
   const { slug } = useCommunity();
@@ -19,16 +19,6 @@ export function StageMessage({ message }: { message: string | null }) {
       className="flex flex-wrap items-center gap-1"
     >
       <span className="text-xs text-muted">{t("stage.toStage")}</span>
-      {(["fiveMinutes", "wrapUp", "time"] as const).map((preset) => (
-        <Button
-          key={preset}
-          size="sm"
-          variant="tertiary"
-          onPress={() => say(t(`stage.presets.${preset}`))}
-        >
-          {t(`stage.presets.${preset}`)}
-        </Button>
-      ))}
       <form
         className="flex gap-1"
         onSubmit={(event) => {

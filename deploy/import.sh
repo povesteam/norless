@@ -26,11 +26,10 @@ one_off="docker compose run --rm --no-deps -T norless"
 is_db() { [ "$(head -c 15 "$1")" = "SQLite format 3" ]; }
 
 # Production's version, so the import writes what that version reads.
+# Its tag is the commit's short hash, or a release's tag; both name the commit.
 tag=$(on_vm "sed -n 's/^PRODUCTION_TAG=//p' .env")
-version=$tag
-[[ "$tag" =~ ^sha-([0-9a-f]{7,40})$ ]] && version=${BASH_REMATCH[1]}
 if [ -z "$tag" ] ||
-  [ "$(git rev-parse --verify --quiet "$version^{commit}" || true)" != "$(git rev-parse HEAD)" ]; then
+  [ "$(git rev-parse --verify --quiet "$tag^{commit}" || true)" != "$(git rev-parse HEAD)" ]; then
   echo "Production runs ${tag:-an unknown version}: check out that commit first." >&2
   exit 1
 fi

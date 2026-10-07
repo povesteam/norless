@@ -1,4 +1,4 @@
-import { ArrowLeft, Guitar } from "lucide-react";
+import { Guitar } from "lucide-react";
 import { TempoButton } from "./TempoListener";
 import { shows } from "../../shared/features";
 import { RecordButton } from "./Recorder";
@@ -6,7 +6,6 @@ import { Button, Dropdown, Label } from "@heroui/react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutIcon } from "../ui/icons";
-import { Link } from "wouter";
 import { ShareChords } from "../chords/PlayChords";
 import { TodayBadge } from "../team/MyNextLine";
 import { keyOf } from "../../shared/music/chords";
@@ -30,6 +29,7 @@ import { MusicianDialog } from "../account/MusicianProfile";
 import { Tip } from "../ui/tip";
 import { Musicians } from "./Musicians";
 import { useReportStageView } from "./report";
+import { ToPlaylist } from "./parts";
 
 export const musiciansLayouts = [
   { id: "bar-grid", devices: ["phone", "tablet", "laptop"] },
@@ -125,13 +125,7 @@ export function MusiciansPage({ slug }: { slug: string }) {
     >
       {/* One row of icons, so the song has the room. */}
       <header className="flex items-center gap-2 overflow-x-auto border-b border-separator px-3 py-2">
-        <Link
-          href={`~/${slug}`}
-          aria-label={community?.name ?? t("musicians.back")}
-          className="link shrink-0"
-        >
-          <ArrowLeft />
-        </Link>
+        <ToPlaylist slug={slug} />
         <RoomChip slug={slug} />
         {me?.user && switches && shows(switches, "serviceRoles") && (
           <TodayBadge slug={slug} />
@@ -223,10 +217,16 @@ export function MusiciansPage({ slug }: { slug: string }) {
           languages={[i18n.language, ...(community?.languages ?? [])]}
           layout={layout?.id ?? "bar-grid"}
           canControl={canControl}
-          canEdit={hasRole(roles, "team") || hasRole(roles, "editor")}
+          // Add chords leads to the Chords mode, which opens only while it's on.
+          canEdit={
+            (hasRole(roles, "team") || hasRole(roles, "editor")) &&
+            !!community &&
+            shows(switchesOf(community), "chords")
+          }
           profile={profile}
           lookAhead
           leader={!!community && shows(switchesOf(community), "serviceRoles")}
+          recordings={canControl && !!switches && shows(switches, "recordings")}
         />
       </div>
     </div>

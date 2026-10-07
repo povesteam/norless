@@ -53,6 +53,12 @@ test("a new version: members see a notice and reload when they choose; an idle s
     0,
   );
 
+  // Closed, it stays away until the next version.
+  await notice.getByRole("button", { name: "Not now" }).click();
+  await expect(notice).toHaveCount(0);
+  await deploy([page]);
+  await expect(notice).toBeVisible();
+
   await notice.getByRole("button", { name: "Reload" }).click();
   await expect(page.getByRole("grid", { name: "Entries" })).toBeVisible();
   await expect(notice).toHaveCount(0);

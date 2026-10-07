@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Tip } from "../ui/tip";
 
 /**
- * Where the pointer is between two rows, a line with a + that opens what can go there
- *. It sits on the row below's top edge, over both rows.
+ * Where the pointer rests between two rows, a + that opens what can go there: on the row
+ * below's top edge, in the rows' column of icons, without a line across them.
  */
 export function InsertLine({
   onPress,
@@ -15,8 +15,7 @@ export function InsertLine({
 }) {
   const { t } = useTranslation();
   return (
-    <div className="pointer-events-none absolute inset-x-2 -top-3 z-10 flex h-6 items-center gap-1">
-      <span className="h-0.5 flex-1 rounded-full bg-accent" />
+    <div className="pointer-events-none absolute start-3.5 -top-3 z-10 flex h-6 items-center">
       <Tip label={t("playlist.insertHere")}>
         <Button
           isIconOnly
@@ -31,7 +30,6 @@ export function InsertLine({
           <Plus className="size-4" />
         </Button>
       </Tip>
-      <span className="h-0.5 flex-1 rounded-full bg-accent" />
     </div>
   );
 }

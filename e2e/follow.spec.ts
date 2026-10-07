@@ -62,6 +62,11 @@ test("a visitor follows the live song on a phone, in both languages, without con
   const parts = visitor
     .getByRole("list", { name: "Parts" })
     .getByRole("listitem");
+  // The part after the live one looks like the others: no dashed border.
+  await expect(parts.nth(1).locator(":scope > *")).not.toHaveCSS(
+    "border-top-style",
+    "dashed",
+  );
   await live(page, { type: "go", entryId, slide: 1 });
   await expect(parts.nth(1)).toHaveAttribute("aria-current", "true");
 
@@ -72,6 +77,21 @@ test("a visitor follows the live song on a phone, in both languages, without con
   // Visitors never get members' names.
   const asVisitor = await api(visitor, "GET", "/api/communities/urmarim/live");
   expect(asVisitor.body).toMatchObject({ changedBy: null });
+
+  // A fresh browser on the bare address, if this were the only community: following
+  // along on top, gone once nothing is live.
+  const fresh = await (await browser.newContext()).newPage();
+  await fresh.route("**/api/communities", (route) =>
+    route.fulfill({ json: [{ slug: "urmarim", name: "Urmărim" }] }),
+  );
+  await fresh.goto("/");
+  const follow = fresh.getByRole("link", { name: "Live now: follow along" });
+  await expect(follow).toBeVisible();
+  await live(page, { type: "blank", blank: true });
+  await expect(follow).toBeHidden();
+  await expect(
+    fresh.getByText("During services, follow the songs here."),
+  ).toBeVisible();
 });
 
 test("a start page shows the QR code to follow along", async ({

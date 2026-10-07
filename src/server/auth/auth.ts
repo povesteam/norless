@@ -339,7 +339,7 @@ export function attachSessions(
                   items: { type: "string", enum: [...guitarShapes] },
                 },
                 noteNames: { enum: [...noteNamings, null] },
-                chordColors: { type: "boolean" },
+                plainChords: { type: "boolean" },
               },
             },
             hints: {

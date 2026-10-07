@@ -14,18 +14,19 @@ Cutover prep comes first: the server and the cutover steps below, in the open ch
 
 ## Next: cutover
 
-1. A maintainer runs `deploy/setup.sh`: the GitHub repository and its secrets, the VM (a Hetzner CAX11 in Nuremberg on Debian), DNS, the VM's `.env` (a Mailgun sending key, a Google OAuth web client with `https://norless.com` as a JavaScript origin, the app team's emails, a YouTube Data API key; VAPID keys are generated), the Mac's backup pull, an uptime monitor on `/api/health`, and GitHub Pages for the manual.
-2. Production on the VM, and a rehearsal with a real service (`add-deployment` 2.3). With the YouTube key set, check last Sunday's chapters against the video.
+1. Done: `deploy/setup.sh` set up the GitHub repository and its secrets, the VM, DNS, the VM's `.env`, the backup pull, the uptime monitor and the manual's Pages site; production answers at `norless.com`.
+2. A rehearsal with a real service on production (`add-deployment` 2.3). With the YouTube key set, check last Sunday's chapters against the video.
 3. The Saturday-night re-import into production, rehearsed once (3.4); then the shadow Sunday beside the old app (3.2).
 4. Cutover (3.3): rotate the old app's Mailgun credentials; the old app stays writable until two good Sundays, then read-only for 3 months, then redirected; the old repositories get a README line pointing here and are archived read-only. Once the old app is read-only, nothing is imported again: delete the importer (`src/server/import`, `npm run import`, the `bson` dependency, `run-reimport.sh`).
 
-Also before or around cutover: a Norless logo (the old rainbow icon stands in), the Switzer font uploaded in Unu-Unu's theme settings, and the bible.com extension's side of sending verses (the requirement is in the `bible-com-projection` spec). The training videos' scripts are ready; filming waits until asked again (`add-deployment` 4.1).
+Also before or around cutover: trying the new icon installed on an Android phone and an iPhone (`add-norless-icon` 3.2), the Switzer font uploaded in Unu-Unu's theme settings, and the bible.com extension's side of sending verses (the requirement is in the `bible-com-projection` spec). The training videos' scripts are ready; filming waits until asked again (`add-deployment` 4.1).
 
 ## After cutover
 
 - One or two features switched on a week, what the team asked for first, each announced by What's new (`add-deployment` 4.2).
 - A code pass over the UI review's findings, after the shadow Sunday.
-- Waiting on others: melodia.ro (an API agreed with its owner: search, import with attribution and a source link; resursecrestine.ro only with permission, links until then), the chord helper (testing with a real piano).
+- A presentation at `norless.com` for a device that never opened a community, Install first (`add-home-presentation`); screenshots on it later, in a way that sends nothing to GitHub.
+- Waiting on others: the chord helper (testing with a real piano). Songs from resursecrestine.ro only with its permission, links until then.
 - Needs a choice first: Electron, so phones join the laptop over local Wi-Fi offline (a new dependency and code signing); the AI features (a provider and an API key).
 
 ## Later, not scheduled

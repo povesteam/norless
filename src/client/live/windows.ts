@@ -67,8 +67,9 @@ export const oneDisplay = () =>
  * Opens a page full screen on a display, where the browser lets pages choose one
  * (Chromium): on `display`, else on the one chosen before for `key` on this device, else
  * on the first that isn't the laptop's own. Without one, or elsewhere, it opens in a new
- * window, which has a fullscreen button: full screen on the laptop's own display would
- * cover the controller. A window already open for `key` comes forward instead, so a
+ * window of half the screen, in its middle, which has a fullscreen button: full screen,
+ * or the browser's own size for a window, on the laptop's own display would cover the
+ * controller. A window already open for `key` comes forward instead, so a
  * second click doesn't make a second projector; choosing a display moves it there.
  */
 export async function openOnDisplay(
@@ -90,13 +91,23 @@ export async function openOnDisplay(
     displays.find((d) => d.label === label) ??
     displays.find((d) => !d.isPrimary);
   if (target) remember(key, target.label);
+  const here = window.screen as typeof window.screen & {
+    availLeft?: number;
+    availTop?: number;
+  };
+  const half = {
+    left: (here.availLeft ?? 0) + here.availWidth / 4,
+    top: (here.availTop ?? 0) + here.availHeight / 4,
+    width: here.availWidth / 2,
+    height: here.availHeight / 2,
+  };
   // Named, so even after this page reloads the same window is reused.
   const win = window.open(
     url,
     `norless-${key}`,
     target
       ? `popup,fullscreen,left=${target.availLeft},top=${target.availTop},width=${target.availWidth},height=${target.availHeight}`
-      : "popup",
+      : `popup,left=${half.left},top=${half.top},width=${half.width},height=${half.height}`,
   );
   if (win) opened.set(key, win);
   return win;

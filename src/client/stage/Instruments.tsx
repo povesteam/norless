@@ -19,7 +19,7 @@ import { parseSong, partBars, type Slide } from "../../shared/song-text";
 import { useShows } from "../data/community";
 import { PartBlocks } from "../chords/Notation";
 import { BarGrid, gridLines, SlideView } from "../songs/SongText";
-import { PartBox } from "./parts";
+import { PartBox, PartMark } from "./parts";
 import { ChordDiagrams } from "./ChordDiagrams";
 import { Changes } from "./Changes";
 import { InstrumentHeader } from "./InstrumentHeader";
@@ -84,6 +84,7 @@ export function InstrumentLayout({
   languages,
   profile,
   onPart,
+  keyMark,
 }: {
   slug: string;
   layout: InstrumentLayoutId;
@@ -97,6 +98,8 @@ export function InstrumentLayout({
   languages: string[];
   profile: Profile;
   onPart?: (slide: number) => void;
+  /** Makes the key it's played in (SongKey) from that key. */
+  keyMark: (shown: string) => React.ReactNode;
 }) {
   const { t } = useTranslation();
   const played = playedKey(song.keySignature, serviceKey);
@@ -168,7 +171,7 @@ export function InstrumentLayout({
   const header = (
     <InstrumentHeader
       song={song}
-      shownKey={played.shown}
+      keyMark={keyMark(played.shown)}
       capo={capo}
       onCapo={setCapo}
       shapeKey={guitar ? shapeKey : null}
@@ -201,8 +204,9 @@ export function InstrumentLayout({
       <div className="flex flex-col gap-4">
         {header}
         {current && (
-          <PartBox active next={false} standalone>
-            <SlideView slide={{ ...withNotes(current), name: part(live) }} />
+          <PartBox active standalone>
+            <PartMark mark={labels[live] ?? ""} name={part(live)} />
+            <SlideView slide={{ ...withNotes(current), name: null }} />
             {notesOf(current)}
             {layout === "keys-concert" && (
               <p className="mt-2 text-lg">
@@ -221,7 +225,6 @@ export function InstrumentLayout({
         {upcoming && (
           <PartBox
             active={false}
-            next
             standalone
             onPress={onPart && (() => onPart(live + 1))}
             after={blocks(live + 1)}
@@ -270,15 +273,12 @@ export function InstrumentLayout({
             <PartBox
               key={i}
               active={i === live}
-              next={i === live + 1}
               onPress={onPart && (() => onPart(i))}
               after={blocks(i)}
             >
-              {/* On a phone the part's name goes above, so its bars have the width. */}
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-2">
-                <span className="shrink-0 font-semibold sm:w-24 sm:pt-2.5">
-                  {part(i)}
-                </span>
+              {/* The part's mark in the corner, so its bars have the width. */}
+              <PartMark mark={labels[i] ?? ""} name={part(i)} />
+              <div className="flex flex-col gap-1">
                 <div className="min-w-0 flex-1">{bars(i)}</div>
               </div>
               {notesOf(slide)}
@@ -307,10 +307,10 @@ export function InstrumentLayout({
             <PartBox
               key={i}
               active={i === live}
-              next={i === live + 1}
               onPress={onPart && (() => onPart(i))}
             >
-              <SlideView slide={{ ...withNotes(slide), name: part(i) }} />
+              <PartMark mark={labels[i] ?? ""} name={part(i)} />
+              <SlideView slide={{ ...withNotes(slide), name: null }} />
               {notesOf(slide)}
             </PartBox>
           ))}
@@ -330,7 +330,6 @@ export function InstrumentLayout({
               <PartBox
                 key={i}
                 active={i === live}
-                next={i === live + 1}
                 onPress={onPart && (() => onPart(i))}
                 after={blocks(i)}
               >
@@ -397,7 +396,7 @@ export function InstrumentLayout({
     <div className="flex flex-col gap-4">
       {header}
       {current && (
-        <PartBox active next={false} standalone>
+        <PartBox active standalone>
           <p className="font-semibold">{part(live)}</p>
           <div className="flex flex-wrap gap-3">
             {partBars(slides[live] as Slide).map((bar, j) => (
@@ -423,7 +422,6 @@ export function InstrumentLayout({
       {upcoming && (
         <PartBox
           active={false}
-          next
           standalone
           onPress={onPart && (() => onPart(live + 1))}
         >

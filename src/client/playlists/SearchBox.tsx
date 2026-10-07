@@ -1,3 +1,5 @@
+import { useBackCloses } from "../ui/back";
+import { TeamRecordingsMark } from "../songs/RecordingsMark";
 import {
   BookOpen,
   CornerDownRight,
@@ -114,6 +116,8 @@ export function SearchBox({
   const frame = useOptionsFrame();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  // Back closes the full-screen search, as leaving the box does.
+  useBackCloses(open, () => input.current?.blur());
   // While open, the box and its results cover the page; the box's
   // place keeps its height, so nothing moves when it comes back.
   const box = useRef<HTMLDivElement>(null);
@@ -498,6 +502,7 @@ function SongOption({ song, title }: { song: SongResult; title: string }) {
             {tag}
           </Chip>
         ))}
+        <TeamRecordingsMark plain songId={song.id} count={song.recordings} />
         {song.lastPlayedAt &&
           t("search.lastPlayed", {
             when: relativeTime(song.lastPlayedAt, new Date(), i18n.language),

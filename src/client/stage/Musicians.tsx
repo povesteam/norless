@@ -29,6 +29,7 @@ export function Musicians({
   },
   lookAhead = false,
   leader = false,
+  recordings = false,
 }: {
   slug: string;
   languages: string[];
@@ -41,6 +42,8 @@ export function Musicians({
   profile?: Profile;
   /** On a member's own device: earlier and later songs, privately. */
   lookAhead?: boolean;
+  /** For the team, with the recordings on: the song's recordings marked. */
+  recordings?: boolean;
 }) {
   const { t } = useTranslation();
   const live = useLiveView(slug);
@@ -61,6 +64,7 @@ export function Musicians({
           <Song
             slug={slug}
             leader={leader}
+            recordings={recordings}
             profile={profile}
             view={view}
             song={view.song}

@@ -10,7 +10,7 @@ import type { Key } from "../../shared/music/chords";
  */
 export function InstrumentHeader({
   song,
-  shownKey,
+  keyMark,
   capo,
   onCapo,
   shapeKey,
@@ -18,7 +18,8 @@ export function InstrumentHeader({
   onNumbers,
 }: {
   song: Song;
-  shownKey: string;
+  /** The key it's played in, with its icon (SongKey); null without one. */
+  keyMark: React.ReactNode;
   capo: number;
   onCapo: (capo: number) => void;
   /** The key of the shapes played, null when the capo doesn't show. */
@@ -30,12 +31,7 @@ export function InstrumentHeader({
   const { t } = useTranslation();
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-      {shownKey && (
-        // Key, time and tempo alike, each kept on one line.
-        <span className="text-lg font-semibold whitespace-nowrap">
-          {t("song.key", { key: shownKey })}
-        </span>
-      )}
+      {keyMark}
       {song.timeSignature && (
         <span className="text-lg font-semibold whitespace-nowrap">
           {t("song.time", { time: song.timeSignature })}

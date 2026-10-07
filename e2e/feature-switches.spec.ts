@@ -219,3 +219,23 @@ test("in Classic a song's page has no history; it comes with the Chords mode", a
     );
   }
 });
+
+// Last: everything stays on after it.
+test("the owner switches every feature on at once; What's new lists them", async ({
+  browser,
+}) => {
+  const owner = await as(browser, "ana@example.com");
+  await owner.goto("/functii/features");
+  owner.once("dialog", (dialog) => void dialog.accept());
+  await owner.getByRole("button", { name: "Switch all on" }).click();
+  await expect(
+    owner.getByRole("button", { name: "Switch all on" }),
+  ).toHaveCount(0);
+  await expect(
+    owner.getByRole("button", { name: /^Practice rooms, On/ }),
+  ).toBeVisible();
+
+  const team = await as(browser, "ioana@example.com");
+  await team.goto(playlist);
+  await expect(team.getByRole("button", { name: /^What's new/ })).toBeVisible();
+});

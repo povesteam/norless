@@ -46,7 +46,7 @@ test("a practice room runs beside the service: its slides don't touch the main s
   await logInAs(singer, "ana@example.com");
   await singer.goto(`/unu-unu/join/${room?.id}`);
   await singer.getByRole("button", { name: "Follow this room" }).click();
-  await singer.getByRole("link", { name: "Vocalists" }).click();
+  await singer.getByRole("link", { name: "Vocals" }).click();
   await expect(singer.getByText("Amazing grace how sweet")).toBeVisible();
   await expect(singer.getByText("Practice room")).toBeVisible();
 
@@ -83,6 +83,16 @@ test("on a laptop the team picks Controller, Running order or Big now and next",
     name: "What the projectors show",
   });
   await expect(previews.getByText("Amazing grace how sweet")).toBeVisible();
+  // The whole slide, as small as the card: its text inside it, not cut off.
+  const card = await previews.getByLabel("Projector RO").boundingBox();
+  const line = await previews
+    .getByLabel("Projector RO")
+    .getByText("Amazing grace how sweet")
+    .boundingBox();
+  expect(line?.x).toBeGreaterThanOrEqual(card?.x ?? 0);
+  expect((line?.x ?? 0) + (line?.width ?? 0)).toBeLessThanOrEqual(
+    (card?.x ?? 0) + (card?.width ?? 0),
+  );
 
   await pickLayout(page, "Running order");
   const order = page.getByRole("list", { name: "Running order" });

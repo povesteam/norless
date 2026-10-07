@@ -1,7 +1,16 @@
-import { Check, Laptop, LogIn, UserPlus } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  House,
+  Laptop,
+  LogIn,
+  MonitorSmartphone,
+  UserPlus,
+} from "lucide-react";
 import {
   Alert,
   Button,
+  buttonVariants,
   Description,
   Input,
   Label,
@@ -20,6 +29,9 @@ import {
 } from "../ui/states";
 
 type How = "me" | "laptop" | "guest";
+/** What was logged in, kept in the page's history entry: back to it later, it says so again
+ * instead of that its code ran out. */
+type Done = { how: How; guest?: string };
 
 /**
  * /login/device/<code>: where the QR code leads, on the phone of someone logged in: the
@@ -37,7 +49,10 @@ export function ApproveDevicePage({ code }: { code: string }) {
     teams.find((m) => m.community === pending.data?.community) ?? teams[0]
   )?.community;
   const [guest, setGuest] = useState("");
-  const [outcome, setOutcome] = useState<"done" | "failed" | null>(null);
+  const [done, setDone] = useState<Done | null>(
+    () => (history.state as { deviceLogin?: Done } | null)?.deviceLogin ?? null,
+  );
+  const [failed, setFailed] = useState(false);
   const [approve, approving] = usePending(async (how: How) => {
     if (!pending.data) return;
     const response = await send("POST", `/api/device-login/${code}/approve`, {
@@ -47,7 +62,14 @@ export function ApproveDevicePage({ code }: { code: string }) {
       ...(how === "guest" && { guest }),
       language: i18n.language,
     });
-    setOutcome(response?.ok ? "done" : "failed");
+    setFailed(!response?.ok);
+    if (!response?.ok) return;
+    const result: Done = { how, ...(how === "guest" && { guest }) };
+    history.replaceState(
+      { ...(history.state as object), deviceLogin: result },
+      "",
+    );
+    setDone(result);
   });
   if (me === undefined) return <Placeholder lines={3} />;
   if (!me.user || me.user.device)
@@ -63,13 +85,43 @@ export function ApproveDevicePage({ code }: { code: string }) {
   return (
     <div className="flex max-w-md flex-col items-start gap-4">
       <h2 className="text-2xl font-semibold">{t("deviceLogin.title")}</h2>
-      {outcome === "done" ? (
-        <Alert status="success">
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title>{t("deviceLogin.done")}</Alert.Title>
-          </Alert.Content>
-        </Alert>
+      {done ? (
+        <>
+          <Alert status="success">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>{t("deviceLogin.done")}</Alert.Title>
+              <Alert.Description>
+                {done.how === "guest"
+                  ? t("deviceLogin.doneGuest", { name: done.guest })
+                  : t(
+                      done.how === "me"
+                        ? "deviceLogin.doneMe"
+                        : "deviceLogin.doneLaptop",
+                    )}
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
+          {history.length > 1 ? (
+            <button
+              type="button"
+              className={buttonVariants()}
+              onClick={() => history.back()}
+            >
+              <ArrowLeft />
+              {t("deviceLogin.goBack")}
+            </button>
+          ) : (
+            <Link href="~/" className={buttonVariants()}>
+              <House />
+              {t("deviceLogin.home")}
+            </Link>
+          )}
+          <Link href="~/account#devices" className="link">
+            <MonitorSmartphone />
+            {t("deviceLogin.manage")}
+          </Link>
+        </>
       ) : pending.data === undefined ? (
         pending.failed ? (
           <ErrorNotice
@@ -87,9 +139,7 @@ export function ApproveDevicePage({ code }: { code: string }) {
           <p className="font-mono text-6xl font-semibold tabular-nums">
             {pending.data.number}
           </p>
-          {outcome === "failed" && (
-            <ErrorNotice message={t("states.actionFailed")} />
-          )}
+          {failed && <ErrorNotice message={t("states.actionFailed")} />}
           {/* On the team, the community's laptop is the main choice: a shared laptop needs it. */}
           <Choice
             help={t("deviceLogin.asMeHelp")}
@@ -126,7 +176,8 @@ export function ApproveDevicePage({ code }: { code: string }) {
                   maxLength={60}
                 >
                   <Label>{t("deviceLogin.guestName")}</Label>
-                  <Input />
+                  {/* A phone's keyboard starts each word of the name with a capital. */}
+                  <Input autoCapitalize="words" />
                   <Description>
                     {t("deviceLogin.asGuestHelp", {
                       name: me.user.displayName,

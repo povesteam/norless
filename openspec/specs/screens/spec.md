@@ -95,7 +95,7 @@ A broadcast overlay screen SHALL show the current slide as a lower third: at mos
 
 ### Requirement: Parts on stage screens
 
-Musicians, vocalists and stage monitor screens SHALL show the song as parts: each named section is a part, and each unnamed slide is its own part, numbered among the song's verses. Each part SHALL be shown whole, as one block, with its notes (`!` lines). Musicians and vocalists screens SHALL be dark by default, and a member SHALL be able to switch them to light per device type. The live part SHALL be framed in the live color (`app-shell` spec) and the next part only dashed in a neutral color, so the two never look alike in dark or light.
+Musicians, vocalists and stage monitor screens SHALL show the song as parts: each named section is a part, and each unnamed slide is its own part, numbered among the song's verses. Each part SHALL be shown whole, as one block, with its notes (`!` lines). Musicians and vocalists screens SHALL be dark by default, and a member SHALL be able to switch them to light per device type. The live part SHALL be framed in the live color (`app-shell` spec), and the next part SHALL have no mark of its own, so the eye stays on the live part in dark or light.
 
 #### Scenario: Unnamed verses
 - **WHEN** a song has a refrain named `R` and three unnamed verse slides
@@ -104,7 +104,7 @@ Musicians, vocalists and stage monitor screens SHALL show the song as parts: eac
 ### Requirement: Musicians layouts
 
 A musicians screen, or a member opening the musicians view on their own device, SHALL be able to use these layouts, as described in `app-shell` (Layouts):
-- **Bar grid** (the default): the whole song as rows of bars, one row per part in the song's order, the live part highlighted and the next one marked. A part whose chord lines have bar lines SHALL show one box per bar; a part without them SHALL show one box per chord. A part's boxes SHALL sit on one line when they fit; else a row per chord line when the longest fits, else 2, 3 or 4 rows of equal length; their columns SHALL line up, so bars align from row to row. The chords of a bar SHALL share its box by their beats, equally until the Chords mode sets them.
+- **Bar grid** (the default): the whole song as rows of bars, one row per part in the song's order, the live part highlighted. A part whose chord lines have bar lines SHALL show one box per bar; a part without them SHALL show one box per chord. A part's boxes SHALL sit on one line when they fit; else a row per chord line when the longest fits, else 2, 3 or 4 rows of equal length; their columns SHALL line up, so bars align from row to row. The chords of a bar SHALL share its box by their beats, equally until the Chords mode sets them.
 - **Chords over words**: the live part with chords above the lyrics, and the next part as chords only
 
 Both SHALL show the key and the time signature. A song without chords SHALL show its parts' lyrics, the key and the structure instead, and SHALL invite members who may add chords to add them. For members who can control live, both SHALL keep previous and next visible, and a tap on a part SHALL send it live.
@@ -128,11 +128,11 @@ Both SHALL show the key and the time signature. A song without chords SHALL show
 ### Requirement: Vocalists layouts
 
 A vocalists screen, or a member opening the vocalists view on their own device, SHALL be able to use these layouts:
-- **Whole song**: every part in the song's order, scrolling by itself to keep the live part in view, the next part marked, and a map of the parts along the edge
+- **Whole song**: every part in the song's order, scrolling by itself to keep the live part in view, and a map of the parts along the edge
 - **Sideways**: for a phone on a microphone stand, the live part on the left and the whole next part on the right; held upright, the next part under the live part
 - **Tablet**: every part in two columns, in one or both languages, and the next song's title and first line at the bottom
 
-The text SHALL be in the member's language by default, with a switch for each of the community's languages and for both. Lines too long for the width SHALL wrap, never be cut off. For members who can control live, every layout SHALL keep previous and next visible, and a tap on a part SHALL send it live. A tap that starts a scroll SHALL NOT count.
+The text SHALL be in the member's language by default, with one button showing the shown language's flag, or a globe for all of them, that opens the choice of each of the community's languages or all. Lines too long for the width SHALL wrap, never be cut off. In Whole song the live part SHALL be larger than the others only as far as its longest line still fits the width, so enlarging never wraps a line. For members who can control live, every layout SHALL keep previous and next visible, and a tap on a part SHALL send it live. A tap that starts a scroll SHALL NOT count. A swipe to the left or right SHALL go to the next or previous part in Sideways and song in Whole song, and a tap or a drag over Whole song's map of the parts SHALL go to the part under the finger: live for members who can control it, and otherwise on their own device only (Sideways back to live when the live part moves, Whole song as looking ahead).
 
 #### Scenario: The laptop falls behind
 - **WHEN** the band starts verse 2 and the projector still shows the refrain
@@ -183,14 +183,14 @@ In browsers that support choosing a display (Chromium: Chrome, Edge), the operat
 
 ### Requirement: Message to the stage
 
-A controller SHALL be able to send a short message to the stage, either one of the presets ("5 minutes", "Wrap up", "Time") with one tap, or a short text, e.g. "refrain once more". It SHALL show on the stage monitors, and in the musicians and vocalists views, on their devices and screens, on its own line above the song, which moves down under it rather than being covered. The message SHALL stay visible until the controller clears it, and it SHALL NOT appear on projector screens or the broadcast overlay.
+A controller SHALL be able to send a short message to the stage, a short text, e.g. "refrain once more" or "5 minutes", typed in the box beside the live controls; there are no presets. It SHALL show on the stage monitors, and in the musicians and vocalists views, on their devices and screens, on its own line above the song, which moves down under it rather than being covered. The message SHALL stay visible until the controller clears it, and it SHALL NOT appear on projector screens or the broadcast overlay.
 
 #### Scenario: Repeat the refrain
 - **WHEN** the operator sends "refrain once more" to the stage
 - **THEN** the stage monitors and the musicians' tablets show the message, and the projector doesn't
 
 #### Scenario: Time for the preacher
-- **WHEN** the operator taps "5 minutes" during the sermon
+- **WHEN** the operator types "5 minutes" and Enter during the sermon
 - **THEN** the stage monitor shows "5 minutes" next to the countdown
 
 #### Scenario: The message doesn't cover the song
@@ -229,7 +229,7 @@ The operator's main view SHALL show a small preview of what each language's proj
 
 ### Requirement: Look ahead
 
-On a member's own device, the musicians and vocalists views SHALL offer Earlier song and Later song, which show the live playlist's songs before and after the one shown, on that device only, without changing what's live. While another song is shown, the view SHALL say which, and offer Back to live; when the live song changes, the view SHALL go back to live by itself. A part of a song looked at SHALL NOT go live when tapped. Screens SHALL always show the live song.
+On a member's own device, the musicians and vocalists views SHALL offer Earlier song and Later song (except the vocalists' Sideways layout, which keeps its room for the part), which show the live playlist's songs before and after the one shown, on that device only, without changing what's live. While another song is shown, the view SHALL say which, and offer Back to live; when the live song changes, the view SHALL go back to live by itself. A part of a song looked at SHALL NOT go live when tapped. Screens SHALL always show the live song.
 
 #### Scenario: Reading the next song during the sermon
 - **WHEN** a guitarist presses Later song while the sermon is live
@@ -294,3 +294,27 @@ The projector, the stage monitor, and the musicians and vocalists screens SHALL 
 #### Scenario: A long line on the projector
 - **WHEN** a slide's longest line fills the projector's width
 - **THEN** it ends 5% of the width before the right edge
+
+### Requirement: Stage view names
+
+The interface SHALL name the musicians view Instruments and the vocalists view Vocals, in the menus, the bar, the screens' types and wherever it names them, since singers are musicians too; their addresses stay `/musicians` and `/vocalists`.
+
+#### Scenario: The bar's stage pages
+- **WHEN** a singer opens the community's menu with the stage views switched on
+- **THEN** it lists Instruments, Vocals and Stage monitor
+
+### Requirement: Between the playlist and one's stage view
+
+On a phone, the playlist's bar SHALL have a button to the stage view of what the person plays (Vocals for singers, Instruments for the others), while the stage views are switched on and the person chose what they play; the Vocals and Instruments toolbars SHALL start with a button back to the playlist, as big as the toolbar's other buttons.
+
+#### Scenario: A singer during the service
+- **WHEN** a singer on a phone looks at the playlist, taps Vocals in its bar, then the playlist button in the toolbar
+- **THEN** they are in the Vocals view, then back at the playlist, without opening the menu
+
+### Requirement: Part marks
+
+A song's parts SHALL be marked by a faint 1, 2, 3 or R (as the map of the parts writes them) in the top corner of their box, instead of "Verse 1" or "Refrain" on a line of their own: on the playlist's slide cards and in the Vocals and Instruments views. The part's name SHALL still be read out. Maps and charts of the parts keep their labels.
+
+#### Scenario: A phone shows more of the song
+- **WHEN** a singer opens a song's slides on a phone
+- **THEN** each card starts with its first line, and a faint 1, 2 or R sits in its corner

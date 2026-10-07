@@ -44,7 +44,14 @@ test.describe("with a mouse", () => {
     await expect(page.getByRole("button", { name: "Add here" })).toHaveCount(0);
 
     await openGapAbove(page, 1);
-    await page.getByRole("menuitem", { name: "Song here" }).click();
+    // The + sits in the rows' column of icons, at the left.
+    const row = await rows(page).nth(1).boundingBox();
+    const plus = await page
+      .getByRole("button", { name: "Add here" })
+      .first()
+      .boundingBox();
+    expect((plus?.x ?? 0) - (row?.x ?? 0)).toBeLessThan(48);
+    await page.getByRole("menuitem", { name: "Song", exact: true }).click();
     // The search box says where the pick lands.
     await expect(search(page)).toBeFocused();
     await expect(page.getByText("After “Început”")).toBeVisible();
@@ -58,7 +65,7 @@ test.describe("with a mouse", () => {
     await expect(page.getByText("After “Început”")).toHaveCount(0);
 
     await openGapAbove(page, 1);
-    await page.getByRole("menuitem", { name: "Divider here" }).click();
+    await page.getByRole("menuitem", { name: "Divider", exact: true }).click();
     const divider = page.getByRole("dialog", { name: "Add divider" });
     await divider.getByRole("textbox", { name: "Heading" }).fill("Rugăciune");
     await divider.getByRole("button", { name: "Save" }).click();
@@ -71,7 +78,9 @@ test.describe("with a mouse", () => {
     ]);
 
     await openGapAbove(page, 3);
-    await page.getByRole("menuitem", { name: "Text slide here" }).click();
+    await page
+      .getByRole("menuitem", { name: "Text slide", exact: true })
+      .click();
     const text = page.getByRole("dialog", { name: "Text slide" });
     await text.getByLabel("Text (Markdown)").fill("Anunțuri");
     await text.getByRole("button", { name: "Save" }).click();
@@ -90,13 +99,13 @@ test.describe("with a mouse", () => {
   }) => {
     await openTwoDividers(page, "Pasaj între rânduri");
     await openGapAbove(page, 1);
-    await page.getByRole("menuitem", { name: "Song here" }).click();
+    await page.getByRole("menuitem", { name: "Song", exact: true }).click();
     await page.keyboard.type("ioan 3:16");
     await page.getByRole("option", { name: /^John 3:16/ }).click();
     await expect(rows(page)).toHaveText([/Început/, /John 3:16/, /Sfârșit/]);
 
     await openGapAbove(page, 1);
-    await page.getByRole("menuitem", { name: "Song here" }).click();
+    await page.getByRole("menuitem", { name: "Song", exact: true }).click();
     await page.keyboard.type("Pauză");
     await page
       .getByRole("option", { name: "Add “Pauză” as a divider" })
@@ -109,13 +118,13 @@ test.describe("with a mouse", () => {
     ]);
 
     await openGapAbove(page, 1);
-    await page.getByRole("menuitem", { name: "Song here" }).click();
+    await page.getByRole("menuitem", { name: "Song", exact: true }).click();
     await expect(page.getByText("After “Început”")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByText("After “Început”")).toHaveCount(0);
 
     await openGapAbove(page, 2);
-    await page.getByRole("menuitem", { name: "Song here" }).click();
+    await page.getByRole("menuitem", { name: "Song", exact: true }).click();
     await expect(page.getByText("After “Pauză”")).toBeVisible();
     // With the mouse, while the list (which hides what's around it) is open.
     await page
