@@ -203,3 +203,22 @@ test.describe("the open search takes over the screen, above the live bar", () =>
     });
   });
 });
+
+test("on a wide window, the results keep their width when the preview's code comes late", async ({
+  page,
+}) => {
+  // The preview's code arrives after the results, as on a slow network.
+  await page.route("**/SearchPreview-*.js", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await route.continue();
+  });
+  await page.getByRole("combobox", { name: "Search songs" }).fill("har min");
+  const results = page.getByRole("listbox", { name: "Suggestions" });
+  await expect(page.getByRole("option", { name: /Har minunat/ })).toBeVisible();
+  const before = (await results.boundingBox())?.width;
+  // The highlighted song's words beside them, once the code is there.
+  await expect(
+    page.getByRole("heading", { name: "Har minunat" }),
+  ).toBeVisible();
+  expect((await results.boundingBox())?.width).toBe(before);
+});

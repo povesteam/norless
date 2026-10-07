@@ -12,7 +12,13 @@ import { Placeholder } from "../ui/states";
  * Beside the search's results on a wide window: the highlighted
  * song's words, in the viewer's language if the song has it, to check it's the right one.
  */
-export default function SearchPreview({ songs }: { songs: string[] }) {
+export default function SearchPreview({
+  songs,
+  className,
+}: {
+  songs: string[];
+  className: string;
+}) {
   const { i18n } = useTranslation();
   const community = useCommunity();
   const focused = useContext(ComboBoxStateContext)?.selectionManager.focusedKey;
@@ -24,10 +30,7 @@ export default function SearchPreview({ songs }: { songs: string[] }) {
     .map((language) => song?.versions.find((v) => v.language === language))
     .find(Boolean);
   return (
-    <section
-      aria-label={version?.title}
-      className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-separator p-4"
-    >
+    <section aria-label={version?.title} className={className}>
       {!id ? null : song?.id !== id ? (
         <Placeholder lines={6} />
       ) : (

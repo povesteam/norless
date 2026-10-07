@@ -53,6 +53,12 @@ type Kind = SearchResult["type"];
 
 // Only wide windows show it, so others don't load the song views.
 const SearchPreview = lazy(() => import("./SearchPreview"));
+/**
+ * The preview's frame, also while its code loads: arriving later, it narrowed the results
+ * under the pointer, and a click that began on one layout ended on another.
+ */
+const previewFrame =
+  "min-h-0 flex-1 overflow-y-auto rounded-xl border border-separator p-4";
 
 /** Something the search box can do instead of finding, e.g. "blank" or "bridge". */
 export type Command = {
@@ -379,8 +385,9 @@ export function SearchBox({
               }
             </ListBox>
             {open && wide && (
-              <Suspense fallback={null}>
+              <Suspense fallback={<div className={previewFrame} />}>
                 <SearchPreview
+                  className={previewFrame}
                   songs={results.flatMap((r) =>
                     r.result?.type === "song" ? [r.id] : [],
                   )}
