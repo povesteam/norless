@@ -404,7 +404,9 @@ function CommunityHome() {
       // The playlist's own, which comes next.
       <Placeholder lines={8} />
     );
-  if (first) return null;
+  // Until it knows who this is and opens the playlist: the same placeholder, so a
+  // slow network shows no blank between it and the playlist's own.
+  if (first) return <Placeholder lines={8} />;
   return (
     <div className="flex flex-col gap-4">
       <SearchBox
