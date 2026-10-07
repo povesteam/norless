@@ -17,6 +17,8 @@ export default defineConfig({
     // Moments show in the viewer's time zone: the seeded communities' own, whatever the machine's.
     timezoneId: "Europe/Bucharest",
     serviceWorkers: "block",
+    // A test that fails on CI is traced on its retry, and CI keeps the traces.
+    trace: "on-first-retry",
   },
   projects: [
     {

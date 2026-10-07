@@ -284,6 +284,11 @@ test.describe("the team", () => {
     await expect(
       page.getByRole("button", { name: "Seara de rugăciune" }),
     ).toHaveCount(0);
+    // The closed menu takes its history entry back off; a goto before that back
+    // comes is aborted by it.
+    await page.waitForFunction(
+      () => !(history.state as { back?: string } | null)?.back,
+    );
     await page.goto("/unu-unu/playlists");
     const link = page.getByRole("link", { name: /Seara de rugăciune/ });
     await expect(link).toHaveCount(0);

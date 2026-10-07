@@ -85,3 +85,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       # The e2e run builds and starts the converter's image.
       - run: npm run e2e -- ${{ matrix.tests }}
+      # The failed tests' traces, to open with `npx playwright show-trace`.
+      - if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: traces-${{ strategy.job-index }}
+          path: test-results/**/trace.zip
+          retention-days: 7

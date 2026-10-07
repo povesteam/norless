@@ -234,8 +234,10 @@ test.describe("on a phone", () => {
     // Classic's menu fills the screen too.
     await page.goto("/clasic");
     await page.getByRole("button", { name: "Menu" }).click();
-    expect((await page.getByRole("dialog").boundingBox())?.width).toBe(
+    // Linux draws it a hair wider than the viewport: 412.0000019.
+    expect((await page.getByRole("dialog").boundingBox())?.width).toBeCloseTo(
       viewport.width,
+      0,
     );
     expect(await held()).toBe("hidden");
   });
