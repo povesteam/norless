@@ -72,9 +72,9 @@ export const extras: View[] = [
       const contexts = await Promise.all(
         (
           [
-            [musician, sizes.phone, "musicians"],
-            [singer, sizes.phone, "vocalists"],
-            [editor, sizes.tablet, "musicians"],
+            [musician, sizes.phone, "instruments"],
+            [singer, sizes.phone, "vocals"],
+            [editor, sizes.tablet, "instruments"],
           ] as const
         ).map(async ([email, size, view]) => {
           const context = await browser.newContext({
