@@ -407,7 +407,9 @@ function useOpensBy(
   const onButton = (target: EventTarget) =>
     !!(target as Element).closest("button, a, input");
   return {
-    className: "cursor-pointer touch-none",
+    // Unselectable: a drag that selected the title would make the next drag one of the
+    // selected text, which cancels the pointer events.
+    className: "cursor-pointer touch-none select-none",
     onClick: (event: React.MouseEvent) => {
       if (dragged.current) dragged.current = false;
       else if (!onButton(event.target)) toggle();

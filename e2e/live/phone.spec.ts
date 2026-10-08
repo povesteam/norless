@@ -90,6 +90,8 @@ test.describe("on a phone", () => {
     await expect(parts).toHaveCount(0);
     await drag(-40);
     await expect(parts).toBeVisible();
+    // A drag selects nothing: the next would drag the selected text instead.
+    expect(await page.evaluate(() => getSelection()?.toString())).toBe("");
     await drag(40);
     await expect(parts).toHaveCount(0);
   });
