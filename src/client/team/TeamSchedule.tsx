@@ -32,7 +32,8 @@ import {
   usePending,
 } from "../ui/states";
 import { tables, useWhen } from "./schedule";
-import { SlotRow } from "./SlotRow";
+import { SlotRow, Who } from "./SlotRow";
+import { PersonAvatar } from "../ui/NameAvatar";
 
 /**
  * /<community>/team-schedule: who does what in the coming services
@@ -85,7 +86,9 @@ export function TeamSchedulePage() {
           />
         ))
       )}
-      {team && data.events.length > 0 && <Templates schedule={data} />}
+      {team && data.events.length > 0 && (
+        <Templates schedule={data} owner={hasRole(roles, "owner")} />
+      )}
       {team && <RolePeople schedule={data} />}
       {/* Last, so what's above doesn't move when it arrives. */}
       <ChurchCalendar />
@@ -198,8 +201,17 @@ function DateCard({
   );
 }
 
-/** For the team: the slots each weekly event's dates start with. */
-function Templates({ schedule }: { schedule: TeamSchedule }) {
+/**
+ * For the team: the slots each weekly event's dates start with; the events themselves
+ * are the community's schedule, in Settings, where owners are led.
+ */
+function Templates({
+  schedule,
+  owner,
+}: {
+  schedule: TeamSchedule;
+  owner: boolean;
+}) {
   const { t } = useTranslation();
   const { slug } = useCommunity();
   return (
@@ -208,6 +220,14 @@ function Templates({ schedule }: { schedule: TeamSchedule }) {
         {t("team.templates")}
       </h3>
       <p className="text-sm text-muted">{t("team.templatesHelp")}</p>
+      {owner ? (
+        <Link href="/settings/schedule" className="link self-start">
+          <CalendarDays />
+          {t("team.eventsInSettings")}
+        </Link>
+      ) : (
+        <p className="text-sm text-muted">{t("team.eventsByOwners")}</p>
+      )}
       {schedule.events.map((e) => (
         <Template key={e.id} slug={slug} event={e} roles={schedule.roles} />
       ))}
@@ -292,8 +312,7 @@ function RolePeople({ schedule }: { schedule: TeamSchedule }) {
   const [editing, setEditing] = useState<Role | null>(null);
   const [chosen, setChosen] = useState<string[]>([]);
   const [failed, setFailed] = useState(false);
-  const name = (id: string) =>
-    schedule.people.find((p) => p.id === id)?.name ?? "";
+  const person = (id: string) => schedule.people.find((p) => p.id === id);
   return (
     <section aria-labelledby="people-title" className="flex flex-col gap-3">
       <h3 id="people-title" className="text-xl font-semibold">
@@ -304,8 +323,10 @@ function RolePeople({ schedule }: { schedule: TeamSchedule }) {
         {schedule.roles.map((r) => (
           <li key={r.id} className="flex flex-wrap items-center gap-2">
             <span className="w-32 shrink-0 font-medium">{r.name}</span>
-            <span className="min-w-0 flex-1 text-sm">
-              {r.people.map(name).join(", ") || t("team.nobody")}
+            <span className="flex min-w-0 flex-1 flex-wrap gap-x-4 gap-y-1 text-sm">
+              {r.people.length > 0
+                ? r.people.map((id) => <Who key={id} person={person(id)} />)
+                : t("team.nobody")}
             </span>
             <Button
               size="sm"
@@ -347,7 +368,14 @@ function RolePeople({ schedule }: { schedule: TeamSchedule }) {
                       <Checkbox.Control>
                         <Checkbox.Indicator />
                       </Checkbox.Control>
-                      <Checkbox.Content>
+                      <Checkbox.Content className="flex items-center gap-2">
+                        <span aria-hidden className="flex shrink-0">
+                          <PersonAvatar
+                            name={p.name}
+                            avatar={p.avatar}
+                            className="size-6 shrink-0"
+                          />
+                        </span>
                         <Label>{p.name}</Label>
                       </Checkbox.Content>
                     </Checkbox>

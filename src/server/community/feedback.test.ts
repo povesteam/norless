@@ -62,7 +62,7 @@ const call = (
   });
 const idea = (text: string) => ({
   text,
-  page: "/unu-unu/vocalists",
+  page: "/unu-unu/vocals",
   deviceType: "phone",
   language: "en",
 });
@@ -88,14 +88,14 @@ test("a member's idea is kept and emailed to the owners, who can reply to the se
       replyTo: "ana@example.com",
     },
   ]);
-  expect(mails[0]?.text).toContain("https://norless.com/unu-unu/vocalists");
+  expect(mails[0]?.text).toContain("https://norless.com/unu-unu/vocals");
 
   const list = (await call("pavel", "GET", "")).json<Feedback[]>();
   expect(list).toMatchObject([
     {
       text: "Could the vocalists view show the next key?",
       from: "Ana",
-      page: "/unu-unu/vocalists",
+      page: "/unu-unu/vocals",
       deviceType: "phone",
       archivedAt: null,
     },

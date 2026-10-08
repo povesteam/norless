@@ -28,7 +28,7 @@ import { Vocalists, type VocalistsLayout } from "../stage/Vocalists";
 import { DeviceIcon, LanguageMark } from "../ui/icons";
 import { clock } from "../ui/time";
 import { tierOf } from "./big-screen";
-import { EntryParts } from "./ControllerViews";
+import { EntryParts } from "./EntryParts";
 import { OnlineMembers } from "./OnlineMembers";
 import { StageMessage } from "./StageMessage";
 

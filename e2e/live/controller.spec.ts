@@ -132,12 +132,16 @@ test("in Classic, an empty playlist disables the live buttons and offers songs n
   await page.goto(`/unu-unu/playlists/${(body as { id: string }).id}`);
   for (const name of ["Blank", "Previous", "Next"])
     await expect(page.getByRole("button", { name })).toBeDisabled();
-  const lately = page.getByRole("list", { name: "Not played lately" });
+  const lately = page.getByRole("list", { name: "Bring it back" });
   await lately.getByRole("button", { name: /Isus e Domn/ }).click();
   await expect(rows(page)).toHaveCount(1);
   await expect(rows(page).first()).toContainText("Isus e Domn");
   await expect(page.getByRole("button", { name: "Next" })).toBeEnabled();
-  await expect(lately).toHaveCount(0);
+  // The added song isn't selected, so the list stays for the next one, without it.
+  await expect(rows(page).first()).toHaveAttribute("aria-selected", "false");
+  await expect(lately.getByRole("button", { name: /Isus e Domn/ })).toHaveCount(
+    0,
+  );
   await pickLayout(page, "Controller");
 });
 
@@ -246,4 +250,33 @@ test("in Controller, the previews keep their column while the next song loads", 
   expect(await previews.boundingBox()).toEqual(before);
   await expect(page.getByRole("list", { name: "Slides" })).toBeVisible();
   expect(await previews.boundingBox()).toEqual(before);
+});
+
+test("in Controller, Left into the song before brings its last part into view once its words load", async ({
+  page,
+}) => {
+  // A laptop with a short window, so the parts scroll.
+  await page.addInitScript(() =>
+    localStorage.setItem("norless:device-type", "laptop"),
+  );
+  await page.setViewportSize({ width: 1280, height: 400 });
+  await logInAs(page, "ioana@example.com");
+  const id = await servicePlaylist(page);
+  await page.goto(`/unu-unu/playlists/${id}`);
+  await pickLayout(page, "Controller");
+  await rows(page).filter({ hasText: "Isus e Domn" }).dblclick();
+  await expect(rows(page).filter({ hasText: "Isus e Domn" })).toContainText(
+    "Live",
+  );
+  // The song before's words come late, as on a slow network.
+  await page.route("**/api/communities/unu-unu/songs/grace", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    await route.continue();
+  });
+  await page.mouse.click(5, 5);
+  await page.keyboard.press("ArrowLeft");
+  // Its last part, live.
+  const live = page.locator('[aria-current="true"]', { hasText: "Amin" });
+  await expect(live).toBeVisible();
+  await expect(live).toBeInViewport();
 });

@@ -117,7 +117,7 @@ test("screens and stage views are dark from the first paint, in a light room's s
     await expect(page.locator("#shell")).toBeHidden();
   }
   // The musicians on their own phones get the placeholder, dark.
-  await page.goto("/unu-unu/musicians");
+  await page.goto("/unu-unu/instruments");
   await expect(html).toHaveCSS("background-color", "rgb(0, 0, 0)");
   await expect(page.locator("#shell")).toHaveCSS("opacity", "1");
   // A paired screen loads in what it showed last: an overlay, transparent for OBS.

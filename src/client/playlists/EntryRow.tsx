@@ -1,6 +1,6 @@
 import { Button, Chip, Link as HeroLink } from "@heroui/react";
 import { TeamRecordingsMark } from "../songs/RecordingsMark";
-import { Ellipsis, ExternalLink } from "lucide-react";
+import { Ellipsis, ExternalLink, History, Radio } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Entry } from "../../server/playlists/playlists";
 import type { Problem } from "../../server/playlists/problems";
@@ -12,6 +12,7 @@ import { EntryIcon } from "../ui/icons";
 import { EntryProblems } from "./problems";
 import { useDuration } from "./TextEntryEditor";
 import { SlidesChips, SlidesThumb } from "./SlideFiles";
+import { relativeTime } from "../ui/time";
 
 /** The plain title of an entry, for typing to find it and for screen readers. */
 export const entryTitle = (entry: Entry, languages: string[]) =>
@@ -36,6 +37,7 @@ export function EntryRow({
   onMenu,
   menuButton = false,
   passed = false,
+  lastPlayed = false,
 }: {
   entry: Entry;
   /** Who leads it. */
@@ -51,10 +53,12 @@ export function EntryRow({
   movingBy?: string;
   /** Opens its actions at a point: the pointer's, for a right-click. */
   onMenu?: (x: number, y: number) => void;
-  /** Before the live entry, or the live one while blank: muted. */
+  /** Before the live entry, or the live one while blank: half see-through. */
   passed?: boolean;
   /** On touch screens, a "⋯" button opens them instead of a right-click. */
   menuButton?: boolean;
+  /** While the playlist is prepared: when its song was last sung in a service. */
+  lastPlayed?: boolean;
 }) {
   const { t, i18n } = useTranslation();
   const community = useCommunity();
@@ -62,6 +66,7 @@ export function EntryRow({
   const duration = useDuration();
   const languages = [i18n.language, ...community.languages];
   const { song, bible } = entry;
+  const ago = (iso: string) => relativeTime(iso, new Date(), i18n.language);
   const link =
     bible &&
     (bibleLink(
@@ -122,6 +127,16 @@ export function EntryRow({
         {song.timeSignature}
       </Chip>
     ),
+    // Before the tags, which the line's fade cuts first.
+    lastPlayed && song?.lastPlayedAt && (
+      <span key="last" className="flex items-center gap-1 text-xs text-muted">
+        <History aria-hidden className="size-3.5" />
+        <span className="sr-only">
+          {t("search.lastPlayed", { when: ago(song.lastPlayedAt) })}
+        </span>
+        <span aria-hidden>{ago(song.lastPlayedAt)}</span>
+      </span>
+    ),
     ...(song?.tags.map((tag) => (
       <Chip key={`tag-${tag}`} size="sm" variant="soft">
         {tag}
@@ -155,7 +170,7 @@ export function EntryRow({
             }
           : undefined
       }
-      className={`flex items-center gap-3 px-3 ${
+      className={`flex items-center gap-3 px-3 ${passed ? "opacity-50" : ""} ${
         twoLines
           ? "h-18"
           : entry.kind === "divider"
@@ -167,9 +182,7 @@ export function EntryRow({
         <EntryIcon kind={entry.kind} className="size-6 shrink-0 text-muted" />
       )}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <div
-          className={`flex min-w-0 items-center gap-2 ${passed ? "text-muted" : ""}`}
-        >
+        <div className="flex min-w-0 items-center gap-2">
           {song ? (
             // Not a link: a click selects the row, and its slides show beside it.
             <span className="truncate">{titleFor(song.titles, languages)}</span>
@@ -183,7 +196,7 @@ export function EntryRow({
             <span className="truncate">{firstLine(entry.text ?? "")}</span>
           )}
           <EntryProblems problems={problems} />
-          {isLive && <span className="sr-only">{t("live.live")}</span>}
+
           {link && (
             // A chip like the key and tags, so it doesn't read as the title's end.
             <Chip size="sm" variant="soft" className="shrink-0">
@@ -199,6 +212,18 @@ export function EntryRow({
             </Chip>
           )}
           {!twoLines && details}
+          {/* At the line's end; every row keeps its room, so going live moves nothing.
+            Drawn from an attribute, so only the live row's text says Live. */}
+          {isLive && <span className="sr-only">{t("live.live")}</span>}
+          <span
+            aria-hidden
+            data-live={t("live.live")}
+            className={`ms-auto flex shrink-0 items-center gap-1 text-xs font-semibold after:content-[attr(data-live)] ${
+              isLive ? "" : "invisible"
+            }`}
+          >
+            <Radio className="size-3.5 text-live" />
+          </span>
         </div>
         {twoLines && (
           // One line, fading out at its end rather than cutting a chip in half.
@@ -224,6 +249,21 @@ export function EntryRow({
           <Ellipsis />
         </Button>
       )}
+    </div>
+  );
+}
+
+/** What follows the pointer while an entry is dragged: its icon and title on a card. */
+export function DragPreview({ entry }: { entry: Entry | undefined }) {
+  const { i18n } = useTranslation();
+  const { languages } = useCommunity();
+  if (!entry) return null;
+  return (
+    <div className="flex w-80 items-center gap-3 rounded-xl border border-separator bg-background px-3 py-3 shadow-lg">
+      <EntryIcon kind={entry.kind} className="size-6 shrink-0 text-muted" />
+      <span className="truncate">
+        {entryTitle(entry, [i18n.language, ...languages])}
+      </span>
     </div>
   );
 }

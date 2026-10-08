@@ -20,6 +20,7 @@ import {
   createPlaylist,
   changePlaylist,
 } from "./playlists.js";
+import { changePlaylistDate } from "./playlist-date.js";
 
 // Empty or left out: no title, the date names it.
 const titleSchema = {
@@ -176,6 +177,31 @@ export function attachPlaylists(
       if (!who) return reply;
       const title = request.body.title?.trim() || null;
       if (!changePlaylist(db, request.params.id, { title }, who))
+        return notFound(reply);
+      changed(request.params.slug, request.params.id, true);
+      return reply.code(204).send();
+    },
+  );
+
+  // Another day, e.g. for a service that moved.
+  app.put<{ Params: Params; Body: { date: string } }>(
+    "/api/communities/:slug/playlists/:id/date",
+    {
+      schema: {
+        body: {
+          type: "object",
+          required: ["date"],
+          additionalProperties: false,
+          properties: {
+            date: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const who = authorize(request, reply);
+      if (!who) return reply;
+      if (!changePlaylistDate(db, request.params.id, request.body.date, who))
         return notFound(reply);
       changed(request.params.slug, request.params.id, true);
       return reply.code(204).send();

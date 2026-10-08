@@ -14,7 +14,7 @@ const base = "/api/communities/notatie";
 
 /** The musicians view in a layout; Radu's choice is kept from other tests. */
 async function musiciansIn(page: Page, layout: string) {
-  await page.goto("/notatie/musicians");
+  await page.goto("/notatie/instruments");
   await pickLayout(page, layout);
 }
 

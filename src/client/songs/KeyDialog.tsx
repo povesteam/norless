@@ -1,6 +1,6 @@
 import { ArrowUpDown, Pin, Save, Undo2, X } from "lucide-react";
 import { Alert, Button, Modal } from "@heroui/react";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Label as AriaLabel, Radio, RadioGroup } from "react-aria-components";
 import { useTranslation } from "react-i18next";
 import type { Entry } from "../../server/playlists/playlists";
@@ -106,7 +106,8 @@ export async function changeSongKey(
 /**
  * The keys on a wheel: a strip that scrolls sideways and snaps the key under its middle,
  * the song's key in the middle and each key with how far it moves (+2, −3). A tap, the
- * arrow keys or a swipe chooses; the chosen key comes to the middle.
+ * arrow keys, a swipe or a drag with the mouse chooses; the chosen key glides to the
+ * middle. Only the strip moves, never the dialog or the page.
  */
 function KeyWheel({
   songKey,
@@ -124,21 +125,30 @@ function KeyWheel({
     ? keysFor(from).sort((a, b) => halfSteps(from, a) - halfSteps(from, b))
     : keysFor(null);
   const strip = useRef<HTMLDivElement>(null);
-  // The chosen key comes to the middle.
-  useEffect(() => {
-    strip.current?.querySelector("[data-selected]")?.scrollIntoView({
-      inline: "center",
-      block: "nearest",
-      behavior: "smooth",
+  // Where the strip's middle is on the chosen key.
+  const centered = () => {
+    const box = strip.current;
+    const item = box?.querySelector<HTMLElement>("[data-selected]");
+    return box && item
+      ? item.offsetLeft + item.offsetWidth / 2 - box.clientWidth / 2
+      : 0;
+  };
+  // Opened on the chosen key at once; later choices glide there.
+  const opened = useRef(false);
+  useLayoutEffect(() => {
+    strip.current?.scrollTo({
+      left: centered(),
+      behavior: opened.current ? "smooth" : "instant",
     });
+    opened.current = true;
   }, [value]);
-  // A swipe that stops chooses the key under the middle.
+  // A swipe or a drag that stops chooses the key under the middle.
   const settle = useRef<ReturnType<typeof setTimeout>>(undefined);
   const onScroll = () => {
     clearTimeout(settle.current);
     settle.current = setTimeout(() => {
       const box = strip.current;
-      if (!box) return;
+      if (!box || drag.current) return;
       const middle = box.getBoundingClientRect().left + box.clientWidth / 2;
       let nearest: HTMLElement | undefined;
       let distance = Infinity;
@@ -149,12 +159,19 @@ function KeyWheel({
       }
       const key = nearest?.dataset.key;
       if (key && key !== value) onChange(key);
+      // Already chosen: back to its middle.
+      else box.scrollTo({ left: centered(), behavior: "smooth" });
     }, 150);
   };
+  // A mouse drags the strip as a finger does; a drag isn't a tap on the key under it.
+  const drag = useRef<{ x: number; left: number; moved: boolean } | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const dragged = useRef(false);
   return (
     <RadioGroup
       value={value}
-      onChange={onChange}
+      // The release of a drag isn't a tap on the key under it.
+      onChange={(key) => dragged.current || onChange(key)}
       orientation="horizontal"
       className="flex flex-col gap-2"
     >
@@ -168,7 +185,40 @@ function KeyWheel({
         <div
           ref={strip}
           onScroll={onScroll}
-          className="flex snap-x snap-mandatory gap-2 overflow-x-auto px-[calc(50%-2rem)] py-2 [scrollbar-width:none]"
+          // In the capture phase: the keys' presses stop their pointer events.
+          onPointerDownCapture={(event) => {
+            if (event.pointerType !== "mouse" || event.button !== 0) return;
+            drag.current = {
+              x: event.clientX,
+              left: strip.current?.scrollLeft ?? 0,
+              moved: false,
+            };
+          }}
+          onPointerMoveCapture={(event) => {
+            const start = drag.current;
+            if (!start || !strip.current) return;
+            const dx = event.clientX - start.x;
+            if (!start.moved && Math.abs(dx) < 5) return;
+            if (!start.moved) {
+              start.moved = true;
+              setDragging(true);
+              strip.current.setPointerCapture(event.pointerId);
+            }
+            strip.current.scrollLeft = start.left - dx;
+          }}
+          onPointerUpCapture={() => {
+            const start = drag.current;
+            drag.current = null;
+            if (!start?.moved) return;
+            // The nearest key is chosen once the strip stops.
+            dragged.current = true;
+            setTimeout(() => (dragged.current = false));
+            setDragging(false);
+            onScroll();
+          }}
+          className={`relative flex gap-2 overflow-x-auto px-[calc(50%-2rem)] py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+            dragging ? "cursor-grabbing select-none" : "snap-x snap-mandatory"
+          }`}
         >
           {keys.map((key) => {
             const steps = from ? halfSteps(from, key) : 0;
@@ -279,15 +329,15 @@ export function ServiceKeyDialog({
               <Save />
               {t("keys.saveForService")}
             </ActionButton>
-            {!sameAsSong && (
-              <ActionButton
-                isPending={making}
-                onPress={() => void makeSongKey()}
-              >
-                <Pin />
-                {t("keys.makePermanent")}
-              </ActionButton>
-            )}
+            {/* Always there, so the dialog keeps its height as keys are tried. */}
+            <ActionButton
+              isPending={making}
+              isDisabled={sameAsSong}
+              onPress={() => void makeSongKey()}
+            >
+              <Pin />
+              {t("keys.makePermanent")}
+            </ActionButton>
           </Modal.Footer>
         </Modal.Dialog>
       </Modal.Container>

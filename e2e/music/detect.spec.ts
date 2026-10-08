@@ -93,7 +93,7 @@ test("the team shares the chord played; musicians see it in the Live chord layou
     type: "go",
     entryId: "detect-1",
   });
-  await page.goto("/acorduri/musicians");
+  await page.goto("/acorduri/instruments");
   await page.getByRole("button", { name: "Share chords" }).click();
   await page.getByRole("menuitem", { name: "From a MIDI piano" }).click();
   await play(page, [57, 60, 64]);
@@ -103,7 +103,7 @@ test("the team shares the chord played; musicians see it in the Live chord layou
 
   const maria = await (await browser.newContext()).newPage();
   await logInAs(maria, "maria@example.com");
-  await maria.goto("/acorduri/musicians");
+  await maria.goto("/acorduri/instruments");
   await pickLayout(maria, "Live chord");
   await expect(maria.getByLabel("Chord played")).toHaveText("Am");
   await expect(maria.getByText("From Ioana's piano")).toBeVisible();

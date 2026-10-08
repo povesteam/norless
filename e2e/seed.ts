@@ -27,7 +27,10 @@ db.exec(`
     ('ioana', 'Ioana', 'ioana@example.com', 'active', '2026-01-01', '2026-01-01'),
     -- Only the test that tries the laptop layouts, whose choice is the member's: others'
     -- pages would open in the layout it's on.
-    ('sorin', 'Sorin', 'sorin@example.com', 'active', '2026-01-01', '2026-01-01');
+    ('sorin', 'Sorin', 'sorin@example.com', 'active', '2026-01-01', '2026-01-01'),
+    -- Each only in one test, which counts on where they're online or logged in.
+    ('marta', 'Marta', 'marta@example.com', 'active', '2026-01-01', '2026-01-01'),
+    ('luca', 'Luca', 'luca@example.com', 'active', '2026-01-01', '2026-01-01');
   INSERT INTO members (id, community_id, user_id, roles, status, created_at, updated_at) VALUES
     ('m-ana', 'c', 'ana', '["owner"]', 'active', '2026-01-01', '2026-01-01'),
     ('m-ion', 'c', 'ion', '[]', 'imported', '2016-01-01', '2016-01-01'),
@@ -36,6 +39,8 @@ db.exec(`
     ('m-petru', 'c', 'petru', '[]', 'imported', '2016-01-01', '2016-01-01'),
     ('m-ioana', 'c', 'ioana', '["team"]', 'active', '2026-01-01', '2026-01-01'),
     ('m-sorin', 'c', 'sorin', '["team"]', 'active', '2026-01-01', '2026-01-01'),
+    ('m-marta', 'c', 'marta', '[]', 'active', '2026-01-01', '2026-01-01'),
+    ('m-luca', 'c', 'luca', '[]', 'active', '2026-01-01', '2026-01-01'),
     -- A community with no songs yet, for empty states.
     ('m-ana-new', 'c-new', 'ana', '["owner"]', 'active', '2026-01-01', '2026-01-01');
 `);

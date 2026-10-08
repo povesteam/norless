@@ -176,6 +176,10 @@
     "title": "Titlul listei",
     "actions": "Acțiuni pentru listă",
     "rename": "Redenumește",
+    "changeDate": "Schimbă data",
+    "changeDateHelp": "Pentru un serviciu mutat sau o listă făcută pentru altă săptămână. Cine conduce cântările urmează serviciul din acea zi.",
+    "date": "Data",
+    "saveDate": "Salvează data",
     "entries": "Elementele listei",
     "empty": "Nimic în listă încă",
     "emptyHelp": "Adaugă cântări, texte din Biblie și separatoare cu căutarea de mai sus, iar anunțuri cu „Adaugă un text”.",
@@ -505,6 +509,7 @@
     "connectedWindows": "Extensia bible.com e conectată, ferestrele {{windows}} deschise."
   },
   "app": {
+    "back": "Înapoi",
     "menu": "Meniu",
     "more": "Altele",
     "stage": "Scenă",
@@ -532,7 +537,23 @@
     "copied": "Link copiat"
   },
   "account": {
+    "appTeam": "Echipa aplicației",
     "title": "Contul meu",
+    "tabs": {
+      "profile": "Profil",
+      "music": "Muzică",
+      "logins": "Conectări",
+      "about": "Despre"
+    },
+    "sessions": {
+      "title": "Unde ești conectat",
+      "on": "{{browser}} pe {{system}}",
+      "unknown": "Un browser",
+      "here": "acest dispozitiv",
+      "seen": "folosit {{when}}",
+      "logOut": "Deconectează acolo",
+      "logOutOf": "Deconectează {{name}}"
+    },
     "deleteHelp": "Ștergerea contului îți elimină numele, emailul și poza. Cântările și listele pe care le-ai adăugat rămân, fără numele tău, la fel și înregistrările tale, pe care le poate asculta apoi toată echipa.",
     "logoutTitle": "Te deconectezi de la Norless?",
     "everywhere": "Și pe celelalte dispozitive ale mele",
@@ -882,7 +903,8 @@
     "guitarShapes": "Formele de chitară preferate",
     "noteNames": "Numele acordurilor",
     "plainChords": "Acorduri simple (o singură culoare)",
-    "chordColorsHelp": "Acordurile într-o singură culoare. Altfel, fiecare acord are culoarea relativei lui (C și Am, F și Dm, G și Em), cel minor mai pal, și fiecare treaptă își păstrează culoarea în orice tonalitate: G în D și B♭ în F sunt amândouă treapta 4. Tonica rămâne simplă, acordurile din afara tonalității sunt magenta, iar o notă de bas după bară ia culoarea treptei ei.",
+    "chordColorsAbout": "Ce înseamnă culorile acordurilor",
+    "chordColorsHelp": "Fiecare acord are culoarea relativei lui (C și Am, F și Dm, G și Em), cel minor mai pal, și fiecare treaptă își păstrează culoarea în orice tonalitate: G în D și B♭ în F sunt amândouă treapta 4. Tonica rămâne simplă, acordurile din afara tonalității sunt magenta, iar o notă de bas după bară ia culoarea treptei ei.",
     "naming": {
       "community": "Cum alege comunitatea",
       "letters": "Litere: C D E",
@@ -1060,7 +1082,7 @@
     "services_one": "1 serviciu",
     "noServices": "Niciun serviciu în această perioadă",
     "noServicesHelp": "Aici apar cântările cântate la servicii, cele mai cântate primele. Alege altă perioadă.",
-    "notLately": "Necântate de mult",
+    "notLately": "Readu-o",
     "notLatelyHelp": "Cântate la cel puțin 3 servicii, la niciunul în ultimele 6 luni.",
     "noneForgotten": "Nicio cântare uitată",
     "noneForgottenHelp": "Toate cântările cântate la cel puțin 3 servicii au fost cântate în ultimele 6 luni.",
@@ -1221,13 +1243,6 @@
     "times_one": "o dată, {{last}}",
     "times_other": "de {{count}} ori, ultima dată {{last}}",
     "newSong": "Cântare nouă"
-  },
-  "lookAhead": {
-    "earlier": "Cântarea dinainte",
-    "later": "Cântarea de după",
-    "hint": "Vezi cântările dinainte și de după, doar pe acest dispozitiv",
-    "looking": "Te uiți la {{title}}: doar pe acest dispozitiv",
-    "back": "Înapoi la ce e live"
   },
   "rooms": {
     "title": "Săli",
@@ -1547,7 +1562,9 @@
     "asked": "Așteaptă răspuns",
     "offered": "Se oferă",
     "away": "Lipsește în ziua aceea",
-    "twice": "Două roluri în ziua aceea",
+    "alsoOn": "Și la {{roles}}",
+    "takeWhy": "Ești printre oamenii pentru {{role}}: locul e al tău pe loc",
+    "offerWhy": "Oamenii pentru {{role}} îi alege echipa: ea îți confirmă oferta",
     "personAway": "{{name}} (lipsește)",
     "confirm": "Confirmă",
     "turnDown": "Refuză",
@@ -1556,6 +1573,8 @@
     "removeSlot": "Scoate locul acesta la {{role}}",
     "templates": "Cu ce începe fiecare dată",
     "templatesHelp": "Pentru fiecare serviciu sau repetiție săptămânală, locurile cu care începe fiecare dată; o dată anume o schimbi mai sus.",
+    "eventsInSettings": "Serviciile și repetițiile săptămânale: Setări › Program",
+    "eventsByOwners": "Proprietarii stabilesc serviciile și repetițiile săptămânale în Setări › Program.",
     "saveTemplate": "Salvează pentru {{name}}",
     "people": "Cine ce face",
     "peopleHelp": "Cei marcați pentru un rol iau imediat locurile libere și află când se eliberează unul. Cei care cântă la un instrument sunt deja marcați pentru rolul lui.",
@@ -1581,13 +1600,14 @@
     "removeAway": "Scoate zilele acestea",
     "push": "Notificări pe acest dispozitiv",
     "pushInstall": "Notificările cer Norless instalat",
-    "pushInstallHow": "Pe iPhone: deschide Norless în Safari, apasă Partajează, apoi Adaugă pe ecranul principal; deschide-l de acolo și pornește notificările. Până atunci, noutățile apar aici și în partea de sus a paginilor.",
-    "pushOff": "Serverul acesta nu trimite încă notificări: noutățile apar aici și în partea de sus a paginilor.",
+    "pushInstallHow": "Pe iPhone: deschide Norless în Safari, apasă Partajează, apoi Adaugă pe ecranul principal; deschide-l de acolo și pornește notificările. Până atunci, noutățile apar aici și pe clopoțelul din bară.",
+    "pushOff": "Serverul acesta nu trimite încă notificări: noutățile apar aici și pe clopoțelul din bară.",
     "pushOn": "Notificările sunt pornite pe acest dispozitiv.",
     "pushTurnOn": "Pornește notificările",
     "pushDenied": "Browserul le blochează: permite notificările pentru Norless din setările lui.",
-    "notifications": "Noutăți pentru tine",
+    "notifications": "Notificări",
     "noNotifications": "Nimic încă.",
+    "noNotificationsHelp": "Când ești pus pe un rol, se eliberează un loc pentru tine sau e gata o listă la care cânți, apare aici.",
     "pushSent": "Trimis pe dispozitivele tale: {{count}}",
     "pushSent_one": "Trimis pe dispozitivul tău",
     "pushFailed": "netrimis pe dispozitive: {{count}}",
@@ -1597,8 +1617,8 @@
     "pushKeys": "Doar aici: notificările pe telefon nu sunt încă pregătite",
     "pushDevices": "Doar aici: niciun dispozitiv de-al tău n-a permis notificările",
     "next": "Ești la {{role}}: {{when}}",
-    "unread": "{{count}} noutăți",
-    "unread_one": "1 noutate",
+    "unreadNotifications": "Notificări, {{count}} noi",
+    "unreadNotifications_one": "Notificări, 1 nouă",
     "today": "Azi: {{roles}}",
     "roles": "Roluri",
     "rolesHelp": "Rolurile unui serviciu, pentru programul echipei. Un rol pentru un instrument îi marchează pe cei care cântă la el.",
@@ -1655,7 +1675,7 @@
     "read_one": "1 eveniment urmează, citit la {{at}}."
   },
   "offline": {
-    "keep": "Păstrează cântările pentru offline",
+    "keepFrom": "Păstrează cântările din {{name}} pentru offline",
     "keepHelp": "Acest dispozitiv păstrează toate cântările și cele mai noi liste, ca să proiecteze fără internet.",
     "offWithout": "Nu e internet: oprit, acest dispozitiv uită cântările păstrate și nu le poate păstra din nou până nu revine internetul. Oprești totuși?",
     "kept": "{{count}} cântări păstrate, la {{at}}.",

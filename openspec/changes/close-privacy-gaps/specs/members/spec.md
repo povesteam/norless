@@ -32,7 +32,7 @@ Each action SHALL be allowed to exactly these people (✓), and the server SHALL
 | Switch a practice room between rehearsal and service, and end it | | | own | | ✓ |
 | Open screens on displays, pair a TV as a screen, share a screen's short link | | | ✓ | | ✓ |
 | Log a laptop in as the community's laptop, or a guest musician's phone, and end it | | | ✓ | | ✓ |
-| Create, rename, archive and restore playlists, change their entries and their host's words | | | ✓ | | ✓ |
+| Create, rename, archive and restore playlists, change their dates, their entries and their host's words | | | ✓ | | ✓ |
 | Create, edit and delete songs | | | | ✓ | ✓ |
 | Edit chords, bar lines, `!` notes, notation blocks, tempo and the reference links of songs | | | ✓ | ✓ | ✓ |
 | Change a song's key permanently, moving its chords | | | ✓ | ✓ | ✓ |

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { api, logInAs } from "../helpers";
-import { rows, servicePlaylist } from "./playlist";
+import { base, rows, servicePlaylist } from "./playlist";
 
 // Every test here changes the one room's live state, so they run one after another.
 test.describe.configure({ mode: "serial" });
@@ -48,6 +48,33 @@ test("a visitor projects a playlist locally, and the church's screens don't chan
     visitor.getByRole("button", { name: "Stop projecting" }).click(),
   ]);
   await expect(visitor.getByRole("button", { name: "Next" })).toHaveCount(0);
+  await visitor.context().close();
+});
+
+test("Project here starts where the church's screens are", async ({
+  page,
+  browser,
+}) => {
+  await logInAs(page, "ioana@example.com");
+  const id = await servicePlaylist(page);
+  const { body } = await api(page, "GET", `${base}/${id}`);
+  const entryId = (body as { entries: { id: string }[] }).entries[0]?.id;
+  await api(page, "POST", "/api/communities/unu-unu/live", {
+    type: "go",
+    entryId,
+    slide: 1,
+  });
+
+  const visitor = await (await browser.newContext()).newPage();
+  await visitor.goto(`/unu-unu/playlists/${id}`);
+  const [projector] = await Promise.all([
+    visitor.waitForEvent("popup"),
+    visitor.getByRole("button", { name: "Project here" }).click(),
+  ]);
+  await expect(
+    projector.locator("[data-fit]").getByText(/Slavă/),
+  ).toBeVisible();
+  await expect(rows(visitor).first()).toContainText("Live");
   await visitor.context().close();
 });
 

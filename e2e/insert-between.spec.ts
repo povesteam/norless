@@ -42,6 +42,16 @@ test.describe("with a mouse", () => {
     // Away from the rows' edges, no line.
     await rows(page).first().hover();
     await expect(page.getByRole("button", { name: "Add here" })).toHaveCount(0);
+    // Near the line between them, the + sits centered on it.
+    const below = await rows(page).nth(1).boundingBox();
+    if (!below) throw new Error("No row");
+    await page.mouse.move(below.x + below.width / 3, below.y + 4);
+    const centered = await page
+      .getByRole("button", { name: "Add here" })
+      .boundingBox();
+    expect(
+      Math.abs((centered?.y ?? 0) + (centered?.height ?? 0) / 2 - below.y),
+    ).toBeLessThan(1);
 
     await openGapAbove(page, 1);
     // The + sits in the rows' column of icons, at the left.

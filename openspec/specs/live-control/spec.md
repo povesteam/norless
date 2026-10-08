@@ -104,7 +104,7 @@ The live state SHALL have a mode: service or rehearsal. The mode SHALL be set fr
 
 ### Requirement: Local projection without login
 
-Anyone, logged in or not, SHALL be able to project locally: pick songs or a playlist, open a projector screen in the same browser (another window or tab), and control it from the page. Local projection SHALL NOT change any room's live state, and SHALL NOT record plays. "Project here", and while projecting "Projector window" and "Stop projecting", SHALL sit in the live bar at the bottom of the page; a playlist or song page SHALL show a bar with "Project here" to people who have no live bar there. When the projector window is closed, projecting SHALL stop as with "Stop projecting", and the page SHALL say that the window was closed. On a phone, the projector SHALL fill the same page, full screen and without the browser's bar, instead of opening a window: a tap on its right half SHALL go to the next slide, a tap on its left half to the previous one, and Back SHALL return to the page, still projecting.
+Anyone, logged in or not, SHALL be able to project locally: pick songs or a playlist, open a projector screen in the same browser (another window or tab), and control it from the page. Started from a playlist whose entry is live in the room, the projector SHALL start on that entry and slide, blank if the room is blank; otherwise with nothing live. Started from a playlist whose entry is live in the room, the projector SHALL start on that entry and slide, blank if the room is blank; otherwise with nothing live. Local projection SHALL NOT change any room's live state, and SHALL NOT record plays. "Project here", and while projecting "Projector window" and "Stop projecting", SHALL sit in the live bar at the bottom of the page; a playlist or song page SHALL show a bar with "Project here" to people who have no live bar there. When the projector window is closed, projecting SHALL stop as with "Stop projecting", and the page SHALL say that the window was closed. On a phone, the projector SHALL fill the same page, full screen and without the browser's bar, instead of opening a window: a tap on its right half SHALL go to the next slide, a tap on its left half to the previous one, and Back SHALL return to the page, still projecting.
 
 #### Scenario: Guest at a home group
 - **WHEN** a visitor without an account opens Norless on a laptop connected to a TV, searches a song and opens a local projector screen
@@ -123,6 +123,10 @@ Anyone, logged in or not, SHALL be able to project locally: pick songs or a play
 - **THEN** the phone shows the projector full screen, without the browser's bar, and goes to the next slide
 - **AND** Back returns to the playlist, still projecting
 
+#### Scenario: Projecting what is live
+- **WHEN** verse 2 of the church's live song is on the screens, and a team member presses Project here on that playlist
+- **THEN** the projector of their device starts on verse 2, and the church's screens don't change
+
 ### Requirement: Laptop layouts
 
 On a laptop, a controller SHALL be able to choose among these layouts, as described in `app-shell` (Layouts):
@@ -131,7 +135,7 @@ On a laptop, a controller SHALL be able to choose among these layouts, as descri
 - **Big now and next**: a large preview of what the projector shows, the next part, all parts of the live song in a strip, and large next, previous and blank buttons
 - **Big screen**: for monitors of Full HD and larger, described in Big screen; the default on a window at least 1900 CSS pixels wide when the member hasn't picked a layout
 
-When a controller edits a song from a laptop layout, the editor SHALL open in the middle column, while the projector preview and the controls stay visible.
+On a window at least 1024 pixels wide, Controller, Running order and Big now and next SHALL fill the window like an app, as Classic does: the window SHALL NOT scroll, each column SHALL scroll on its own, and the title row, the search box and the controls SHALL stay in view; in Big now and next the controls stay above the playlist, which scrolls under them. When a controller edits a song from a laptop layout, the editor SHALL open in the middle column, while the projector preview and the controls stay visible.
 
 #### Scenario: Default layout on the church laptop
 - **WHEN** an operator opens a playlist on a laptop with a 1440 × 900 window for the first time
@@ -144,6 +148,10 @@ When a controller edits a song from a laptop layout, the editor SHALL open in th
 #### Scenario: Edit during the service
 - **WHEN** the operator opens the refrain of the live song in the editor from the Controller layout
 - **THEN** the editor replaces the parts list in the middle, and the preview, next and blank stay visible on the right
+
+#### Scenario: A long running order
+- **WHEN** an operator scrolls a running order longer than the window in the Running order layout
+- **THEN** only the running order scrolls, and the previews, next, previous and blank stay where they are
 
 ### Requirement: Phone and tablet controls
 
@@ -311,7 +319,7 @@ A team member SHALL be able to start a practice room from the live bar, with a p
 
 ### Requirement: Playlist title row
 
-While the app frame is on, a playlist's title SHALL be in the community bar (`app-shell` spec), and the row above the search box SHALL hold, for controllers, the problems indicator and the estimated end, for members, who is online, and the layout, chosen from a menu that names the current one, so the entries start near the top of the page. On a phone the row SHALL fit one line: the problems as their count, the layout as its icon, and no link to all playlists, which the menu has; Add text slide SHALL be an icon beside the search box. In the Classic layout the layout menu SHALL stay above the columns. The playlist's menu (the title's on a phone, ⋯ on a laptop) SHALL end with the 5 newest other playlists and All playlists, to go to another one.
+While the app frame is on, a playlist's title SHALL be in the community bar (`app-shell` spec), and the row above the search box SHALL hold, for controllers, the problems indicator and the estimated end, for members, who is online, and the layout, chosen from a menu that names the current one, so the entries start near the top of the page. On a phone the row SHALL fit one line: the problems as their count, the layout as its icon, and no link to all playlists, which the menu has; Add text slide SHALL be an icon beside the search box. In the Classic layout the layout menu SHALL sit in that row, above the playlist's column, not in a row of its own. The playlist's menu (the title's on a phone, ⋯ on a laptop) SHALL end with the 5 newest other playlists and All playlists, to go to another one.
 
 #### Scenario: One row
 - **WHEN** an operator opens a playlist with problems in the Controller layout on a laptop

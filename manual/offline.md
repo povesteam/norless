@@ -5,9 +5,10 @@ hall without wifi.
 
 ## Before you leave
 
-On the laptop, with internet, open a playlist, open **This device** under the live
-controls, and switch on **Keep songs for offline**. It says how many songs it kept and
-when; it keeps them again when songs change. Install Norless on that laptop (the
+On the laptop, with internet, open your community, then **My account** (your photo at
+the top right), and in its **This device** tab switch on **Keep <community>'s songs for
+offline**. It says how many songs it kept and when; it keeps them again when songs
+change. Install Norless on that laptop (the
 browser's install button), so it opens without internet.
 
 ## Without internet

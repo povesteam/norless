@@ -117,7 +117,7 @@ test("the phone's bars take the page's own background, in light and dark", async
   page,
 }) => {
   // A stage view first, which paints the bars black, then the app's pages.
-  await page.goto("/unu-unu/vocalists");
+  await page.goto("/unu-unu/vocals");
   for (const colorScheme of ["light", "dark"] as const) {
     await page.emulateMedia({ colorScheme });
     await page.goto("/unu-unu/playlists");
@@ -170,8 +170,9 @@ test.describe("offline on one laptop", () => {
     await logInAs(page, "ioana@example.com");
     await page.goto("/unu-unu/playlists/steady");
     await page.evaluate(() => navigator.serviceWorker.ready);
-    await page.getByRole("button", { name: "This device" }).click();
-    await page.getByText("Keep songs for offline").click();
+    // On My account, for the community this device opened last.
+    await page.goto("/account/device");
+    await page.getByText("Keep Unu-Unu's songs for offline").click();
     await expect(page.getByText(/songs kept, at/)).toBeVisible();
 
     // No internet: switching off asks first, since the songs couldn't come back.
@@ -183,14 +184,14 @@ test.describe("offline on one laptop", () => {
       expect(dialog.message()).toContain("There's no internet");
       await dialog.dismiss();
     });
-    await page.getByText("Keep songs for offline").click();
+    await page.getByText("Keep Unu-Unu's songs for offline").click();
     await asked;
     await expect(
-      page.getByRole("switch", { name: "Keep songs for offline" }),
+      page.getByRole("switch", { name: "Keep Unu-Unu's songs for offline" }),
     ).toBeChecked();
 
     // The frame says so and opens what was kept.
-    await page.reload();
+    await page.goto("/unu-unu/playlists/steady");
     await page
       .getByRole("link", { name: "Open what this device kept" })
       .click();

@@ -118,6 +118,23 @@ describe("song search", () => {
     expect(songIds((await search("nou")).results)).toEqual([song.id]);
   });
 
+  test("words typed together and typos find songs, after the exact matches", async () => {
+    addSong("joined", { ro: ["Dați-mi un cântec", "Vreau să cânt"] });
+    addSong("typo", { ro: ["Har minunat", "Ce mare har"] });
+    addSong("exact", { ro: ["Minunt", "Har și pace"] });
+    addSong("lyrics", { ro: ["Altul", "Doar har minunat mă ține"] });
+
+    expect(songIds((await search("datimi")).results)).toEqual(["joined"]);
+    // "minunt" as typed comes first; the titles with a typo before the lyrics.
+    expect(songIds((await search("har minunt")).results)).toEqual([
+      "exact",
+      "typo",
+      "lyrics",
+    ]);
+    // Fewer than five letters: no sloppy matches.
+    expect(songIds((await search("hsr")).results)).toEqual([]);
+  });
+
   test("chords don't match", async () => {
     addSong("song", { ro: ["Cântare", ".Am    G\nSlavă"] });
 

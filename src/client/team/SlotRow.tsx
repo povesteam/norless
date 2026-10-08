@@ -3,9 +3,11 @@ import { RowMenu } from "../ui/RowMenu";
 import { Button, Chip, ListBox, Select } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import type { Role, ScheduleDate, Slot } from "../../server/schedule/team-data";
-import type { TeamSchedule } from "../../server/schedule/team-schedule";
+import type { Person, TeamSchedule } from "../../server/schedule/team-schedule";
 import { useCommunity } from "../data/community";
 import { slotUrl } from "./schedule";
+import { PersonAvatar } from "../ui/NameAvatar";
+import { Tip } from "../ui/tip";
 
 /** A slot: its role, who, and what this person may do with it. */
 export function SlotRow({
@@ -29,7 +31,7 @@ export function SlotRow({
     method?: "POST" | "DELETE",
   ) => Promise<Response | null>;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug } = useCommunity();
   const url = slotUrl(slug, date, slot.key);
   const person = schedule.people.find((p) => p.id === slot.userId);
@@ -37,10 +39,15 @@ export function SlotRow({
     schedule.people
       .find((p) => p.id === id)
       ?.away.some((a) => a.first <= date.date && date.date <= a.last) ?? false;
-  // Two roles the same date: allowed, with a note.
-  const twice =
-    slot.userId !== null &&
-    date.slots.filter((s) => s.userId === slot.userId).length > 1;
+  // Two roles or more the same date: allowed, with a note naming the others.
+  const others =
+    slot.userId === null
+      ? []
+      : date.slots
+          .filter((s) => s !== slot && s.userId === slot.userId)
+          .map(
+            (s) => schedule.roles.find((r) => r.id === s.roleId)?.name ?? "",
+          );
   const marked = !!me && !!role?.people.includes(me);
   return (
     <li className="flex flex-wrap items-center gap-2">
@@ -60,9 +67,7 @@ export function SlotRow({
             onChange={(userId) => void act(`${url}/assign`, { userId })}
           />
         ) : (
-          <span className={person ? "" : "text-muted"}>
-            {person?.name ?? t("team.open")}
-          </span>
+          <Who person={person} />
         )}
       </span>
       {slot.status === "asked" && <Chip size="sm">{t("team.asked")}</Chip>}
@@ -76,7 +81,13 @@ export function SlotRow({
           {t("team.away")}
         </Chip>
       )}
-      {twice && <Chip size="sm">{t("team.twice")}</Chip>}
+      {others.length > 0 && (
+        <Chip size="sm">
+          {t("team.alsoOn", {
+            roles: new Intl.ListFormat(i18n.language).format(others),
+          })}
+        </Chip>
+      )}
       {team && slot.status === "offered" && (
         <>
           <Button
@@ -97,14 +108,21 @@ export function SlotRow({
         </>
       )}
       {slot.status === "open" && me && (
-        <Button
-          size="sm"
-          variant="secondary"
-          onPress={() => void act(`${url}/take`)}
+        // Why it's one or the other: being among the role's people.
+        <Tip
+          label={t(marked ? "team.takeWhy" : "team.offerWhy", {
+            role: role?.name ?? "",
+          })}
         >
-          <HandHelping />
-          {marked ? t("team.take") : t("team.offer")}
-        </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onPress={() => void act(`${url}/take`)}
+          >
+            <HandHelping />
+            {marked ? t("team.take") : t("team.offer")}
+          </Button>
+        </Tip>
       )}
       {team && (
         <RowMenu
@@ -149,10 +167,11 @@ function PersonPicker({
     ...schedule.people.filter((p) => !role?.people.includes(p.id)),
   ];
   const options = [
-    { id: OPEN, label: t("team.open") },
+    { id: OPEN, label: t("team.open"), person: undefined },
     ...people.map((p) => ({
       id: p.id,
       label: away(p.id) ? t("team.personAway", { name: p.name }) : p.name,
+      person: p,
     })),
   ];
   return (
@@ -173,12 +192,41 @@ function PersonPicker({
         <ListBox>
           {options.map((o) => (
             <ListBox.Item key={o.id} id={o.id} textValue={o.label}>
-              {o.label}
+              <span className="flex min-w-0 items-center gap-2">
+                {o.person && (
+                  <span aria-hidden className="flex shrink-0">
+                    <PersonAvatar
+                      name={o.person.name}
+                      avatar={o.person.avatar}
+                      className="size-6 shrink-0"
+                    />
+                  </span>
+                )}
+                <span className="truncate">{o.label}</span>
+              </span>
               <ListBox.ItemIndicator />
             </ListBox.Item>
           ))}
         </ListBox>
       </Select.Popover>
     </Select>
+  );
+}
+
+/** Who is in a slot, as their photo and name; "Open" when nobody is. */
+export function Who({ person }: { person: Person | undefined }) {
+  const { t } = useTranslation();
+  if (!person) return <span className="text-muted">{t("team.open")}</span>;
+  return (
+    <span className="flex min-w-0 items-center gap-2">
+      <span aria-hidden className="flex shrink-0">
+        <PersonAvatar
+          name={person.name}
+          avatar={person.avatar}
+          className="size-6 shrink-0"
+        />
+      </span>
+      <span className="truncate">{person.name}</span>
+    </span>
   );
 }

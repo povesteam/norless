@@ -13,6 +13,8 @@ import { useDeviceType, useLayout } from "../data/device";
 import { useLayoutShown, useUsageCommunity } from "../data/usage";
 import { useJson } from "../data/fetch";
 import { useChanges } from "../data/changes";
+import type { Playlist } from "../../server/playlists/playlists";
+import type { LiveView } from "../../server/live/live-view";
 import { StageNotice, StageSlides, ToPlaylist } from "./parts";
 import { Parts, slidesIn } from "./VocalsParts";
 import { LanguageChoice } from "./LanguageChoice";
@@ -21,7 +23,6 @@ import { Tip } from "../ui/tip";
 import { hasRole, useMe, useRoles } from "../data/me";
 import { sendLive, useLiveView } from "../data/room";
 import { LedByIcon } from "../playlists/LedBy";
-import { useLookAhead } from "./LookAhead";
 import { useSwipe } from "../ui/swipe";
 import { SongKey } from "./SongKey";
 import { RecordingsMark } from "../songs/RecordingsMark";
@@ -35,7 +36,7 @@ export const vocalistsLayouts = [
 ] as const;
 export type VocalistsLayout = (typeof vocalistsLayouts)[number]["id"];
 
-/** /<community>/vocalists: the vocalists view on a member's own device, in their layout. */
+/** /<community>/vocals: the vocalists view on a member's own device, in their layout. */
 export function VocalistsPage({ slug }: { slug: string }) {
   const { t, i18n } = useTranslation();
   const community = useJson<Community>(
@@ -55,6 +56,10 @@ export function VocalistsPage({ slug }: { slug: string }) {
   );
   const canControl = hasRole(useRoles(slug), "team");
   const { me } = useMe();
+  const live = useLiveView(slug);
+  const serviceRoles =
+    !!community && shows(switchesOf(community), "serviceRoles");
+  const recordings = !!community && shows(switchesOf(community), "recordings");
   // The member's language by default; any community language, or all of them.
   const [shown, setShown] = useState<string>();
   const own = languages.includes(i18n.language)
@@ -95,6 +100,7 @@ export function VocalistsPage({ slug }: { slug: string }) {
             onChoose={setShown}
           />
         )}
+        <LiveKey slug={slug} view={live} canChange={canControl} />
         <ToggleButtonGroup
           aria-label={t("musicians.layout")}
           selectionMode="single"
@@ -132,13 +138,10 @@ export function VocalistsPage({ slug }: { slug: string }) {
           languages={choice === "all" ? languages : [choice]}
           layout={layout?.id ?? "whole"}
           canControl={canControl}
-          lookAhead
-          leader={!!community && shows(switchesOf(community), "serviceRoles")}
-          recordings={
-            canControl &&
-            !!community &&
-            shows(switchesOf(community), "recordings")
-          }
+          leader={serviceRoles}
+          recordings={canControl && recordings}
+          keyInToolbar
+          marks={serviceRoles || recordings}
         />
       </div>
     </div>
@@ -155,9 +158,10 @@ export function Vocalists({
   languages,
   layout,
   canControl,
-  lookAhead = false,
   leader = false,
   recordings = false,
+  keyInToolbar = false,
+  marks = true,
 }: {
   slug: string;
   languages: string[];
@@ -165,38 +169,47 @@ export function Vocalists({
   canControl: boolean;
   /** Who leads the song, when the service roles are switched on. */
   leader?: boolean;
-  /** On a member's own device: earlier and later songs, privately. */
-  lookAhead?: boolean;
   /** For the team, with the recordings on: the song's recordings marked. */
   recordings?: boolean;
+  /** On a member's device, the key is in the toolbar (LiveKey). */
+  keyInToolbar?: boolean;
+  /**
+   * Whether the line of marks under the toolbar shows: on a member's device, while the
+   * features that fill it (recordings, service roles) are on, so it doesn't come and go
+   * with the songs.
+   */
+  marks?: boolean;
 }) {
   const { t } = useTranslation();
   const live = useLiveView(slug);
-  const ahead = useLookAhead(slug, lookAhead ? live : undefined, languages);
-  const looked = lookAhead ? ahead.shown : live;
   // In Sideways, those who don't control live swipe through the parts on their own
   // phone, until the live part moves.
   const [own, setOwn] = useState<{ slide: number; live: string }>();
   const liveAt = `${live?.entryId}:${live?.slide}`;
   if (own && own.live !== liveAt) setOwn(undefined);
-  const view =
-    own && looked ? { ...looked, slide: own.slide, blank: false } : looked;
-  const controls = canControl && !ahead.looking;
-  // A part of a song looked at privately doesn't go live.
+  const view = own && live ? { ...live, slide: own.slide, blank: false } : live;
   const go = (slide: number, via: "part" | "song-map") =>
     view?.entryId &&
     void sendLive(slug, { type: "go", entryId: view.entryId, slide }, via);
   const onPart =
-    controls && view?.entryId
+    canControl && view?.entryId
       ? (slide: number) => go(slide, "part")
       : undefined;
-  // Swipes: the next or previous part in Sideways, song in Whole song; live for the
-  // team, on this phone for the others.
+  // Swipes: the next or previous part in Sideways, live for the team and on this phone
+  // for the others; the team's song in Whole song.
+  const playlist = useJson<Playlist>(
+    canControl && layout !== "sideways" && live?.playlistId
+      ? `/api/communities/${slug}/playlists/${live.playlistId}`
+      : null,
+    useChanges(slug, "entries", "playlists"),
+  ).data;
+  const songs =
+    playlist?.entries.filter((e) => e.song && !e.song.deleted) ?? [];
   const root = useRef<HTMLDivElement>(null);
   useSwipe(root, (by) => {
     if (!live) return;
     if (layout === "sideways") {
-      if (controls)
+      if (canControl)
         void sendLive(slug, { type: by > 0 ? "next" : "previous" }, "swipe");
       else if (live.song) {
         const count = slidesIn(live.song, languages)[0]?.slides.length ?? 0;
@@ -208,46 +221,35 @@ export function Vocalists({
       }
       return;
     }
-    const next = ahead.songs[ahead.index + by];
-    if (controls && next)
+    const next = songs[songs.findIndex((e) => e.id === live.entryId) + by];
+    if (canControl && next)
       void sendLive(slug, { type: "go", entryId: next.id, slide: 0 }, "swipe");
-    else if (lookAhead) ahead.step(by);
   });
   return (
     <div ref={root} className="relative flex min-h-0 flex-1 flex-col">
       <StageNotice message={view?.message} />
-      {/* Sideways keeps its room for the part, on a phone held either way. */}
-      {lookAhead && layout !== "sideways" && ahead.bar}
       {/* A steady line: who leads the song comes and goes with the songs. */}
-      <div className="flex min-h-7 flex-wrap items-center gap-3 px-4 pt-2">
-        <RecordingMark view={view} />
-        {/* The key it's sung in; the team changes it for this service from here. */}
-        {view?.song &&
-          playedKey(view.song.keySignature, view.entry?.keySignature).shown && (
-            <SongKey
+      {marks && (
+        <div className="flex min-h-7 flex-wrap items-center gap-3 px-4 pt-2">
+          <RecordingMark view={view} />
+          {!keyInToolbar && (
+            <LiveKey slug={slug} view={view} canChange={canControl} />
+          )}
+          {recordings && view?.song && (
+            <RecordingsMark
               slug={slug}
-              view={view}
-              shown={
-                playedKey(view.song.keySignature, view.entry?.keySignature)
-                  .shown
-              }
-              canChange={controls}
+              songId={view.song.id}
+              count={view.entry?.song?.recordings}
             />
           )}
-        {recordings && view?.song && (
-          <RecordingsMark
-            slug={slug}
-            songId={view.song.id}
-            count={view.entry?.song?.recordings}
-          />
-        )}
-        {view?.ledBy && leader && (
-          <span className="flex items-center gap-1 text-lg">
-            <LedByIcon aria-hidden className="size-4" />
-            {t("team.ledBy", { name: view.ledBy })}
-          </span>
-        )}
-      </div>
+          {view?.ledBy && leader && (
+            <span className="flex items-center gap-1 text-lg">
+              <LedByIcon aria-hidden className="size-4" />
+              {t("team.ledBy", { name: view.ledBy })}
+            </span>
+          )}
+        </div>
+      )}
       {view?.entry?.kind === "slides" ? (
         <div className="p-4">
           <StageSlides view={view} languages={languages} />
@@ -259,11 +261,12 @@ export function Vocalists({
           languages={languages}
           layout={layout}
           onPart={onPart}
-          onMap={controls ? (slide) => go(slide, "song-map") : undefined}
+          onMap={canControl ? (slide) => go(slide, "song-map") : undefined}
           slug={slug}
         />
       ) : (
-        <p className="p-4 text-muted">{t("musicians.noSong")}</p>
+        // The free height, so previous and next stay at the bottom.
+        <p className="flex-1 p-4 text-muted">{t("musicians.noSong")}</p>
       )}
       {canControl && (
         <div className="grid grid-cols-2 gap-2 border-t border-separator p-2">
@@ -287,5 +290,24 @@ export function Vocalists({
         </div>
       )}
     </div>
+  );
+}
+
+/** The key the live song is sung in; the team changes it for this service from here. */
+function LiveKey({
+  slug,
+  view,
+  canChange,
+}: {
+  slug: string;
+  view: LiveView | undefined;
+  canChange: boolean;
+}) {
+  const song = view?.song;
+  const shown =
+    song && playedKey(song.keySignature, view.entry?.keySignature).shown;
+  if (!shown) return null;
+  return (
+    <SongKey slug={slug} view={view} shown={shown} canChange={canChange} />
   );
 }

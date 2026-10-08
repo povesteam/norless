@@ -35,9 +35,10 @@ test("the privacy page names who answers for the data, as the owner set it", asy
   await form.getByRole("button", { name: "Save the contact" }).click();
   await expect(form.getByText("Saved")).toBeVisible();
 
-  // A member: in the account menu.
-  await page.getByRole("button", { name: "Ana", exact: true }).click();
-  await page.getByRole("menuitem", { name: "Privacy" }).click();
+  // A member: in My account's About tab.
+  await page.getByRole("link", { name: "Ana", exact: true }).click();
+  await page.getByRole("tab", { name: "About" }).click();
+  await page.getByRole("link", { name: "Privacy" }).click();
   await expect(page).toHaveURL("/privacy");
   await expect(
     page.getByRole("listitem").filter({ hasText: "Biserica UnuUnu" }),

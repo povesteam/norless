@@ -13,6 +13,21 @@ const applyScheme = () =>
 applyScheme();
 dark.addEventListener("change", applyScheme);
 
+// Android pans the visible area down to a focused field instead of resizing the page.
+// React Aria sizes dialogs to the visible height but places them at the page's top, so
+// they follow the visible area's top too (index.css); zoomed in, as React Aria, they
+// keep the page's size and place.
+const visible = window.visualViewport;
+if (visible) {
+  const follow = () =>
+    document.documentElement.style.setProperty(
+      "--visual-viewport-top",
+      `${visible.scale > 1 ? 0 : visible.offsetTop}px`,
+    );
+  visible.addEventListener("resize", follow);
+  visible.addEventListener("scroll", follow);
+}
+
 const root = document.getElementById("root");
 if (!root) throw new Error("Missing #root element");
 

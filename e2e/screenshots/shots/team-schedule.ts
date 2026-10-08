@@ -153,6 +153,12 @@ export const teamSchedule: View[] = [
     go: open(`/${slug}/my-schedule`),
   },
   {
+    name: "notifications",
+    as: musician,
+    sizes: ["phone"],
+    go: open(`/${slug}/notifications`),
+  },
+  {
     name: "settings-roles",
     as: owner,
     sizes: ["laptop"],

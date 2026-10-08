@@ -52,7 +52,7 @@ test("a phone on the same wifi is offered the laptop's login, and logs it in as 
   ).toHaveCount(0);
 
   // Dan sees it on My account, and ends it.
-  await phone.goto("/account");
+  await phone.goto("/account/logins");
   const device = phone
     .getByRole("listitem")
     .filter({ hasText: "Laptop (Dan)" });
@@ -70,7 +70,7 @@ test("a guest musician: the band member's guest QR logs the guest's phone in, an
   const small = { viewport: { width: 390, height: 844 } };
   const dan = await (await browser.newContext(small)).newPage();
   await logInAs(dan, "dan@example.com");
-  await dan.goto("/account");
+  await dan.goto("/account/logins");
   const name = dan.getByRole("textbox", { name: "The guest's name" });
   // A phone's keyboard starts each word with a capital.
   await expect(name).toHaveAttribute("autocapitalize", "words");
@@ -105,7 +105,7 @@ test("a guest musician: the band member's guest QR logs the guest's phone in, an
   // A reload on Vlad's phone keeps it his.
   await vlad.reload();
   await vlad.getByRole("button", { name: "Log in" }).click();
-  await expect(vlad).toHaveURL(/\/sala-mica\/musicians$/);
+  await expect(vlad).toHaveURL(/\/sala-mica\/instruments$/);
   await expect(
     dan.getByText(/^Vlad \(guest of Dan\) is in, until/),
   ).toBeVisible();
@@ -142,6 +142,6 @@ test("a guest musician: the band member's guest QR logs the guest's phone in, an
   await expect(dan.getByText("The device is logged in.")).toBeVisible();
   await expect(ilie).toHaveURL(/\/$/);
   await expect(
-    ilie.getByRole("button", { name: "Ilie (guest of Dan)" }),
+    ilie.getByRole("link", { name: "Ilie (guest of Dan)" }),
   ).toBeVisible();
 });

@@ -523,8 +523,8 @@ test("led by: the service's worship lead leads each song, unless the team chose 
   expect(playlist.leads).toEqual({
     lead: { id: "ana", name: "Ana" },
     people: [
-      { id: "ana", name: "Ana" },
-      { id: "vlad", name: "Vlad" },
+      { id: "ana", name: "Ana", avatar: null },
+      { id: "vlad", name: "Vlad", avatar: null },
     ],
   });
   expect(playlist.entries[0]?.ledBy).toBeNull();

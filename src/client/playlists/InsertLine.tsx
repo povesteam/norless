@@ -15,7 +15,9 @@ export function InsertLine({
 }) {
   const { t } = useTranslation();
   return (
-    <div className="pointer-events-none absolute start-3.5 -top-3 z-10 flex h-6 items-center">
+    // Centered on the line between the rows: the row's 2-pixel border is above the box
+    // it's placed in, so 12 + 2 pixels up.
+    <div className="pointer-events-none absolute start-3.5 -top-3.5 z-10 flex h-6 items-center">
       <Tip label={t("playlist.insertHere")}>
         <Button
           isIconOnly

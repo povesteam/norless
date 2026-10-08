@@ -1,5 +1,4 @@
 import {
-  ArrowLeft,
   BookOpen,
   ChevronRight,
   Guitar,
@@ -111,7 +110,8 @@ export function SettingsPage({ tab }: { tab?: string }) {
       (id !== "roles" || shows("serviceRoles")),
   );
   const current = tab && shown.some(([id]) => id === tab) ? tab : "members";
-  // On a phone, the sections as a list, each opening on its own page with a way back;
+  // On a phone, the sections as a list, each opening on its own page, which the bar's
+  // back button leaves;
   // elsewhere, a list at the side.
   if (phone) {
     const section = tab && tabs[current];
@@ -137,13 +137,10 @@ export function SettingsPage({ tab }: { tab?: string }) {
           </nav>
         </div>
       );
+    // The bar's back button leads to the list.
     const { title, Content } = section;
     return (
       <div className="flex flex-col gap-4">
-        <Link href="/settings" className="link self-start text-sm">
-          <ArrowLeft />
-          {t("settings.title")}
-        </Link>
         <h2 className="text-2xl font-semibold">{t(title)}</h2>
         <Content />
       </div>

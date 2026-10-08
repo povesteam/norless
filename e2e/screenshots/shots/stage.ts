@@ -43,16 +43,34 @@ export const stage: View[] = [
     },
   },
   {
+    // A song's parts in one language, with the choice above them.
+    name: "control-song",
+    as: team,
+    sizes: ["phone"],
+    go: async (page) => {
+      await page.goto(playlist);
+      await page
+        .getByRole("grid")
+        .getByRole("row")
+        .filter({ hasText: /Tatăl nostru|The Lord's Prayer/ })
+        .click();
+      await page
+        .getByRole("region", { name: en.controller.phone.song })
+        .getByRole("radiogroup", { name: en.song.language })
+        .waitFor();
+    },
+  },
+  {
     name: "musicians",
     as: musician,
     sizes: ["phone", "tablet"],
-    go: open(`/${slug}/musicians`),
+    go: open(`/${slug}/instruments`),
   },
   {
     name: "vocalists",
     as: singer,
     sizes: ["phone", "tablet"],
-    go: open(`/${slug}/vocalists`),
+    go: open(`/${slug}/vocals`),
   },
   {
     name: "stage-monitor",

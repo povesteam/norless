@@ -43,7 +43,7 @@ test("a device listens; the stage shows the band speeding up; the measured tempo
   });
 
   // This device listens, through the (fake) microphone.
-  await page.goto("/tempo/musicians");
+  await page.goto("/tempo/instruments");
   await page
     .getByRole("button", { name: "Listen for tempo", exact: true })
     .click();

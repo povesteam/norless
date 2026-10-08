@@ -35,16 +35,15 @@ test("the bar groups a team member's pages in one line at step 6", async ({
   // Links, so Cmd-click and right-click work on them.
   await expect(
     page.getByRole("menuitem", { name: "Instruments" }),
-  ).toHaveAttribute("href", "/echipa/musicians");
+  ).toHaveAttribute("href", "/echipa/instruments");
   await page.keyboard.press("Escape");
   await expect(page.getByRole("menu")).toHaveCount(0);
   await openFromBar(page, "My schedule");
   await expect(page).toHaveURL("/echipa/my-schedule");
   await openFromBar(page, "Statistics");
   await expect(page).toHaveURL("/echipa/statistics");
-  // The account menu's pages too, opened in place.
-  await page.getByRole("button", { name: "Ioana" }).click();
-  const account = page.getByRole("menuitem", { name: "My account" });
+  // The photo and name open My account.
+  const account = page.getByRole("link", { name: "Ioana" });
   await expect(account).toHaveAttribute("href", "/account");
   await account.click();
   await expect(page).toHaveURL("/account");

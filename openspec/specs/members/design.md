@@ -31,6 +31,7 @@ Why members, roles, invitations, avatars and presence work as the spec says.
 - **Presence is following a topic**: being online is following the community's presence topic, which only members may do. Each connection is a device of its person, told phone or computer by the User-Agent, which is good enough for a label.
 - **Who's here is avatars only, names in a tooltip**: a row of avatars is short enough for a playlist's title row. The tooltip (hover, keyboard focus, long-press) reads name, devices and "last live change", and is also the avatar's accessible name. The last live change is a ring that is always drawn, transparent unless it applies, and the row keeps an avatar's height while loading, so nothing moves.
 - **The members page stacks on a phone**: each member's row puts the name and email above the roles and the ⋯ menu, since tables wider than the screen scrolled sideways.
+- **Faces wherever people are listed**: the members list, the team schedule and the choice of who leads a song show each person's photo or initials before their name; the list's queries carry the avatar.
 
 ## Rejected
 

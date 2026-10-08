@@ -31,6 +31,7 @@ import { clock } from "../ui/time";
 import { ActionButton, ErrorNotice, usePending } from "../ui/states";
 import { InBar } from "../app/BarPlace";
 import { PlaylistTitle } from "./PlaylistTitle";
+import { DateIcon, PlaylistDateDialog } from "./PlaylistDate";
 
 const exportKinds: ExportKind[] = ["print", "html", "copy"];
 
@@ -39,6 +40,7 @@ export function PlaylistHeader({
   canChange,
   canArchive,
   onRename,
+  onChangeDate,
   onArchive,
   viewers,
   status,
@@ -48,6 +50,8 @@ export function PlaylistHeader({
   /** For the team: archive it, or restore it while archived. */
   canArchive: boolean;
   onRename: (title: string) => Promise<unknown>;
+  /** To another day, as YYYY-MM-DD. */
+  onChangeDate: (date: string) => Promise<unknown>;
   onArchive: (archived: boolean) => Promise<unknown>;
   /** Who else has it open: in this row, so coming and going moves nothing below. */
   viewers: ReactNode;
@@ -61,6 +65,7 @@ export function PlaylistHeader({
   const [exporting, setExporting] = useState<ExportKind | null>(null);
   const [chaptering, setChaptering] = useState(false);
   const [telling, setTelling] = useState(false);
+  const [dating, setDating] = useState(false);
   const { slug } = useCommunity();
   const member = useIsMember(slug);
   // The newest other playlists, to go to one from the title's menu.
@@ -96,6 +101,7 @@ export function PlaylistHeader({
             // Archiving is undone with Restore, so it doesn't ask first.
             if (key === "archive") void onArchive(true);
             else if (key === "rename") setEditing(true);
+            else if (key === "date") setDating(true);
             else if (key === "chapters") setChaptering(true);
             else if (key === "ready") setTelling(true);
             else if (key !== "all" && !String(key).startsWith("open:"))
@@ -106,6 +112,12 @@ export function PlaylistHeader({
             <Dropdown.Item id="rename" textValue={t("playlist.rename")}>
               <Pencil />
               <Label>{t("playlist.rename")}</Label>
+            </Dropdown.Item>
+          ) : null}
+          {canChange ? (
+            <Dropdown.Item id="date" textValue={t("playlist.changeDate")}>
+              <DateIcon />
+              <Label>{t("playlist.changeDate")}</Label>
             </Dropdown.Item>
           ) : null}
           {shows("export")
@@ -217,6 +229,13 @@ export function PlaylistHeader({
         )}
         {viewers}
         {status}
+        {dating && (
+          <PlaylistDateDialog
+            date={playlist.date}
+            onChange={onChangeDate}
+            onClose={() => setDating(false)}
+          />
+        )}
         {telling && (
           <TellReadyDialog
             playlist={playlist}

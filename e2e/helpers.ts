@@ -29,6 +29,8 @@ export async function accessibilityProblems(page: Page) {
     const { violations } = await new AxeBuilder({ page })
       // React Aria's hidden announcer keeps announcements whose labels are gone.
       .exclude("[data-live-announcer]")
+      // Playlist rows already passed are faded below the contrast rule on purpose.
+      .exclude("[data-passed]")
       .analyze();
     for (const v of violations)
       if (v.impact === "serious" || v.impact === "critical")

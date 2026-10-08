@@ -11,7 +11,7 @@ Why the roles, slots, notifications, song leaders, calendar and playlist news wo
 - **Reading never saves**: a date shows its weekly event's template until the team (or a sign-up) changes it. Then its slots are saved and the template no longer reaches it. The first to change a date is its builder, who is told of its declines, sign-ups and offers.
 - **Slots are known by role and place** (`roleId:0`), the same before and after saving, so the routes don't care whether a date was saved. A one-off event starts without slots, and 8 weeks ahead is shown.
 - **A decline lives in what the builder was told**, not on the slot: the slot is simply open again, with statuses open, asked, accepted and offered.
-- **Away is a warning, not a block**: the team may still ask someone who marked a day away. Two roles in one date are allowed with a note.
+- **Away is a warning, not a block**: the team may still ask someone who marked a day away. Two roles or more in one date are allowed, each place naming the person's others ("Also Chitară and Tobe"), which says how many and which.
 - **The people picker is a select**: those marked for the role come first, with "(away)" beside those away that day. A combobox lost its list when the schedule reloaded after a change.
 - **Devices don't take slots**: the community's laptop and guests' phones are not people.
 - **A deleted account** loses its away days, notifications, push subscriptions and role markings, and its slots open again.
@@ -20,8 +20,8 @@ Why the roles, slots, notifications, song leaders, calendar and playlist news wo
 - **Notifications are rows**, shown in the app and pushed. An `about` key makes each go once: a slot's reminder, an open role on a date to one person. A decline's open notice and a playlist's "ready" carry their time, so they can go again.
 - **One minute-by-minute job** sends reminders, open-slot notices and changed-song news, so saving a slot or a song needn't know about notifications.
 - **Push texts are in the community's first language**, since the server doesn't know a device's language; the app shows them in the reader's.
-- **Push uses web-push** (MPL-2.0) with the server's own keys. Without keys push stays off, people are told in the app and My schedule says so. The service worker shows the notification and opens My schedule on a tap. Subscriptions the push service says are gone are deleted.
-- **How each push went is kept** on its notification: devices sent, failed or stopped, or why none. My schedule shows it in a muted line, so a member sees why their phone stayed quiet. A failed push is logged on the server with the push service's host and answer, never the device's address (it is a secret URL).
+- **Push uses web-push** (MPL-2.0) with the server's own keys. Without keys push stays off, people are told in the app and the Notifications page says so. The service worker shows the notification and opens what it's about on a tap. Subscriptions the push service says are gone are deleted.
+- **How each push went is kept** on its notification: devices sent, failed or stopped, or why none. The Notifications page shows it in a muted line, so a member sees why their phone stayed quiet. A failed push is logged on the server with the push service's host and answer, never the device's address (it is a secret URL).
 - **A playlist knows its service**: the next service's playlist Norless makes gets it when made. A playlist made by hand plans the next service no playlist plans yet, so "Sunday" made on Tuesday is Sunday's. There is no field to change it; when it is wrong, choosing a leader per song still works.
 - **Who leads a song**: the first person in a leading slot, assigned or accepted, unless the team chose another person from that service's leading or vocal slots. A play keeps the chosen person, else the lead, when it is recorded.
 - **Names go to members only**: a playlist's leaders and the live view's leader travel on the members' topic, as for who changed the slide. The playlist reloads when slots or roles change, so a new lead shows at once.
@@ -33,6 +33,10 @@ Why the roles, slots, notifications, song leaders, calendar and playlist news wo
 - **The calendar sits where nothing moves when it loads**: on My schedule after one's own slots, and at the end of the team schedule.
 - **"Ready" is said, not guessed**: a playlist is built bit by bit, so Norless can't know when it is ready. The team says so from the playlist's actions, with a dialog that explains who is told, and can say it again. The people told are those in its service's slots, assigned or accepted, except the one telling.
 - **Changed songs are told only after "ready"**: while the team is building, changes are expected. Afterwards, a song's text, chords or key, a key for the service, or a song added is told once to the people in instrument or leading slots, singers included since a key matters to them.
+- **A bell for what's new**: in every bar of a community (the laptop's header, the phone's bar, Classic's), for members while service roles are on, always there so nothing moves, with the count of new ones (9+ past nine). It opens the Notifications page, the same on every device: newest first, bold until seen there, each leading where its push does (a playlist's news to the playlist, the rest to My schedule), with how its push went and this device's switch. My schedule links to it; the line at the top keeps the next place and Accept. What was new showed only on My schedule before.
+- **Why Take or Offer, in a tooltip**: the labels stay; hover or a long press says "You're among the people for Tobe: it's yours at once" or "The team chooses the people for Chitară: it confirms your offer". The interface may be rethought once the team uses it.
+- **Photos beside names**: in the slots, the choice of who's in one, the people marked for a role and their choice, and the choice of who leads a song, the photo hidden from screen readers, which read the name.
+- **The templates say where the services are set**: the weekly services and rehearsals are the schedule in Settings, a link for owners, a sentence for the rest of the team.
 
 ## Rejected
 
@@ -43,3 +47,7 @@ Why the roles, slots, notifications, song leaders, calendar and playlist news wo
 - **Rehearsal-only roles**: every role can be used for any event.
 - **A trash button on every row**: destructive actions move into the row's menu.
 - **A statistics view by leader**: the data is kept, a view comes when asked for.
+- A count ("3 roles that day") or an icon with ×3: they don't say which roles.
+- One line above the schedule explaining Take and Offer, or one "Sign up" for both.
+- A popover under the bell on a laptop, the top line always shown, or a dot on the photo: one page on every device is simpler.
+- The app's What's new bubble merged into the bell: kept apart until both are used.

@@ -38,12 +38,24 @@ test("the team fills a service's places; the person accepts, and marks days away
   const maria = await as(browser, "maria@example.com");
   await maria.goto("/echipa/my-schedule");
   await expect(maria.getByText("Voce", { exact: true })).toBeVisible();
-  // What she was told; the line at the top stays off this page, which has the same.
-  await expect(maria.getByText(/You're on Voce/)).toHaveCount(1);
+  // The line at the top stays off this page, which has the same.
+  await expect(maria.getByText(/You're on Voce/)).toHaveCount(0);
+  // What she was told is behind the bell, which says how many are new.
+  await maria.getByRole("link", { name: "Notifications, 1 new" }).click();
+  await expect(maria).toHaveURL("/echipa/notifications");
+  await expect(
+    maria.getByRole("link", { name: /You're on Voce/ }),
+  ).toBeVisible();
   // And how it went by push: these tests run without the server's keys.
   await expect(
-    maria.getByText("Only here: notifications to phones aren't set up yet"),
+    maria.getByText(/Only here: notifications to phones aren't set up yet/),
   ).toBeVisible();
+  // Seen, the bell has nothing new.
+  await expect(
+    maria.getByRole("link", { name: "Notifications", exact: true }),
+  ).toBeVisible();
+  await maria.getByRole("link", { name: /You're on Voce/ }).click();
+  await expect(maria).toHaveURL("/echipa/my-schedule");
   await maria.getByRole("button", { name: "Accept" }).first().click();
   await expect(sunday.getByText("Waiting for an answer")).toHaveCount(0);
 
@@ -177,8 +189,63 @@ test("the worship lead leads each song; the team gives one to a vocalist", async
     type: "go",
     entryId: (entry.body as { id: string }).id,
   });
-  await ioana.goto("/echipa/musicians");
+  await ioana.goto("/echipa/instruments");
   await expect(ioana.getByText("Led by Maria")).toBeVisible();
+});
+
+test("someone in two places of a date sees the other named; an open place says why Take or Offer; people show with their photos", async ({
+  browser,
+}) => {
+  const ioana = await as(browser, "ioana@example.com");
+  const base = "/api/communities/echipa";
+  const schedule = async () =>
+    (await api(ioana, "GET", `${base}/team-schedule`)).body as {
+      roles: {
+        id: string;
+        name: string;
+        instrument: string | null;
+        leads: boolean;
+      }[];
+      dates: {
+        eventId: string;
+        date: string;
+        slots: { key: string; roleId: string }[];
+      }[];
+    };
+  const { roles, dates } = await schedule();
+  // The last date listed, which the tests above leave alone.
+  const sunday = dates.at(-1);
+  if (!sunday) throw new Error("no date");
+  const at = `${base}/team-schedule/${sunday.eventId}/${sunday.date}/slots`;
+  const guitar = roles.find((r) => r.instrument === "guitar");
+  const drums = roles.find((r) => r.instrument === "drums");
+  // A role nobody is marked for, left open.
+  const host = roles.find((r) => !r.instrument && !r.leads);
+  for (const role of [guitar, drums, host])
+    await api(ioana, "POST", at, { roleId: role?.id });
+  const slots = (await schedule()).dates.find(
+    (d) => d.date === sunday.date && d.eventId === sunday.eventId,
+  )?.slots;
+  for (const role of [guitar, drums]) {
+    const slot = slots?.findLast((s) => s.roleId === role?.id);
+    await api(ioana, "POST", `${at}/${slot?.key}/assign`, { userId: "maria" });
+  }
+  await ioana.goto("/echipa/team-schedule");
+  const card = ioana.getByRole("region").filter({
+    has: ioana.getByText(`Also ${drums?.name}`),
+  });
+  // Maria twice: each row names her other role.
+  await expect(card.getByText(`Also ${drums?.name}`)).toBeVisible();
+  await expect(card.getByText(`Also ${guitar?.name}`)).toBeVisible();
+
+  // An open place: Ioana isn't among the vocalists, so she offers, and the tooltip says why.
+  const offer = card.getByRole("button", { name: "Offer to do it" }).first();
+  // React Aria opens tooltips on hover once a pointer was used on the page.
+  await ioana.mouse.click(0, 0);
+  await offer.hover();
+  await expect(ioana.getByRole("tooltip")).toContainText(
+    "The team chooses the people for",
+  );
 });
 
 test("an owner sets the church's calendar, whose address only owners see", async ({
@@ -256,6 +323,9 @@ test("the team tells the service's people the playlist is ready", async ({
   );
 
   const maria = await as(browser, "maria@example.com");
-  await maria.goto("/echipa/my-schedule");
-  await expect(maria.getByText(/Gata · .+ is ready: 0 songs/)).toBeVisible();
+  await maria.goto("/echipa/notifications");
+  // It leads to the playlist.
+  const told = maria.getByRole("link", { name: /Gata · .+ is ready: 0 songs/ });
+  await told.click();
+  await expect(maria).toHaveURL(`/echipa/playlists/${id}`);
 });

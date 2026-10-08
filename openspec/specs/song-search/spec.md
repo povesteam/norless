@@ -7,7 +7,7 @@ Let operators find what to add to a playlist, songs in any language, Bible refer
 
 ### Requirement: Search songs by title and lyrics
 
-The system SHALL search all non-deleted songs of the community that the owners haven't excluded (`song-feedback` spec) by title and lyrics, across all language versions. Title matches SHALL rank above lyric matches. Chord lines, section names and layout characters SHALL NOT be searchable. Search SHALL ignore diacritics and case. Results SHALL be limited to 25 songs.
+The system SHALL search all non-deleted songs of the community that the owners haven't excluded (`song-feedback` spec) by title and lyrics, across all language versions. Title matches SHALL rank above lyric matches. Chord lines, section names and layout characters SHALL NOT be searchable. Search SHALL ignore diacritics and case. Results SHALL be limited to 25 songs. After the songs that contain every word, the search SHALL find songs whose title or lyrics contain the query with its words joined and its punctuation ignored, and then songs within about one typo (a letter missing, extra or changed) per five letters of the query, titles before lyrics and fewer typos first, so a sloppy match never ranks above an exact one.
 
 #### Scenario: Search without diacritics
 - **WHEN** the operator types "isus e domn"
@@ -20,6 +20,14 @@ The system SHALL search all non-deleted songs of the community that the owners h
 #### Scenario: Chords are not searched
 - **WHEN** the operator types "Am"
 - **THEN** songs aren't matched only because their chord lines contain "Am"
+
+#### Scenario: Words typed together
+- **WHEN** the operator types "datimi"
+- **THEN** the song titled "Dați-mi un cântec" is found
+
+#### Scenario: A typo
+- **WHEN** the operator types "har minunt"
+- **THEN** "Har minunat" is found, after any song that contains "har" and "minunt" as typed
 
 ### Requirement: Result details
 
@@ -81,15 +89,15 @@ Typing a letter or digit anywhere outside a text field, without Ctrl, Cmd or Alt
 
 ### Requirement: Browsing without a query
 
-Focusing the empty search box SHALL show, in one list, songs worth suggesting, each with a chip saying why, then a random sample, up to 100 songs in all, leaving out excluded songs: for a member, the songs they like (`song-feedback` spec), last liked first; songs sung in exactly one of the community's last 4 services (one sung in 2 or more is sung often enough), longest ago first; and the songs not played lately (`song-statistics` spec: in at least 3 services, none in the last 6 months), most sung first; up to 5 of each, a song once, none already in the open playlist.
+Focusing the empty search box SHALL show, in one list, songs worth suggesting, each with a chip saying why, then a random sample, up to 100 songs in all, leaving out excluded songs: for a member, the songs they like (`song-feedback` spec), last liked first, "You like it" in the accent color; songs sung in exactly one of the community's last 4 services (one sung in 2 or more is sung often enough), longest ago first, "Played recently" in grey; and the songs not played lately (`song-statistics` spec: in at least 3 services, none in the last 6 months), most sung first, "Bring it back" in green; up to 5 of each, a song once, none already in the open playlist.
 
 #### Scenario: Browse for inspiration
 - **WHEN** the operator focuses the empty search box
-- **THEN** the songs sung lately are listed first, marked "Played lately", then the ones not played lately, then random songs, up to 100
+- **THEN** the songs sung lately are listed first, marked "Played recently" in grey, then the ones not played lately, marked "Bring it back" in green, then random songs, up to 100
 
 ### Requirement: Searching takes over the screen
 
-While the search box's results are open, the box and its results SHALL cover the page: the box at the top, the results filling the rest down to the live bar, if one shows, or the screen's bottom (on a phone, the keyboard's top), so the live controls keep working while searching. On a window at least 1024 pixels wide, the highlighted song's words SHALL show beside the results, in the viewer's language if the song has it. A pick, Escape or a click outside SHALL give the page back as it was.
+While the search box's results are open, the box and its results SHALL cover the page: the box at the top, the results filling the rest down to the live bar, if one shows, or the screen's bottom (on a phone, the keyboard's top), so the live controls keep working while searching. A press on the box that opens the results SHALL NOT pick the result that appears under the pointer when it's released. On a window at least 1024 pixels wide, the highlighted song's words SHALL show beside the results, in the viewer's language if the song has it, each part marked by its faint 1, 2 or R as on the slide cards; the words SHALL change once a song stays highlighted for a moment, and SHALL stay until the next song's words have loaded, so moving quickly over the results doesn't blink. A pick, Escape or a click outside SHALL give the page back as it was.
 
 #### Scenario: The phone's search fills the screen
 - **WHEN** an operator taps the search box on a phone
@@ -98,3 +106,7 @@ While the search box's results are open, the box and its results SHALL cover the
 #### Scenario: Checking the words before adding
 - **WHEN** an operator on a laptop types "har" and moves down to "Har minunat"
 - **THEN** the words of "Har minunat" show beside the results, and the live bar stays below them
+
+#### Scenario: A click on the box
+- **WHEN** an operator on a laptop clicks the search box, and a suggestion appears under the pointer before the button is released
+- **THEN** the results stay open and nothing is added to the playlist

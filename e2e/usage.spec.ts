@@ -79,7 +79,7 @@ test("a double-click that sends a song live is counted as live.go via double-cli
   );
 });
 
-test("switched off on My account, the next event is kept without the member; the app team reads usage from its menu", async ({
+test("switched off on My account, the next event is kept without the member; the app team reads usage from My account", async ({
   page,
   browser,
 }) => {
@@ -99,7 +99,7 @@ test("switched off on My account, the next event is kept without the member; the
     });
   expect((await count("on")).status).toBe(204);
 
-  await page.goto("/account");
+  await page.goto("/account/profile");
   const counting = page.getByRole("switch", {
     name: "Help improve Norless: count how I use it",
   });
@@ -125,10 +125,9 @@ test("switched off on My account, the next event is kept without the member; the
     ["off", null],
   ]);
 
-  // The app team's page, from its account menu.
-  await team.goto("/");
-  await team.getByRole("button", { name: "app-team" }).click();
-  await team.getByRole("menuitem", { name: "Usage" }).click();
+  // The app team's page, from My account.
+  await team.goto("/account/about");
+  await team.getByRole("link", { name: "Usage" }).click();
   await expect(team).toHaveURL(/\/app-usage$/);
   await expect(
     team.getByRole("heading", { name: "Not used in 30 days" }),

@@ -85,9 +85,10 @@ export function usePlaylistEdits(
   const quiet = useRef(0);
   /**
    * Adds an entry, at the end or `after` one (null: at the top); `shown` is how it looks,
-   * to show it before the server answers. Gives its id, once added.
+   * to show it before the server answers. Gives its id, once added, and selects it
+   * unless `select` is false.
    */
-  const add = async (entry: NewEntry, shown?: Entry) => {
+  const add = async (entry: NewEntry, shown?: Entry, select = true) => {
     const added = shown && {
       entry: shown,
       id: null as string | null,
@@ -103,7 +104,7 @@ export function usePlaylistEdits(
     const { id } = (await response.json()) as { id: string };
     if (added)
       setAdding((list) => list.map((a) => (a === added ? { ...a, id } : a)));
-    setSelected(id);
+    if (select) setSelected(id);
     return id;
   };
   const unhide = (entryId: string) =>

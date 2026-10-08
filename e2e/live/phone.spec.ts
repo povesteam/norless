@@ -24,6 +24,24 @@ test.describe("on a phone", () => {
     await expect(page.getByRole("button", { name: "Next" })).toBeInViewport();
   });
 
+  test("the Song view shows one language, chosen above the parts and kept on the phone", async ({
+    page,
+  }) => {
+    await logInAs(page, "ioana@example.com");
+    await page.goto("/unu-unu/playlists/steady");
+    await rows(page).first().click();
+    const song = page.getByRole("region", { name: "Song" });
+    await expect(song).toBeInViewport();
+    await expect(song.getByText("Amazing grace how sweet")).toBeVisible();
+    await expect(song.getByText("Слава Тобі")).toHaveCount(0);
+    await song.getByRole("radio", { name: "UA" }).click();
+    await expect(song.getByText("Слава Тобі")).toBeVisible();
+    await expect(song.getByText("Amazing grace how sweet")).toHaveCount(0);
+    await page.reload();
+    await rows(page).first().click();
+    await expect(song.getByText("Слава Тобі")).toBeVisible();
+  });
+
   test("the live bar shows only the title and Previous, Blank and Next until it's opened, and stays as chosen", async ({
     page,
   }) => {
@@ -50,6 +68,29 @@ test.describe("on a phone", () => {
     await page.reload();
     await expect(parts).toBeVisible();
     await page.getByRole("button", { name: "Fewer controls" }).click();
+    await expect(parts).toHaveCount(0);
+
+    // The title opens and folds it too: a tap, or a drag up and down.
+    const title = async () => {
+      const bar = await page.locator("[data-bottom-bar]").boundingBox();
+      return { x: (bar?.x ?? 0) + 200, y: (bar?.y ?? 0) + 24 };
+    };
+    const drag = async (by: number) => {
+      const { x, y } = await title();
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x, y + by, { steps: 4 });
+      await page.mouse.up();
+    };
+    let at = await title();
+    await page.touchscreen.tap(at.x, at.y);
+    await expect(parts).toBeVisible();
+    at = await title();
+    await page.touchscreen.tap(at.x, at.y);
+    await expect(parts).toHaveCount(0);
+    await drag(-40);
+    await expect(parts).toBeVisible();
+    await drag(40);
     await expect(parts).toHaveCount(0);
   });
 
@@ -94,7 +135,7 @@ test.describe("on a phone", () => {
       page.getByRole("button", { name: "Fullscreen" }),
     ).toBeVisible();
 
-    await page.goto("/unu-unu/vocalists");
+    await page.goto("/unu-unu/vocals");
     await page.getByRole("radio", { name: "Whole song" }).click();
     await expect(page.getByText("Voi proclama")).toBeVisible();
     // Nothing scrolls sideways: the long line continues on the next row.

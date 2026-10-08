@@ -27,10 +27,19 @@ the songs**: the starter list's Worship lead does.
 
 ![My schedule](../screenshots/phone-my-schedule.png)
 
-Your places with Accept and Decline, the open places you can take, your away days, and
-what you were told. Switch on notifications to get them on your phone: assigned, a
-reminder 3 hours before, open places, and the playlist's news. On an iPhone, add Norless
-to the home screen first.
+Your places with Accept and Decline, the open places you can take, and your away days.
+An open place says **Take it** when you're among its role's people (it's yours at once),
+else **Offer to do it** (the team confirms); point at it, or hold it on a phone, to read
+why. Someone in several places of a date has the others named on each.
+
+## Notifications
+
+![Notifications](../screenshots/phone-notifications.png)
+
+The bell in the bar shows how many things are new for you; tap it to read them, each
+leading to its playlist or to your schedule. Switch on notifications there to get them on
+your phone too: assigned, a reminder 3 hours before, open places, and the playlist's news.
+On an iPhone, add Norless to the home screen first.
 
 ## Who leads each song
 

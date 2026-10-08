@@ -72,3 +72,31 @@ export function OnlineMembers() {
     </div>
   );
 }
+
+/** On a phone's menu: who else is online, each with their devices and stage views. */
+export function OnlineList({ others }: { others: OnlineMember[] }) {
+  const { t } = useTranslation();
+  if (!others.length) return null;
+  return (
+    <section
+      aria-label={t("presence.online")}
+      className="flex flex-col gap-2 border-b border-separator pb-3"
+    >
+      <h2 className="text-xs font-semibold tracking-wide text-muted uppercase">
+        {t("presence.online")}
+      </h2>
+      {others.map((person) => (
+        <p key={person.userId} className="flex items-center gap-2">
+          <PersonAvatar name={person.name} avatar={person.avatar} />
+          <span className="min-w-0 flex-1 truncate">{person.name}</span>
+          <span className="text-sm text-muted">
+            {[
+              ...person.devices.map((d) => t(`presence.${d}`)),
+              ...person.views.map((v) => t(`${v.view}.title`)),
+            ].join(", ")}
+          </span>
+        </p>
+      ))}
+    </section>
+  );
+}

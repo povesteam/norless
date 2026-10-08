@@ -253,14 +253,21 @@ export function projectInPage(phone: boolean) {
   inPage = phone;
 }
 
-/** Starts projecting `entries` locally, or switches to them, and opens the projector window. */
+/**
+ * Starts projecting `entries` locally, or switches to them, and opens the projector
+ * window; `from` the room's live entry and slide, when it's one of them.
+ */
 export function projectLocally({
   slug,
   languages,
   playlistId,
   entries,
   known = [],
-}: Omit<Local, "view"> & { known?: Song[] }) {
+  from,
+}: Omit<Local, "view"> & {
+  known?: Song[];
+  from?: { entryId: string; slide: number; blank: boolean };
+}) {
   for (const song of known) songs.set(song.id, song);
   if (local?.slug !== slug) {
     channel?.close();
@@ -290,6 +297,14 @@ export function projectLocally({
   };
   windowClosed = false;
   publish({ slug, languages, playlistId, entries, view: idle });
+  if (from && entries.some((e) => e.id === from.entryId))
+    void actLocally({
+      type: "go",
+      entryId: from.entryId,
+      slide: from.slide,
+    }).then(() =>
+      from.blank ? actLocally({ type: "blank", blank: true }) : undefined,
+    );
   void openLocalProjector();
 }
 

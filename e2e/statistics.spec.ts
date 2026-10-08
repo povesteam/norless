@@ -19,7 +19,7 @@ test("members open the statistics from the menu; a new song says it wasn't sung 
     page.getByRole("heading", { name: "Most played", level: 3 }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Not played lately", level: 3 }),
+    page.getByRole("heading", { name: "Bring it back", level: 3 }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Played a lot lately", level: 3 }),

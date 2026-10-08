@@ -86,16 +86,32 @@ body {
   min-height: 100dvh;
   padding-bottom: 0;
 }
-/* An app screen (Classic on a laptop) fills the window: its columns scroll, the page
-   doesn't, and About and Privacy are in its menu. */
+/* An app screen (Classic from 750 pixels, the wide laptop layouts from 1024) fills the
+   window: its columns scroll, the page doesn't, and About and Privacy are in its menu. */
 @media (min-width: 750px) {
-  #root > div:has([data-app-screen]) {
+  #root > div:has([data-app-screen="classic"]) {
     height: 100dvh;
     overflow: hidden;
   }
-  #root > div:has([data-app-screen]) > footer {
+  #root > div:has([data-app-screen="classic"]) > footer {
     display: none;
   }
+}
+@media (min-width: 1024px) {
+  #root > div:has([data-app-screen="wide"]) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  #root > div:has([data-app-screen="wide"]) > footer {
+    display: none;
+  }
+}
+/* Dialogs, drawers and alerts where the visible area is (main.tsx), also while Android's
+   keyboard pans it down to a focused field. */
+.modal__backdrop,
+.drawer__backdrop,
+.alert-dialog__backdrop {
+  top: var(--visual-viewport-top, 0px);
 }
 /* Interface text can't be selected by accident; lyrics and editors stay selectable. */
 button,

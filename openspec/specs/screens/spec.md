@@ -297,7 +297,7 @@ The projector, the stage monitor, and the musicians and vocalists screens SHALL 
 
 ### Requirement: Stage view names
 
-The interface SHALL name the musicians view Instruments and the vocalists view Vocals, in the menus, the bar, the screens' types and wherever it names them, since singers are musicians too; their addresses stay `/musicians` and `/vocalists`.
+The interface SHALL name the musicians view Instruments and the vocalists view Vocals, in the menus, the bar, the screens' types and wherever it names them, since singers are musicians too; and their addresses say so too: `/instruments` and `/vocals`.
 
 #### Scenario: The bar's stage pages
 - **WHEN** a singer opens the community's menu with the stage views switched on

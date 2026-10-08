@@ -76,7 +76,7 @@ test("a PDF dropped onto the playlist becomes slides that go live page by page, 
   ).toHaveAttribute("aria-current", "true");
   // The stage views name it.
   const band = await (await browser.newContext()).newPage();
-  await band.goto("/diapozitive/vocalists");
+  await band.goto("/diapozitive/vocals");
   await expect(band.getByText("Slides 2/2")).toBeVisible();
   // Phones following along see the page across their width.
   const phone = await (

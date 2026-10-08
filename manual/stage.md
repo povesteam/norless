@@ -14,7 +14,7 @@ For the musicians and singers. Once switched on, the community's bar has
 Both show the key and the time signature. A song without chords shows its words and
 its structure, and the team can add the chords from there.
 
-On **My account**, under Musician, list your instruments and mark your main one; it
+On **My account**, under **Music**, list your instruments and mark your main one; it
 chooses your layouts:
 
 - **Guitar:** the capo and the shapes to play, from the shapes you like (C, A, G, E,
@@ -25,7 +25,7 @@ chooses your layouts:
 
 Chords can read as letters, Do-Re-Mi or numbers, for you or for the whole community.
 
-**Chord colors** (on My account): each chord in a color for its degree in the
+**Chord colors** (My account, Music; the ⓘ beside Plain chords says it in short): each chord in a color for its degree in the
 key, so G in D looks like B♭ in F. A chord shares its color with its relative (C and
 Am, F and Dm, G and Em), the minor one softer; the home chord stays plain, and chords
 outside the key are magenta. A suffix (sus4, 7, maj7, dim) has its own shade, mixed

@@ -209,6 +209,13 @@ test("entries above the live one look done, and while blank a line marks where t
   await expect(rows(page).nth(3).locator("[data-entry]")).not.toHaveAttribute(
     "data-passed",
   );
+  // Faded clearly, and the live row says so besides its frame.
+  await expect(rows(page).first().locator("[data-entry]")).toHaveCSS(
+    "opacity",
+    "0.5",
+  );
+  await expect(rows(page).nth(2).locator("[data-live]")).toBeVisible();
+  await expect(rows(page).nth(3).locator("[data-live]")).toBeHidden();
   await expect(rows(page).first()).not.toContainText(/\d{1,2}:\d{2}/);
   await expect(page.locator("[data-position]")).toHaveCount(0);
 

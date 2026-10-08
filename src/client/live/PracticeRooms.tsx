@@ -351,10 +351,10 @@ export function JoinRoomPage({
         <>
           <p className="text-muted">{t("rooms.joinedHelp")}</p>
           <nav className="flex flex-col gap-2">
-            <Link href={`~/${slug}/musicians`} className="link">
+            <Link href={`~/${slug}/instruments`} className="link">
               {t("musicians.title")}
             </Link>
-            <Link href={`~/${slug}/vocalists`} className="link">
+            <Link href={`~/${slug}/vocals`} className="link">
               {t("vocalists.title")}
             </Link>
             <Link href={`~/${slug}/stage`} className="link">

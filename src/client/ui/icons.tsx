@@ -70,7 +70,7 @@ import {
   Sunrise,
 } from "lucide-react";
 import type { EntryKind } from "../../server/playlists/playlists";
-import type { DeviceType } from "../../shared/preferences";
+import type { DeviceType, Instrument } from "../../shared/preferences";
 import type { Feature, Planned } from "../../shared/features";
 import type { ScreenType } from "../../shared/screens";
 
@@ -149,6 +149,16 @@ export function LayoutIcon({ id }: { id: string }) {
   const Icon = layoutIcons[id];
   return Icon ? <Icon /> : null;
 }
+
+/** Each instrument's icon; Lucide has no bass, which takes the guitar's. */
+export const instrumentIcons: Record<Instrument, LucideIcon> = {
+  guitar: Guitar,
+  keys: Piano,
+  bass: Guitar,
+  drums: Drum,
+  vocals: MicVocal,
+  other: Music,
+};
 
 const deviceIcons = { phone: Smartphone, tablet: Tablet, laptop: Laptop };
 

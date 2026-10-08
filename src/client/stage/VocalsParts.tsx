@@ -62,9 +62,8 @@ export function Parts({
   // Whole song: keep the live part in view.
   const list = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    list.current
-      ?.querySelector('[aria-current="true"]')
-      ?.scrollIntoView({ block: "center", behavior: "smooth" });
+    const part = list.current?.querySelector('[aria-current="true"]');
+    if (list.current && part) scrollToPart(list.current, part);
   }, [live, song.id]);
 
   // A tap or a drag over the map moves to a part: live for the team, into view for others.
@@ -76,12 +75,9 @@ export function Parts({
     const i = Number(at?.dataset.part ?? -1);
     if (i < 0 || i === mapped.current) return;
     mapped.current = i;
+    const part = list.current?.children[i];
     if (onMap) onMap(i);
-    else
-      list.current?.children[i]?.scrollIntoView({
-        block: "center",
-        behavior: "smooth",
-      });
+    else if (list.current && part) scrollToPart(list.current, part);
   };
 
   if (layout === "sideways")
@@ -163,6 +159,41 @@ export function Parts({
       )}
     </div>
   );
+}
+
+/** The scroll under way in each list, so a newer one takes over. */
+const scrolls = new WeakMap<Element, number>();
+
+/**
+ * Scrolls `list` to `part`, centered where it fits and else from its top, in 200 ms: a
+ * finger running over the map doesn't leave it behind. It aims again on every frame, so
+ * a part that grows as it goes live still ends wholly in view. Jumps for reduced motion.
+ */
+function scrollToPart(list: HTMLElement, part: Element) {
+  const aim = () => {
+    const view = list.getBoundingClientRect();
+    const box = part.getBoundingClientRect();
+    // Boxes are in the window's pixels, scrolling in the list's, which its text size zooms.
+    const scale = list.clientHeight / view.height || 1;
+    const top = (box.top - view.top) * scale + list.scrollTop;
+    const height = box.height * scale;
+    const room = list.clientHeight;
+    const wanted = height <= room ? top - (room - height) / 2 : top;
+    return Math.max(0, Math.min(wanted, list.scrollHeight - room));
+  };
+  cancelAnimationFrame(scrolls.get(list) ?? 0);
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    list.scrollTop = aim();
+    return;
+  }
+  const from = list.scrollTop;
+  const start = performance.now();
+  const step = (now: number) => {
+    const done = Math.min(1, (now - start) / 200);
+    list.scrollTop = from + (aim() - from) * (1 - (1 - done) ** 3);
+    if (done < 1) scrolls.set(list, requestAnimationFrame(step));
+  };
+  scrolls.set(list, requestAnimationFrame(step));
 }
 
 /** A part in each shown language, one after the other. */

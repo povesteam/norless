@@ -31,7 +31,8 @@ declare module "fastify" {
 }
 
 const COOKIE = "__Host-session";
-const DAY = 86_400_000;
+const HOUR = 3_600_000;
+const DAY = 24 * HOUR;
 const LIFETIME = 30 * DAY;
 
 /** Whether the dev login is on: DEV_LOGIN=1, never with NODE_ENV=production. */
@@ -169,12 +170,17 @@ export function sameOrigin(headers: IncomingHttpHeaders): boolean {
   }
 }
 
-type SessionRow = SessionUser & { expiresAt: string };
+type SessionRow = SessionUser & {
+  expiresAt: string;
+  seenAt: string | null;
+  userAgent: string | null;
+};
 
 const findSession = (db: Db, token: string, now: number) =>
   db
     .prepare(
-      `SELECT s.id AS sessionId, s.expires_at AS expiresAt, u.id, u.display_name AS displayName, u.email,
+      `SELECT s.id AS sessionId, s.expires_at AS expiresAt, s.seen_at AS seenAt,
+         s.user_agent AS userAgent, u.id, u.display_name AS displayName, u.email,
          u.avatar, u.device_kind AS device
        FROM sessions s JOIN users u ON u.id = s.user_id
        WHERE s.id = ? AND s.expires_at > ? AND u.status <> 'deleted'`,
@@ -211,6 +217,10 @@ export function attachSessions(
   app.decorateRequest("user", null);
 
   const renew = db.prepare("UPDATE sessions SET expires_at = ? WHERE id = ?");
+  // Where and when it's used, for the list on My account; at most once an hour.
+  const seen = db.prepare(
+    "UPDATE sessions SET seen_at = ?, user_agent = ? WHERE id = ?",
+  );
 
   app.addHook("onRequest", async (request, reply) => {
     if (!request.url.startsWith("/api/")) return;
@@ -226,8 +236,15 @@ export function attachSessions(
     const now = Date.now();
     const row = findSession(db, token, now);
     if (!row) return clearSessionCookie(reply);
-    const { expiresAt, ...user } = row;
+    const { expiresAt, seenAt, userAgent, ...user } = row;
     request.user = user;
+    const agent = request.headers["user-agent"]?.slice(0, 400) ?? null;
+    if (
+      !seenAt ||
+      now - Date.parse(seenAt) > HOUR ||
+      (agent && agent !== userAgent)
+    )
+      seen.run(new Date(now).toISOString(), agent, user.sessionId);
     // A device's session ends on time.
     if (!user.device && Date.parse(expiresAt) - now < LIFETIME - DAY) {
       renew.run(new Date(now + LIFETIME).toISOString(), user.sessionId);

@@ -52,7 +52,7 @@ test("a big window opens Big screen: the room's screens, the band's devices, mor
     })
   ).newPage();
   await logInAs(phone, "radu@example.com");
-  await phone.goto("/ecran-mare/musicians");
+  await phone.goto("/ecran-mare/instruments");
   const tile = people.getByRole("button", {
     name: /^Open Radu · .* · Phone larger$/,
   });

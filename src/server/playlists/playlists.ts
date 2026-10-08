@@ -43,7 +43,7 @@ export type Entry = {
   ledBy?: Person | null;
 };
 
-export type Person = { id: string; name: string };
+export type Person = { id: string; name: string; avatar?: string | null };
 
 /** The service a playlist plans: its event and its date in the community. */
 export type Service = { eventId: string; date: string };
@@ -72,6 +72,11 @@ export type Playlist = PlaylistSummary & {
   readyAt?: string | null;
   /** Members only: who leads its songs from the service's slots, and who else may. */
   leads?: { lead: Person | null; people: Person[] };
+  /**
+   * Being prepared: its day is today or later, and none of its songs was sung in a
+   * service from it yet. Its rows say when each song was last sung.
+   */
+  preparing: boolean;
 };
 
 export type EntryInput = {
@@ -235,11 +240,18 @@ export function getPlaylist(
         : {}),
     };
   });
+  const sung = db
+    .prepare(
+      "SELECT 1 FROM plays WHERE playlist_id = ? AND mode = 'service' LIMIT 1",
+    )
+    .get(id);
   return {
     ...summary,
     entries,
     service,
     ...(names ? { leads: leadsOf(db, communityId, service) } : {}),
+    preparing:
+      !sung && summary.date >= localTime(now, zoneOf(db, communityId)).date,
   };
 }
 
@@ -255,7 +267,7 @@ export function leadsOf(
   if (!service) return { lead: null, people: [] };
   const rows = db
     .prepare(
-      `SELECT s.user_id AS id, u.display_name AS name, r.leads
+      `SELECT s.user_id AS id, u.display_name AS name, u.avatar, r.leads
        FROM slots s
        JOIN service_roles r ON r.id = s.role_id AND r.deleted_at IS NULL
        JOIN users u ON u.id = s.user_id
@@ -268,7 +280,9 @@ export function leadsOf(
   })[];
   const lead = rows.find((r) => r.leads === 1);
   const people = [
-    ...new Map(rows.map((r) => [r.id, { id: r.id, name: r.name }])).values(),
+    ...new Map(
+      rows.map((r) => [r.id, { id: r.id, name: r.name, avatar: r.avatar }]),
+    ).values(),
   ];
   return { lead: lead ? { id: lead.id, name: lead.name } : null, people };
 }
@@ -296,7 +310,7 @@ export function leaderOf(
 }
 
 /** The community's time zone and schedule, to work out its services. */
-function scheduleOf(db: Db, communityId: string) {
+export function scheduleOf(db: Db, communityId: string) {
   const { timeZone } = db
     .prepare("SELECT time_zone AS timeZone FROM communities WHERE id = ?")
     .get(communityId) as { timeZone: string };
@@ -477,6 +491,7 @@ export function createPlaylist(
     entries: [],
     archivedAt: null,
     service,
+    preparing: true,
   };
 }
 

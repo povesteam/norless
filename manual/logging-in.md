@@ -10,8 +10,13 @@ Norless has no passwords.
 - **Email me a login link** sends a link that works once, for 15 minutes. Norless never
   says whether an address belongs to a member.
 
-You stay logged in for 30 days on that device. **My account**, in the account menu,
-logs you out, here or everywhere (a lost phone, for example).
+You stay logged in for 30 days on that device. **My account**, which your photo opens,
+has its parts in tabs. Under **Logins** it lists where you're logged in (the browser and
+when it was last used), logs out one of those places from here, and logs you out here
+or everywhere (a lost phone, for example). Under **This device** it corrects whether
+it's a phone, a tablet or a laptop.
+
+![Where you're logged in](../screenshots/laptop-account-logins.png)
 
 Only people the owners invited can edit or control. Anyone else who logs in sees what
 a visitor sees: songs and playlists, and what's live.

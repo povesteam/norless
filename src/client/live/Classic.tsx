@@ -29,6 +29,8 @@ import type { Via } from "../../shared/usage";
 import { useHintAnchor } from "./hints";
 import { SlidesPanel } from "./SlidesPanel";
 import { UserMenu } from "../app/UserMenu";
+import { NotificationsBell } from "../team/NotificationsBell";
+import { BackButton, parentOf } from "../app/BackButton";
 import { useBackCloses } from "../ui/back";
 import { usePageHeld } from "../ui/full-screen";
 import { Tip } from "../ui/tip";
@@ -51,6 +53,7 @@ export function ClassicBar() {
   const others = useOthersOnline();
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
+  const parent = parentOf(location);
   // Going to another page closes the menu.
   const [seen, setSeen] = useState(location);
   if (location !== seen) {
@@ -85,10 +88,12 @@ export function ClassicBar() {
         </Link>
       )}
       <div className="flex items-center gap-2">
-        {menu}
+        {/* On a phone below the top, the way back takes the menu's place. */}
+        {phone && parent ? <BackButton to={parent} /> : menu}
         <BarPlace place="title" />
         {!above && home}
         <div className="ms-auto flex shrink-0 items-center gap-2">
+          <NotificationsBell />
           <UserMenu compact online={phone ? others : undefined} />
         </div>
       </div>

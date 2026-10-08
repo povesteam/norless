@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import {
   api,
+  createSong,
   expectTitleSafe,
   logInAs,
   openFromBar,
@@ -38,7 +39,7 @@ test("the stage monitor shows the current and next part, messages, and the sermo
   // The musicians see the messages too, and so does the stage monitor opened from the
   // menu, without a screen set up.
   const musicians = await browser.newPage();
-  await musicians.goto("/unu-unu/musicians");
+  await musicians.goto("/unu-unu/instruments");
   await page.goto(`/unu-unu/playlists/${id}`);
   await openFromBar(page, "Stage monitor");
   await expect(page).toHaveURL(/\/unu-unu\/stage$/);
@@ -137,44 +138,88 @@ test("musicians and vocalists screens show the live song", async ({
   await vocalists.close();
 });
 
-test("a singer looks at the next song on their device, and is back on the live one when it changes", async ({
+test("on a phone, the vocalists' toolbar holds the key, and previous and next stay at the bottom", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await logInAs(page, "ioana@example.com");
   const id = await servicePlaylist(page);
-  const [grace, , isus] = (
+  const [grace, , , passage] = (
     (await api(page, "GET", `${base}/${id}`)).body as {
       entries: { id: string }[];
     }
   ).entries;
+  const go = (entry: { id: string } | undefined) =>
+    api(page, "POST", "/api/communities/unu-unu/live", {
+      type: "go",
+      entryId: entry?.id,
+    });
+  await go(grace);
+  await page.goto("/unu-unu/vocals");
+  await expect(
+    page
+      .locator("header")
+      .getByRole("button", { name: "Key for this service: G" }),
+  ).toBeVisible();
+
+  // With a Bible passage live, nothing floats mid-screen.
+  await go(passage);
+  await expect(page.getByText("No song is live.")).toBeVisible();
+  const next = await page.getByRole("button", { name: "Next" }).boundingBox();
+  expect((next?.y ?? 0) + (next?.height ?? 0)).toBeGreaterThan(844 - 24);
+});
+
+test("in Whole song on a phone, the map's last part comes wholly into view above previous and next, at once", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await logInAs(page, "ana@example.com");
+  // Larger text, which zooms the view.
+  await api(page, "PUT", "/api/me/preferences", { phone: { textSize: 1.3 } });
+  // Lines too long for a phone, so the live part, drawn larger, wraps and grows.
+  const verses = Array.from({ length: 8 }, (_, i) =>
+    [
+      `${i + 1}:`,
+      "Poartă-ți lumina prin întuneric ca să-i găsești iar pe cei pierduți",
+      "Poartă-ți lumina ca toți s-o vadă și să dea lumină celor din jur",
+      "Privește la cei ce-s lângă tine și-n întuneric s-au rătăcit",
+      "Dă-le lumina ca să-i ajute să vadă drumul spre infinit",
+    ].join("\n"),
+  ).join("\n\n");
+  const songId = await createSong(page, "Opt strofe", verses);
+  const { body } = await api(page, "POST", base, { title: "Opt strofe" });
+  const id = (body as { id: string }).id;
+  const entry = await api(page, "POST", `${base}/${id}/entries`, {
+    kind: "song",
+    songId,
+  });
   await api(page, "POST", "/api/communities/unu-unu/live", {
     type: "go",
-    entryId: grace?.id,
+    entryId: (entry.body as { id: string }).id,
   });
-  await page.goto("/unu-unu/vocalists");
-  await expect(page.getByText("Amazing grace how sweet")).toBeVisible();
-  // The hint shows once on a device, then the arrows alone.
-  const hint = page.getByText("Look at the songs before and after");
-  await expect(hint).toBeVisible();
-  await page.reload();
-  await expect(page.getByText("Amazing grace how sweet")).toBeVisible();
-  await expect(hint).toHaveCount(0);
-
-  await page.getByRole("button", { name: "Later song" }).click();
-  await expect(page.getByText(/Looking at Isus e Domn/)).toBeVisible();
-  await expect(page.getByText("Cântăm cu bucurie")).toBeVisible();
-  await page.getByRole("button", { name: "Back to live" }).click();
-  await expect(page.getByText("Amazing grace how sweet")).toBeVisible();
-
-  // The live song changes while looking ahead: back on it.
-  await page.getByRole("button", { name: "Later song" }).click();
-  await expect(page.getByText(/Looking at Isus e Domn/)).toBeVisible();
-  await api(page, "POST", "/api/communities/unu-unu/live", {
-    type: "go",
-    entryId: isus?.id,
-  });
-  await expect(page.getByText(/Looking at/)).toHaveCount(0);
-  await expect(page.getByText("Cântăm cu bucurie")).toBeVisible();
+  await page.goto("/unu-unu/vocals");
+  const parts = page.getByRole("list", { name: "Parts" });
+  await expect(parts.getByRole("listitem").first()).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
+  await page
+    .getByRole("navigation", { name: "Map of the parts" })
+    .getByText("8", { exact: true })
+    .click();
+  const last = parts.getByRole("listitem").last();
+  const next = page.getByRole("button", { name: "Next" });
+  // Within half a second, as a finger running down the map needs.
+  await expect
+    .poll(
+      async () => {
+        const part = await last.boundingBox();
+        const button = await next.boundingBox();
+        return (part?.y ?? 0) + (part?.height ?? 0) <= (button?.y ?? 0);
+      },
+      { timeout: 500 },
+    )
+    .toBe(true);
 });
 
 test("musicians see the chords as a bar grid or over the words, and the team taps parts", async ({

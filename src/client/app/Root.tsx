@@ -77,10 +77,10 @@ export function Root() {
                       <JoinRoomPage slug={community} roomId={room} />
                     )}
                   </Route>
-                  <Route path="/:community/musicians">
+                  <Route path="/:community/instruments">
                     {({ community }) => <MusiciansPage slug={community} />}
                   </Route>
-                  <Route path="/:community/vocalists">
+                  <Route path="/:community/vocals">
                     {({ community }) => <VocalistsPage slug={community} />}
                   </Route>
                   <Route path="/:community/stage">

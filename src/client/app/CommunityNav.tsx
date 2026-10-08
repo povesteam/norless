@@ -1,5 +1,7 @@
 import { Button, buttonVariants, Dropdown, Label } from "@heroui/react";
-import { useOthersOnline } from "../live/OnlineMembers";
+import { Focusable } from "react-aria-components";
+import { BackButton, parentOf } from "./BackButton";
+import { OnlineList, useOthersOnline } from "../live/OnlineMembers";
 import { RequestCount } from "../stage/RequestCount";
 import { useRef, useState } from "react";
 import {
@@ -33,7 +35,8 @@ import { LanguagePicker } from "./LanguagePicker";
 import { hasRole, useIsMember, useMe, useRoles } from "../data/me";
 import { FeedbackDialog } from "./FeedbackDialog";
 import { UserMenu } from "./UserMenu";
-import { HostIcon, ScreenIcon } from "../ui/icons";
+import { NotificationsBell } from "../team/NotificationsBell";
+import { HostIcon, instrumentIcons, ScreenIcon } from "../ui/icons";
 import { useBackCloses } from "../ui/back";
 import { Tip } from "../ui/tip";
 import { usePageHeld } from "../ui/full-screen";
@@ -58,7 +61,8 @@ function AppLinks() {
 
 /**
  * On a phone's bar, one tap to the stage view of what the person plays (Vocals for
- * singers, Instruments for the others); the view's toolbar leads back.
+ * singers, Instruments for the others), with their main instrument's icon; the view's
+ * toolbar leads back.
  */
 function MyStageView() {
   const { t } = useTranslation();
@@ -67,15 +71,20 @@ function MyStageView() {
   if (!main || !shows("stageViews")) return null;
   const view = main === "vocals" ? "vocalists" : "musicians";
   const label = t(`${view}.title`);
+  const path = main === "vocals" ? "/vocals" : "/instruments";
+  const Icon = instrumentIcons[main];
   return (
     <Tip label={label}>
-      <Link
-        href={`/${view}`}
-        aria-label={label}
-        className={buttonVariants({ isIconOnly: true, variant: "ghost" })}
-      >
-        <ScreenIcon type={view} className="size-5" />
-      </Link>
+      {/* Focusable gives the tooltip the link's place, as a button would. */}
+      <Focusable>
+        <Link
+          href={path}
+          aria-label={label}
+          className={buttonVariants({ isIconOnly: true, variant: "ghost" })}
+        >
+          <Icon className="size-5" />
+        </Link>
+      </Focusable>
     </Tip>
   );
 }
@@ -127,13 +136,13 @@ function useBarGroups(): BarGroup[] {
       items: [
         ...item(
           shows("stageViews"),
-          "/musicians",
+          "/instruments",
           <Guitar />,
           t("musicians.title"),
         ),
         ...item(
           shows("stageViews"),
-          "/vocalists",
+          "/vocals",
           <MicVocal />,
           t("vocalists.title"),
         ),
@@ -240,6 +249,7 @@ export function CommunityNav() {
   usePageHeld(open);
   const row = useRef<HTMLDivElement>(null);
   const [top, setTop] = useState(0);
+  const parent = parentOf(location);
   const home = (
     <Link
       href="/"
@@ -339,6 +349,7 @@ export function CommunityNav() {
         </nav>
         <div className="flex shrink-0 items-center gap-2">
           <LanguagePicker />
+          <NotificationsBell />
           <UserMenu appLinks />
         </div>
         {dialog}
@@ -357,23 +368,29 @@ export function CommunityNav() {
       )}
       {/* ☰ first, the photo last, as in Classic's bar. */}
       <div ref={row} className="group/bar flex items-center gap-2">
-        <Button
-          isIconOnly
-          variant="ghost"
-          aria-label={t("app.menu")}
-          aria-expanded={open}
-          aria-controls="phone-menu"
-          onPress={() => {
-            setTop((row.current?.getBoundingClientRect().bottom ?? 0) + 8);
-            setOpen(!open);
-          }}
-        >
-          <Menu className="size-6" />
-        </Button>
+        {/* Below the top, the way back takes the menu's place. */}
+        {parent ? (
+          <BackButton to={parent} />
+        ) : (
+          <Button
+            isIconOnly
+            variant="ghost"
+            aria-label={t("app.menu")}
+            aria-expanded={open}
+            aria-controls="phone-menu"
+            onPress={() => {
+              setTop((row.current?.getBoundingClientRect().bottom ?? 0) + 8);
+              setOpen(!open);
+            }}
+          >
+            <Menu className="size-6" />
+          </Button>
+        )}
         <BarPlace place="title" />
         {!above && home}
         <div className="ms-auto flex shrink-0 items-center gap-2">
           <MyStageView />
+          <NotificationsBell />
           <UserMenu compact online={others} />
         </div>
       </div>
@@ -384,6 +401,7 @@ export function CommunityNav() {
           className="fixed inset-x-0 bottom-0 z-20 flex flex-col gap-4 overflow-y-auto overscroll-contain bg-background px-4 pb-4"
           style={{ top }}
         >
+          <OnlineList others={others} />
           <nav
             aria-label={name}
             className="menu-rows flex flex-col gap-1 text-lg"

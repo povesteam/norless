@@ -12,6 +12,7 @@ import { attachChanges } from "./changes.js";
 import { alertAppTeam, attachAlerts } from "./ops/alerts.js";
 import { watchConverter } from "./converter.js";
 import { attachDeviceLogin } from "./auth/device-login.js";
+import { attachSessionList } from "./auth/sessions.js";
 import { attachEditing } from "./songs/editing.js";
 import { attachFeatureRequests } from "./community/feature-requests.js";
 import { attachLiveChord } from "./live/live-chord.js";
@@ -419,6 +420,7 @@ export function buildApp({
     },
   };
   attachDeviceLogin(app, { db, live, findCommunity });
+  attachSessionList(app, db);
   attachSongs(app, { db, live: relayed, findCommunity });
   attachSongFeedback(app, { db, live: relayed, findCommunity });
   attachFeatureRequests(app, { db, findCommunity });

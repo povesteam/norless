@@ -195,6 +195,8 @@ export function SearchBox({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  const pressedBox = useRef(false);
+
   // Asked to add somewhere: the box takes the focus.
   useEffect(() => {
     if (place?.label) input.current?.focus();
@@ -232,6 +234,16 @@ export function SearchBox({
         // reading the words doesn't close it.
         onMouseDown={(event) => {
           if (open && event.target !== input.current) event.preventDefault();
+        }}
+        // A press on the box opens the results; its release over the result that
+        // appeared under the pointer isn't a pick (React Aria picks on release).
+        onPointerDown={(event) => {
+          pressedBox.current = event.target === input.current;
+        }}
+        onPointerUpCapture={(event) => {
+          if (pressedBox.current && event.target !== input.current)
+            event.stopPropagation();
+          pressedBox.current = false;
         }}
       >
         <ComboBox
@@ -467,11 +479,14 @@ function useFreeArea(active: boolean) {
   return area;
 }
 
-/** Why the empty box suggests a song, in its chip. */
+/**
+ * Why the empty box suggests a song, in its chip: sung recently is a caution (grey), not
+ * sung for long a suggestion (green).
+ */
 const reasons = {
-  liked: "opinions.liked",
-  lately: "search.lately",
-  rested: "statistics.notLately",
+  liked: { label: "opinions.liked", color: "accent" },
+  lately: { label: "search.lately", color: "default" },
+  rested: { label: "statistics.notLately", color: "success" },
 } as const;
 
 function SongOption({ song, title }: { song: SongResult; title: string }) {
@@ -490,8 +505,8 @@ function SongOption({ song, title }: { song: SongResult; title: string }) {
       </Label>
       <Description className="flex flex-wrap items-center gap-1">
         {song.reason && (song.reason !== "liked" || liked) && (
-          <Chip size="sm" color="accent" variant="soft">
-            {t(reasons[song.reason])}
+          <Chip size="sm" color={reasons[song.reason].color} variant="soft">
+            {t(reasons[song.reason].label)}
           </Chip>
         )}
         {song.keySignature && (

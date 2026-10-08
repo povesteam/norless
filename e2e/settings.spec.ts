@@ -63,7 +63,8 @@ test("on a phone the settings are a list of sections; an event goes from its ⋯
   await row.getByRole("button", { name: "Actions: De șters" }).click();
   await page.getByRole("menuitem", { name: "Delete" }).click();
   await expect(row).toHaveCount(0);
-  await page.getByRole("link", { name: "Settings" }).click();
+  // The bar's back button, in the menu's place.
+  await page.getByRole("button", { name: "Back" }).click();
   await expect(page).toHaveURL(/\/unu-unu\/settings$/);
   await expect(page.getByRole("link", { name: "Members" })).toBeVisible();
 });

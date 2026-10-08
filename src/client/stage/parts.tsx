@@ -1,7 +1,7 @@
 import { buttonVariants } from "@heroui/react";
 import { ListMusic } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Button as AriaButton } from "react-aria-components";
+import { Button as AriaButton, Focusable } from "react-aria-components";
 import { Link } from "wouter";
 import { Tip } from "../ui/tip";
 import type { LiveView } from "../../server/live/live-view";
@@ -26,13 +26,16 @@ export function ToPlaylist({ slug }: { slug: string }) {
   const { t } = useTranslation();
   return (
     <Tip label={t("stage.toPlaylist")}>
-      <Link
-        href={`~/${slug}`}
-        aria-label={t("stage.toPlaylist")}
-        className={`${buttonVariants({ isIconOnly: true, size: "sm", variant: "secondary" })} shrink-0`}
-      >
-        <ListMusic />
-      </Link>
+      {/* Focusable gives the tooltip the link's place, as a button would. */}
+      <Focusable>
+        <Link
+          href={`~/${slug}`}
+          aria-label={t("stage.toPlaylist")}
+          className={`${buttonVariants({ isIconOnly: true, size: "sm", variant: "secondary" })} shrink-0`}
+        >
+          <ListMusic />
+        </Link>
+      </Focusable>
     </Tip>
   );
 }

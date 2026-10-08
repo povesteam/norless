@@ -30,7 +30,7 @@
     "newSong": "Create the song “{{title}}”",
     "command": "Command",
     "bibleHint": "Type a reference to add a passage, like {{example}}",
-    "lately": "Played lately",
+    "lately": "Played recently",
     "place": "After “{{title}}”",
     "placeTop": "At the top",
     "cancelPlace": "Add at the end instead"
@@ -176,6 +176,10 @@
     "title": "Playlist title",
     "actions": "Playlist actions",
     "rename": "Rename",
+    "changeDate": "Change date",
+    "changeDateHelp": "For a service that moved, or a playlist made for the wrong week. Who leads its songs follows that day's service.",
+    "date": "Date",
+    "saveDate": "Save the date",
     "entries": "Entries",
     "empty": "Nothing in this playlist yet",
     "emptyHelp": "Add songs, Bible references and dividers with the search box above, and announcements with “Add text slide”.",
@@ -505,6 +509,7 @@
     "connectedWindows": "bible.com extension connected, windows {{windows}} open."
   },
   "app": {
+    "back": "Back",
     "menu": "Menu",
     "more": "More",
     "stage": "Stage",
@@ -532,7 +537,23 @@
     "copied": "Link copied"
   },
   "account": {
+    "appTeam": "The app team",
     "title": "My account",
+    "tabs": {
+      "profile": "Profile",
+      "music": "Music",
+      "logins": "Logins",
+      "about": "About"
+    },
+    "sessions": {
+      "title": "Where you're logged in",
+      "on": "{{browser}} on {{system}}",
+      "unknown": "A browser",
+      "here": "this device",
+      "seen": "used {{when}}",
+      "logOut": "Log out there",
+      "logOutOf": "Log out of {{name}}"
+    },
     "deleteHelp": "Deleting your account removes your name, email and photo. Songs and playlists you added stay, without your name, and so do recordings you made, which the whole team can then hear.",
     "logoutTitle": "Log out of Norless?",
     "everywhere": "Also on my other devices",
@@ -882,7 +903,8 @@
     "guitarShapes": "Guitar shapes I like",
     "noteNames": "Chord names",
     "plainChords": "Plain chords (one color)",
-    "chordColorsHelp": "Chords in one color. Otherwise, each chord shares its color with its relative (C and Am, F and Dm, G and Em), the minor one softer, and each degree keeps its color in every key: G in D and B♭ in F are both 4. The tonic stays plain, chords outside the key are magenta, and a bass note after the slash takes its own degree's color.",
+    "chordColorsAbout": "What the chord colors mean",
+    "chordColorsHelp": "Each chord shares its color with its relative (C and Am, F and Dm, G and Em), the minor one softer, and each degree keeps its color in every key: G in D and B♭ in F are both 4. The tonic stays plain, chords outside the key are magenta, and a bass note after the slash takes its own degree's color.",
     "naming": {
       "community": "As the community chooses",
       "letters": "Letters: C D E",
@@ -1060,7 +1082,7 @@
     "services_one": "1 service",
     "noServices": "No services in this period",
     "noServicesHelp": "Songs played in services show here, most played first. Pick another period.",
-    "notLately": "Not played lately",
+    "notLately": "Bring it back",
     "notLatelyHelp": "Played in 3 services or more, none in the last 6 months.",
     "noneForgotten": "No forgotten songs",
     "noneForgottenHelp": "Every song played in 3 services or more was played in the last 6 months.",
@@ -1221,13 +1243,6 @@
     "times_one": "once, {{last}}",
     "times_other": "{{count}} times, last {{last}}",
     "newSong": "New song"
-  },
-  "lookAhead": {
-    "earlier": "Earlier song",
-    "later": "Later song",
-    "hint": "Look at the songs before and after, on this device only",
-    "looking": "Looking at {{title}}: only on this device",
-    "back": "Back to live"
   },
   "rooms": {
     "title": "Rooms",
@@ -1547,7 +1562,9 @@
     "asked": "Waiting for an answer",
     "offered": "Offers to",
     "away": "Away that day",
-    "twice": "Two roles that day",
+    "alsoOn": "Also {{roles}}",
+    "takeWhy": "You're among the people for {{role}}: it's yours at once",
+    "offerWhy": "The team chooses the people for {{role}}: it confirms your offer",
     "personAway": "{{name}} (away)",
     "confirm": "Confirm",
     "turnDown": "Turn down",
@@ -1556,6 +1573,8 @@
     "removeSlot": "Remove this place for {{role}}",
     "templates": "What each date starts with",
     "templatesHelp": "For each weekly service or rehearsal, the places each of its dates starts with; change a date on its own above.",
+    "eventsInSettings": "Weekly services and rehearsals: Settings › Schedule",
+    "eventsByOwners": "Owners set the weekly services and rehearsals in Settings › Schedule.",
     "saveTemplate": "Save for {{name}}",
     "people": "Who does what",
     "peopleHelp": "People marked for a role take its open places at once and hear when one opens. Those who play an instrument are marked for its role already.",
@@ -1581,13 +1600,14 @@
     "removeAway": "Remove these days",
     "push": "Notifications on this device",
     "pushInstall": "Notifications need Norless installed",
-    "pushInstallHow": "On an iPhone: open Norless in Safari, tap Share, then Add to Home Screen; open it from there and turn notifications on. Until then, what's new shows here and at the top of the pages.",
-    "pushOff": "This server doesn't send notifications yet: what's new shows here and at the top of the pages.",
+    "pushInstallHow": "On an iPhone: open Norless in Safari, tap Share, then Add to Home Screen; open it from there and turn notifications on. Until then, what's new shows here, and on the bell in the bar.",
+    "pushOff": "This server doesn't send notifications yet: what's new shows here, and on the bell in the bar.",
     "pushOn": "Notifications are on for this device.",
     "pushTurnOn": "Turn on notifications",
     "pushDenied": "The browser blocks them: allow notifications for Norless in its settings.",
-    "notifications": "What's new for you",
+    "notifications": "Notifications",
     "noNotifications": "Nothing yet.",
+    "noNotificationsHelp": "When you're put on a role, a place opens for you, or a playlist you play in is ready, it shows here.",
     "pushSent": "Sent to {{count}} of your devices",
     "pushSent_one": "Sent to your device",
     "pushFailed": "not sent to {{count}} devices",
@@ -1597,8 +1617,8 @@
     "pushKeys": "Only here: notifications to phones aren't set up yet",
     "pushDevices": "Only here: none of your devices allowed notifications",
     "next": "You're on {{role}}: {{when}}",
-    "unread": "{{count}} new",
-    "unread_one": "1 new",
+    "unreadNotifications": "Notifications, {{count}} new",
+    "unreadNotifications_one": "Notifications, 1 new",
     "today": "Today: {{roles}}",
     "roles": "Roles",
     "rolesHelp": "The roles of a service, for the team schedule. A role for an instrument marks those who play it.",
@@ -1655,7 +1675,7 @@
     "read_one": "1 event coming, read at {{at}}."
   },
   "offline": {
-    "keep": "Keep songs for offline",
+    "keepFrom": "Keep {{name}}'s songs for offline",
     "keepHelp": "This device keeps every song and the newest playlists, to project without internet.",
     "offWithout": "There's no internet: switched off, this device forgets the kept songs and can't keep them again until the internet is back. Switch off anyway?",
     "kept": "{{count}} songs kept, at {{at}}.",

@@ -20,6 +20,11 @@ export const FeaturesPage = lazy(() =>
 export const MySchedulePage = lazy(() =>
   import("../team/MySchedule").then((m) => ({ default: m.MySchedulePage })),
 );
+export const NotificationsPage = lazy(() =>
+  import("../team/Notifications").then((m) => ({
+    default: m.NotificationsPage,
+  })),
+);
 export const TeamSchedulePage = lazy(() =>
   import("../team/TeamSchedule").then((m) => ({ default: m.TeamSchedulePage })),
 );

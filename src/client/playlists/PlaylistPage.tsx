@@ -15,14 +15,18 @@ import { useJson } from "../data/fetch";
 import { hasRole, useRoles } from "../data/me";
 import { useLiveCommands } from "./commands";
 import {
-  BigNowNext,
   type ControllerLayout,
   controllerLayouts,
-  EntryParts,
   PhoneViews,
   Previews,
   RunningOrder,
 } from "../live/ControllerViews";
+import {
+  WideLayout,
+  wideLayouts,
+  type WideLayoutId,
+} from "../live/WideLayouts";
+import { EntryParts } from "../live/EntryParts";
 import { LayoutPicker, useLayout, useWindowWidth } from "../data/device";
 import { BIG_SCREEN, layoutsFor } from "../live/big-screen";
 import type { Via } from "../../shared/usage";
@@ -54,6 +58,9 @@ import { useEditingSong } from "./editing-song";
 import { addSlides, FileDrop } from "./SlideFiles";
 import { NotLately } from "./NotLately";
 
+const isWide = (layout: string): layout is WideLayoutId =>
+  (wideLayouts as readonly string[]).includes(layout);
+
 // Big screen loads its previews' views only where it shows.
 const BigScreen = lazy(() =>
   import("../live/BigScreen").then((m) => ({ default: m.BigScreen })),
@@ -75,13 +82,14 @@ export function PlaylistPage({ id }: { id: string }) {
     () => live.subscribe(`playlist:${id}`, () => setVersion((n) => n + 1)),
     [id],
   );
-  // Who leads its songs comes from the team schedule's slots.
-  const slots = useChanges(community.slug, "slots", "service_roles");
+  // Who leads its songs comes from the team schedule's slots; what was sung, from the
+  // plays (the played mark, and whether it's still being prepared).
+  const others = useChanges(community.slug, "slots", "service_roles", "plays");
   const {
     data: playlist,
     failed,
     retry,
-  } = useJson<Playlist>(url, version + slots);
+  } = useJson<Playlist>(url, version + others);
   // The window's title names the playlist.
   usePlace(playlist ? playlistName(playlist, i18n.language) : null);
   // An archived playlist is read, and can go live, but isn't changed until restored.
@@ -214,6 +222,7 @@ export function PlaylistPage({ id }: { id: string }) {
         movingBy={movingBy}
         liveEntryId={liveEntryId}
         liveBlank={!!liveEntryId && !!view?.blank}
+        preparing={playlist?.preparing}
         problems={problems}
         canChange={canChange}
         selected={selected}
@@ -267,6 +276,7 @@ export function PlaylistPage({ id }: { id: string }) {
       canChange={canChange}
       canArchive={isTeam}
       onRename={(title) => change("PATCH", "", { title })}
+      onChangeDate={(date) => change("PUT", "/date", { date })}
       onArchive={(archived) => change("PUT", "/archived", { archived })}
       // On a phone, who's here is under the photo in the bar.
       viewers={!phone && <Viewers viewers={viewers} />}
@@ -280,7 +290,7 @@ export function PlaylistPage({ id }: { id: string }) {
             <PlaylistEnd times={times} />
           )}
           {shows("appFrame") && !phone && <OnlineMembers />}
-          {layout !== "classic" && layout !== "list" && picker}
+          {layout !== "list" && picker}
         </>
       }
     />
@@ -326,24 +336,30 @@ export function PlaylistPage({ id }: { id: string }) {
         ],
         playlistId: id,
         entries,
+        // Where the room is, when it's this playlist.
+        from:
+          view?.entryId && view.playlistId === id
+            ? { entryId: view.entryId, slide: view.slide, blank: view.blank }
+            : undefined,
       }),
   };
 
   return (
     <div
-      // Classic on a laptop is an app screen: the window holds it, its columns scroll.
-      data-app-screen={layout === "classic" || undefined}
+      // Classic on a laptop and the wide laptop layouts are app screens: the window
+      // holds them, their columns scroll.
+      data-app-screen={
+        layout === "classic" ? "classic" : isWide(layout) ? "wide" : undefined
+      }
       // It grows to the screen's bottom, where a bar of live controls sits.
       className={`flex flex-1 flex-col gap-4 ${
-        layout === "classic" ? "min-[750px]:min-h-0" : ""
+        layout === "classic"
+          ? "min-[750px]:min-h-0"
+          : isWide(layout)
+            ? "lg:min-h-0"
+            : ""
       }`}
     >
-      {/* Classic's layout menu stays above its columns. */}
-      {layout === "classic" && (
-        <div className="flex flex-wrap items-center justify-end gap-2 empty:hidden">
-          {picker}
-        </div>
-      )}
       {layout !== "classic" && header}
       {failedChange && <ErrorNotice message={t("states.actionFailed")} />}
       {undo && (
@@ -379,12 +395,16 @@ export function PlaylistPage({ id }: { id: string }) {
             editor={songEditor}
             onEdit={setEditingSong}
             empty={entries.length === 0}
+            // While no entry is selected; a song added from it isn't selected, so the
+            // list stays for the next.
             aside={
               canChange &&
-              entries.length === 0 &&
               shows("statistics") && (
                 <NotLately
-                  onAdd={(songId) => void add({ kind: "song", songId })}
+                  added={entries.flatMap((e) => (e.song ? [e.song.id] : []))}
+                  onAdd={(songId) =>
+                    void add({ kind: "song", songId }, undefined, false)
+                  }
                 />
               )
             }
@@ -405,12 +425,12 @@ export function PlaylistPage({ id }: { id: string }) {
           </div>
           <ProjectBar {...project} />
         </>
-      ) : layout === "controller" ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,1fr)]">
-          {list}
-          {/* Always a cell, so the previews keep their column while a song loads. */}
-          <div className="min-w-0">
-            {editingSong ? (
+      ) : isWide(layout) ? (
+        <WideLayout
+          layout={layout}
+          list={list}
+          parts={
+            editingSong ? (
               songEditor
             ) : (
               <EntryParts
@@ -420,39 +440,23 @@ export function PlaylistPage({ id }: { id: string }) {
                 onEditSong={canEditSongs ? setEditingSong : undefined}
                 canGo={isTeam}
               />
-            )}
-          </div>
-          {/* In view while the parts or the editor scroll. */}
-          <div className="flex flex-col gap-3 lg:sticky lg:top-4 lg:self-start">
-            <Previews />
-            <LiveBar view={view} side project={project} />
-          </div>
-        </div>
-      ) : layout === "running-order" ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          {editingSong ? (
-            songEditor
-          ) : (
-            <RunningOrder
-              key={songsSaved}
-              entries={entries}
-              view={liveEntryId ? view : undefined}
-              onEditSong={canEditSongs ? setEditingSong : undefined}
-            />
-          )}
-          <div className="flex flex-col gap-3 lg:sticky lg:top-4 lg:self-start">
-            <Previews />
-            <LiveBar view={view} side project={project} />
-          </div>
-        </div>
-      ) : layout === "big" ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          <BigNowNext view={view} />
-          <div className="flex flex-col gap-3">
-            <LiveBar view={view} side big project={project} />
-            {list}
-          </div>
-        </div>
+            )
+          }
+          order={
+            editingSong ? (
+              songEditor
+            ) : (
+              <RunningOrder
+                key={songsSaved}
+                entries={entries}
+                view={liveEntryId ? view : undefined}
+                onEditSong={canEditSongs ? setEditingSong : undefined}
+              />
+            )
+          }
+          view={view}
+          project={project}
+        />
       ) : layout === "big-screen" ? (
         <Suspense fallback={<Placeholder lines={8} />}>
           <BigScreen
@@ -497,6 +501,7 @@ export function PlaylistPage({ id }: { id: string }) {
                 view={view}
                 big
                 canGo={isTeam}
+                oneLanguage
               />
             }
             screens={<Previews big />}

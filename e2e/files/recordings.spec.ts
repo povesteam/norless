@@ -58,7 +58,7 @@ test("a team member records a rehearsal through two songs and plays the refrain 
   } = await twoSongs(page);
   await api(page, "POST", `${base}/live`, { type: "go", entryId: first });
 
-  await page.goto("/repetitii/musicians");
+  await page.goto("/repetitii/instruments");
   await page.getByRole("button", { name: "Record", exact: true }).click();
   // The first time on this device: everyone in the room is recorded.
   await expect(page.getByText("Tell them before you start")).toBeVisible();
@@ -67,7 +67,7 @@ test("a team member records a rehearsal through two songs and plays the refrain 
   await expect(page.getByText("Recording · Radu")).toBeVisible();
   // A visitor's stage screen shows it, without the name.
   const stage = await (await browser.newContext()).newPage();
-  await stage.goto("/repetitii/vocalists");
+  await stage.goto("/repetitii/vocals");
   await expect(stage.getByText("Recording", { exact: true })).toBeVisible();
 
   await page.waitForTimeout(3000);

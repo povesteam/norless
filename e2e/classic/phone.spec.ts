@@ -72,17 +72,20 @@ test("on a phone: the live song's title above the buttons, the menu at the left 
   await page.goto(`/clasic/playlists/${id}`);
   const bar = page.locator("[data-bottom-bar]");
   await expect(bar.getByText(/^Lumina lumii/)).toBeVisible();
+  // A long press on an icon-only button names it, and doesn't press it.
+  const next = bar.getByRole("button", { name: "Next" });
+  const touch = { pointerType: "touch", pointerId: 7, isPrimary: true };
+  await next.dispatchEvent("pointerdown", touch);
+  await expect(page.getByRole("tooltip")).toHaveText("Next");
+  await next.dispatchEvent("pointerup", touch);
+  await expect(bar.getByText(/^Lumina lumii · Verse 1/)).toBeVisible();
 
-  // ☰ first, the photo last; the photo opens the account menu.
+  // ☰ first, the photo last; the photo opens My account.
   const menu = page.getByRole("button", { name: "Menu" });
-  const photo = page.getByRole("button", { name: "Ioana" });
+  const photo = page.getByRole("link", { name: "Ioana" });
   expect((await menu.boundingBox())?.x ?? 0).toBeLessThan(50);
   expect((await photo.boundingBox())?.x ?? 0).toBeGreaterThan(300);
-  await photo.click();
-  await expect(
-    page.getByRole("menuitem", { name: "My account" }),
-  ).toBeVisible();
-  await page.keyboard.press("Escape");
+  await expect(photo).toHaveAttribute("href", "/account");
   // The drawer opens from the left.
   await menu.click();
   const drawer = page.getByRole("dialog", { name: "Menu" });

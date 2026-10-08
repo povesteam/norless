@@ -69,7 +69,7 @@ test("a guitarist with C and G shapes plays capo 4; a drummer sees the bars and 
   expect(saved.status).toBe(204);
 
   // On a laptop, a guitarist's main layout is the chart.
-  await page.goto("/formatia/musicians");
+  await page.goto("/formatia/instruments");
   await expect(page.getByText("Capo 4")).toBeVisible();
   await expect(page.getByText("C shapes")).toBeVisible();
   await expect(page.getByText("G/B", { exact: true }).first()).toBeVisible();
@@ -92,7 +92,7 @@ test("a key for the service moves the musicians' chords and shows on the project
   await page.goto("/formatia");
   const { songId, playlistId } = await liveSongInE(page);
   const visitor = await (await browser.newContext()).newPage();
-  await visitor.goto("/formatia/musicians");
+  await visitor.goto("/formatia/instruments");
   await expect(visitor.getByText("C#m", { exact: true })).toBeVisible();
 
   await page.goto(`/formatia/playlists/${playlistId}`);
@@ -134,7 +134,7 @@ test("a musician sees each chord in its degree's color, unless they chose plain 
 }) => {
   await page.goto("/formatia");
   const { songId, entryId } = await liveSongInE(page);
-  await page.goto("/account");
+  await page.goto("/account/music");
   const plainChords = page.getByRole("switch", {
     name: "Plain chords (one color)",
   });
@@ -144,9 +144,17 @@ test("a musician sees each chord in its degree's color, unless they chose plain 
     0,
   );
   await expect(page.getByText("Suffixes:")).toBeVisible();
+  // The degrees as the member names chords: C major's, in letters by default.
+  await expect(page.getByText("Degrees:")).toContainText("CDmEmFGAmBdim");
+  // What the colors mean, behind a button.
+  await page
+    .getByRole("button", { name: "What the chord colors mean" })
+    .click();
+  await expect(page.getByRole("dialog")).toContainText("relative");
+  await page.keyboard.press("Escape");
 
   // In E: E is 1, B/D# is 5 over 7, C#m is 6 and A is 4, in the bar grid.
-  await page.goto("/formatia/musicians");
+  await page.goto("/formatia/instruments");
   await pickLayout(page, "Bar grid");
   const chord = (text: string) =>
     page.locator("[data-degree]", { hasText: new RegExp(`^${text}$`) }).first();
@@ -184,13 +192,16 @@ test("a musician sees each chord in its degree's color, unless they chose plain 
   await page.goto(`/formatia/songs/${songId}/chords`);
   await expect(chord("C#m")).toHaveAttribute("data-degree", "6");
 
-  // Plain chords: one color, no legend.
-  await page.goto("/account");
+  // Plain chords: one color, the examples kept, in it.
+  await page.goto("/account/music");
   const saved = page.waitForResponse("/api/me/preferences");
   await page.getByText("Plain chords (one color)").click();
   expect((await saved).status()).toBe(204);
-  await expect(page.getByText("Suffixes:")).toHaveCount(0);
-  await page.goto("/formatia/musicians");
+  await expect(page.getByText("Suffixes:")).toBeVisible();
+  await expect(
+    page.getByText("Degrees:").locator("span.text-chord").first(),
+  ).toBeVisible();
+  await page.goto("/formatia/instruments");
   await expect(page.getByText("C#m").first()).toBeVisible();
   await expect(page.locator("[data-degree]")).toHaveCount(0);
 });
@@ -251,7 +262,7 @@ test("the bar grid's rows are equal and aligned, a bar's chords as long as their
     type: "go",
     entryId: (entry.body as { id: string }).id,
   });
-  await page.goto("/formatia/musicians");
+  await page.goto("/formatia/instruments");
   await pickLayout(page, "Bar grid");
   const bars = page.locator("[data-bar-grid]").first().locator(":scope > *");
   await expect(bars).toHaveCount(8);
@@ -287,7 +298,7 @@ test("the musicians view asks once what you play, and its icons name themselves 
     musician: { instruments: [] },
   });
   expect(unasked.status).toBe(204);
-  await page.goto("/formatia/musicians");
+  await page.goto("/formatia/instruments");
   const ask = page.getByRole("dialog", { name: "What do you play?" });
   await expect(ask).toBeVisible();
   await ask.getByRole("button", { name: "Done" }).click();
@@ -351,7 +362,7 @@ test("a song without chords links an editor to its Chords mode", async ({
   });
   expect(live.status).toBe(200);
   await logInAs(page, "maria@example.com");
-  await page.goto("/formatia/musicians");
+  await page.goto("/formatia/instruments");
   await pickLayout(page, "Chords over words");
   await expect(page.getByText("This song has no chords yet.")).toBeVisible();
   await page.getByRole("link", { name: "Add chords" }).click();
@@ -370,7 +381,7 @@ test("a song without chords links an editor to its Chords mode", async ({
       },
     });
   });
-  await page.goto("/formatia/musicians");
+  await page.goto("/formatia/instruments");
   await expect(page.getByText("This song has no chords yet.")).toBeVisible();
   await expect(page.getByRole("link", { name: "Add chords" })).toHaveCount(0);
 });
@@ -442,7 +453,7 @@ test("Whole song enlarges the live part without wrapping its lines", async ({
     type: "go",
     entryId: (entry.body as { id: string }).id,
   });
-  await page.goto("/formatia/vocalists");
+  await page.goto("/formatia/vocals");
   const live = page
     .getByRole("list", { name: "Parts" })
     .locator('[aria-current="true"] [lang]')
@@ -458,24 +469,19 @@ test("Whole song enlarges the live part without wrapping its lines", async ({
   expect(size).toBeLessThanOrEqual(24);
 });
 
-test("Sideways leaves out the bar to look at other songs, which Whole song keeps", async ({
+test("each part's mark shows faint in its corner, its name only read out", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   // A song is live in a playlist since the tests above.
   await logInAs(page, "maria@example.com");
-  await page.goto("/formatia/vocalists");
-  const earlier = page.getByRole("button", { name: "Earlier song" });
-  await expect(earlier).toBeVisible();
-  // Each part's mark, faint in its corner, its name only read out.
+  await page.goto("/formatia/vocals");
   const first = page
     .getByRole("list", { name: "Parts" })
     .getByRole("listitem")
     .first();
   await expect(first.locator("[data-mark]")).toHaveAttribute("data-mark", "1");
   await expect(first.getByText("Verse 1")).toHaveClass(/sr-only/);
-  await page.getByRole("radio", { name: "Sideways" }).click();
-  await expect(earlier).toHaveCount(0);
 });
 
 test("in Vocals, swipes and the map of the parts move the team's live part, and a singer's own view", async ({
@@ -496,7 +502,7 @@ test("in Vocals, swipes and the map of the parts move the team's live part, and 
     ).slide;
 
   // The team, Sideways: a swipe to the left sends the next part live.
-  await page.goto("/formatia/vocalists");
+  await page.goto("/formatia/vocals");
   await page.getByRole("radio", { name: "Sideways" }).click();
   await swipe(page, -1);
   await expect.poll(slide).toBe(1);
@@ -524,7 +530,7 @@ test("in Vocals, swipes and the map of the parts move the team's live part, and 
     })
   ).newPage();
   await logInAs(singer, "maria@example.com");
-  await singer.goto("/formatia/vocalists");
+  await singer.goto("/formatia/vocals");
   await singer.getByRole("radio", { name: "Sideways" }).click();
   await expect(singer.locator("[data-mark]").first()).toHaveAttribute(
     "data-mark",

@@ -101,6 +101,7 @@ describe("member management", () => {
     expect(list).toContainEqual({
       id: "m",
       name: "pavel",
+      avatar: null,
       email: "pavel@example.com",
       roles: [],
       status: "imported",

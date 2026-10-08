@@ -109,12 +109,16 @@ For members who can control live, every instrument layout SHALL keep previous an
 
 ### Requirement: Key for a service
 
-The team SHALL be able to set the key of a song for one service, on its playlist entry, without changing the song. The service key SHALL apply wherever that entry's song shows a key or chords: musicians layouts (transposing its chords), the stage monitor, the projector's key line, the bible.com header and the playlist. Key changes SHALL be named in half steps. The key SHALL be chosen on a wheel: the song's 12 keys in a strip that scrolls sideways and snaps the chosen one under its middle, the song's key in the middle and each key with how far it moves (+2, −3); a tap, the arrow keys or a swipe chooses. Saving for this service and saving as the song's key SHALL look alike. The team SHALL also open it from the song's key in the Vocals and Instruments views. Wherever a song's key shows in those views and on its page, it SHALL show with a key icon instead of "Key:", read out as "Key".
+The team SHALL be able to set the key of a song for one service, on its playlist entry, without changing the song. The service key SHALL apply wherever that entry's song shows a key or chords: musicians layouts (transposing its chords), the stage monitor, the projector's key line, the bible.com header and the playlist. Key changes SHALL be named in half steps. The key SHALL be chosen on a wheel: the song's 12 keys in a strip that scrolls sideways and snaps the chosen one under its middle, the song's key in the middle and each key with how far it moves (+2, −3); a tap, the arrow keys, a swipe or a drag with the mouse chooses, and the chosen key, or after a swipe or drag the key nearest the middle, SHALL glide to the middle; the strip SHALL open already on the chosen key, without gliding, and only the strip SHALL move, never the dialog or the page, with no scrollbar showing. Saving for this service and saving as the song's key SHALL look alike, and both SHALL always show, saving as the song's key unavailable while the chosen key is the song's, so the dialog keeps its height while keys are tried. The team SHALL also open it from the song's key in the Vocals and Instruments views. Wherever a song's key shows in those views and on its page, it SHALL show with a key icon instead of "Key:", read out as "Key".
 
 #### Scenario: Lower for a guest singer
 - **WHEN** the team sets "Sângele Tău", in A, to G for Sunday's playlist
 - **THEN** Sunday's musicians layouts show its chords a whole step lower, the projector's key line shows G, and the playlist shows "G (song: A)"
 - **AND** the song itself is still in A
+
+#### Scenario: Trying keys on a phone
+- **WHEN** a singer opens the key for this service on a phone and taps A, then B♭
+- **THEN** each tapped key glides under the marker, the dialog doesn't move, and "Save as the song's key" stays where it was
 
 ### Requirement: Changing a song's key
 

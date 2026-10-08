@@ -21,17 +21,19 @@ import { PageThumbs } from "./PageThumbs";
  */
 /**
  * The live card of `list` scrolls into view when another goes live, as little as it takes,
- * so following a song on a phone needs no scrolling.
+ * so following a song on a phone needs no scrolling; again once `loaded` changes, as the
+ * song before's last part goes live before its words arrive.
  */
 export function useLiveInView(
   list: RefObject<HTMLElement | null>,
   live: number | null,
+  loaded: unknown,
 ) {
   useEffect(() => {
     list.current
       ?.querySelector('[aria-current="true"]')
       ?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  }, [list, live]);
+  }, [list, live, loaded]);
 }
 
 export function SlidesPanel({
@@ -47,13 +49,13 @@ export function SlidesPanel({
   const community = useCommunity();
   const partName = usePartName();
   const list = useRef<HTMLDivElement>(null);
-  useLiveInView(list, live);
   const song = useJson<Song>(
     entry?.song
       ? `/api/communities/${community.slug}/songs/${entry.song.id}`
       : null,
     useChanges(community.slug, "songs", "song_versions"),
   ).data;
+  useLiveInView(list, live, song?.id ?? entry?.id);
 
   if (!entry || entry.kind === "divider") return null;
   if (entry.kind === "slides")

@@ -7,15 +7,23 @@ import { useCommunity } from "../data/community";
 import { useJson } from "../data/fetch";
 
 /**
- * Beside an empty playlist: songs sung in many services but not in the last 6 months,
- * the Statistics page's list, each added with a click.
+ * Beside the playlist while no entry is selected: songs sung in many services but not in
+ * the last 6 months, the Statistics page's list, each added with a click; those already
+ * in the playlist leave it.
  */
-export function NotLately({ onAdd }: { onAdd: (songId: string) => void }) {
+export function NotLately({
+  added,
+  onAdd,
+}: {
+  /** The playlist's songs. */
+  added: string[];
+  onAdd: (songId: string) => void;
+}) {
   const { t, i18n } = useTranslation();
   const { slug, languages } = useCommunity();
   const songs = useJson<{ notLately: CountedSong[] }>(
     `/api/communities/${slug}/statistics`,
-  ).data?.notLately;
+  ).data?.notLately.filter((song) => !added.includes(song.id));
   if (!songs?.length) return null;
   return (
     <section className="flex flex-col gap-2">

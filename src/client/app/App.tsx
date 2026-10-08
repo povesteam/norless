@@ -51,6 +51,7 @@ import {
   ChangesPage,
   FeaturesPage,
   MySchedulePage,
+  NotificationsPage,
   TeamSchedulePage,
   HostPage,
   AboutPage,
@@ -147,8 +148,8 @@ export function App() {
             <Route path="/privacy">
               <PrivacyPage />
             </Route>
-            <Route path="/account">
-              <AccountPage />
+            <Route path="/account/:tab?">
+              {({ tab }) => <AccountPage tab={tab} />}
             </Route>
             <Route path="/app-ideas">
               <AppIdeasPage />
@@ -211,6 +212,9 @@ export function App() {
                       <Route path="/my-schedule">
                         <MySchedulePage />
                       </Route>
+                      <Route path="/notifications">
+                        <NotificationsPage />
+                      </Route>
                       <Route path="/host">
                         <HostPage />
                       </Route>
@@ -261,7 +265,13 @@ function AppHeader() {
   ).data;
   return (
     <header
-      className={`flex items-center justify-between gap-2 ${phone ? "pt-4" : ""}`}
+      // On a phone it stays at the top, with the way back (app-shell spec, Back on a
+      // phone).
+      className={`flex items-center justify-between gap-2 ${
+        phone
+          ? "sticky top-0 z-20 -mx-4 border-b border-separator bg-background px-4 pt-4 pb-2"
+          : ""
+      }`}
     >
       <div className="flex flex-col items-start gap-1">
         {last && (

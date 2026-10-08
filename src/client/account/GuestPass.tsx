@@ -174,7 +174,7 @@ export function GuestPage({ code }: { code: string }) {
     });
     if (!response?.ok) return setProblem(true);
     const { community } = (await response.json()) as { community: string };
-    location.assign(`/${community}/musicians`);
+    location.assign(`/${community}/instruments`);
   });
   if (data === undefined)
     return failed ? (

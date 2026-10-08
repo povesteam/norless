@@ -7,7 +7,6 @@ import { type Profile } from "./instrument-layouts";
 import { StageNotice, StageSlides } from "./parts";
 import { guitarShapes } from "../../shared/preferences";
 import { sendLive, useLiveView } from "../data/room";
-import { useLookAhead } from "./LookAhead";
 import { Song } from "./MusiciansSong";
 
 /**
@@ -27,7 +26,6 @@ export function Musicians({
     naming: "letters",
     colors: false,
   },
-  lookAhead = false,
   leader = false,
   recordings = false,
 }: {
@@ -40,19 +38,14 @@ export function Musicians({
   canEdit?: boolean;
   /** Who reads it: a screen has none, so letters and every note. */
   profile?: Profile;
-  /** On a member's own device: earlier and later songs, privately. */
-  lookAhead?: boolean;
   /** For the team, with the recordings on: the song's recordings marked. */
   recordings?: boolean;
 }) {
   const { t } = useTranslation();
-  const live = useLiveView(slug);
-  const ahead = useLookAhead(slug, lookAhead ? live : undefined, languages);
-  const view = lookAhead ? ahead.shown : live;
+  const view = useLiveView(slug);
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <StageNotice message={view?.message} />
-      {lookAhead && ahead.bar}
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
         <div className="flex flex-wrap gap-x-4">
           <RecordingMark view={view} />
@@ -77,7 +70,7 @@ export function Musicians({
                 : undefined
             }
             onPart={
-              canControl && !ahead.looking && view.entry
+              canControl && view.entry
                 ? (slide) =>
                     void sendLive(
                       slug,

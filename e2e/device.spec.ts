@@ -1,13 +1,18 @@
 import { devices, expect, type Page, test } from "@playwright/test";
 import { api, logInAs, openSteadyPage } from "./helpers";
 
-/** The device type the user menu shows as chosen. */
+/** The device type My account shows as chosen, opened from the photo. */
 async function deviceType(page: Page) {
   await page.goto("/unu-unu/playlists");
   // Her name, and on a phone who else is online.
-  const account = page.getByRole("button", { name: /^Ana(,|$)/ });
-  await account.click();
-  return page.getByRole("menuitemradio", { checked: true }).textContent();
+  await page.getByRole("link", { name: /^Ana(,|$)/ }).click();
+  await expect(page).toHaveURL("/account");
+  // Its This device tab.
+  await page.goto("/account/device");
+  return page
+    .getByRole("radiogroup", { name: "This device is a" })
+    .getByRole("radio", { checked: true })
+    .textContent();
 }
 
 /** About and Privacy as rows a finger hits, 44 pixels high. */
@@ -44,7 +49,7 @@ test.describe("on a phone", () => {
     await menu.click();
     await expect(menu).toHaveAttribute("aria-expanded", "true");
     // Her photo, named with who else is online.
-    await expect(page.getByRole("button", { name: /^Ana(,|$)/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^Ana(,|$)/ })).toBeVisible();
     await nav.getByRole("link", { name: "Playlists" }).click();
     await expect(page).toHaveURL("/unu-unu/playlists");
     await expect(nav).toHaveCount(0);
@@ -130,7 +135,7 @@ test.describe("on a phone", () => {
     await logInAs(maria, "maria@example.com");
     await maria.goto("/unu-unu/playlists/steady");
     await expect(
-      page.getByRole("button", { name: /^Ana, and \d+ others? online$/ }),
+      page.getByRole("link", { name: /^Ana, and \d+ others? online$/ }),
     ).toBeVisible();
     expect(await search.boundingBox()).toEqual(before);
     await maria.context().close();
@@ -211,13 +216,37 @@ test.describe("on a phone", () => {
       musician: { instruments: ["vocals"], main: "vocals" },
     });
     await page.goto("/unu-unu/playlists/steady");
-    await page.getByRole("link", { name: "Vocals" }).click();
-    await expect(page).toHaveURL("/unu-unu/vocalists");
+    const vocals = page.getByRole("link", { name: "Vocals" });
+    // With the main instrument's icon.
+    await expect(vocals.locator("svg.lucide-mic-vocal")).toBeVisible();
+    // A long-press names it beside the button, not in the screen's corner.
+    const touch = { pointerType: "touch", pointerId: 7, isPrimary: true };
+    await vocals.dispatchEvent("pointerdown", touch);
+    const tip = page.getByRole("tooltip");
+    await expect(tip).toHaveText("Vocals");
+    const link = await vocals.boundingBox();
+    const shown = await tip.boundingBox();
+    const middle = (box: typeof link) => (box?.x ?? 0) + (box?.width ?? 0) / 2;
+    expect(Math.abs(middle(shown) - middle(link))).toBeLessThan(80);
+    await vocals.dispatchEvent("pointerup", touch);
+    await vocals.click();
+    await expect(page).toHaveURL("/unu-unu/vocals");
     const back = page.getByRole("link", { name: "The playlist" });
     // As big as the toolbar's other buttons.
     expect((await back.boundingBox())?.height).toBeGreaterThanOrEqual(32);
     await back.click();
     await expect(page).toHaveURL(/\/unu-unu(\/playlists\/|\/follow|$)/);
+
+    // A pianist's button shows keys.
+    await api(page, "PUT", "/api/me/preferences", {
+      musician: { instruments: ["keys"], main: "keys" },
+    });
+    await page.goto("/unu-unu/playlists/steady");
+    await expect(
+      page
+        .getByRole("link", { name: "Instruments" })
+        .locator("svg.lucide-piano"),
+    ).toBeVisible();
   });
 
   test("the menu is a page of its own, and the page behind it holds still", async ({
@@ -242,7 +271,32 @@ test.describe("on a phone", () => {
     expect(await held()).toBe("hidden");
   });
 
-  test("who else is online stacks under the photo, which opens the menu as a page with them on top", async ({
+  test("below the top, back takes the menu's place, to where it came from or from a link to the parent; My account keeps its way back in view", async ({
+    page,
+  }) => {
+    await logInAs(page, "maria@example.com");
+    // Opened from a link: the song, then its chords from it.
+    await page.goto("/unu-unu/songs/grace");
+    const back = page.getByRole("button", { name: "Back" });
+    await expect(back).toBeVisible();
+    await expect(page.getByRole("button", { name: "Menu" })).toHaveCount(0);
+    await page.getByRole("link", { name: "Chords" }).first().click();
+    await expect(page).toHaveURL(/\/unu-unu\/songs\/grace\/chords/);
+    await back.click();
+    await expect(page).toHaveURL("/unu-unu/songs/grace");
+    await back.click();
+    await expect(page).toHaveURL(/\/unu-unu(\/playlists\/[^/]+)?$/);
+    await expect(page.getByRole("button", { name: "Menu" })).toBeVisible();
+
+    // Pages outside the community keep the way back at the top.
+    await page.goto("/account");
+    await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
+    await expect(
+      page.getByRole("link", { name: "Back to Unu-Unu" }),
+    ).toBeInViewport();
+  });
+
+  test("who else is online stacks under the photo, which opens My account, and heads the menu", async ({
     page,
     browser,
   }) => {
@@ -251,20 +305,19 @@ test.describe("on a phone", () => {
     await other.goto("/unu-unu/playlists/steady");
     await logInAs(page, "ioana@example.com");
     await page.goto("/unu-unu/playlists/steady");
-    const photo = page.getByRole("button", {
+    const photo = page.getByRole("link", {
       name: /^Ioana, and \d+ others? online$/,
     });
-    await photo.click();
+    await expect(photo).toBeVisible();
+    // No row of avatars above the search box on a phone.
+    await expect(page.getByRole("group", { name: "Online" })).toHaveCount(0);
+    await page.getByRole("button", { name: "Menu" }).click();
     const online = page.getByRole("region", { name: "Online" });
     await expect(online).toContainText("Maria");
     await expect(online).not.toContainText("Ioana");
-    // Once it has opened (it grows from the photo).
-    await expect
-      .poll(() => page.locator('[data-slot="dropdown-popover"]').boundingBox())
-      .toMatchObject({ x: 0, width: viewport.width });
-    // No row of avatars above the search box on a phone.
-    await page.keyboard.press("Escape");
-    await expect(page.getByRole("group", { name: "Online" })).toHaveCount(0);
+    await page.getByRole("button", { name: "Menu" }).click();
+    await photo.click();
+    await expect(page).toHaveURL("/account");
   });
 
   // Android's back button or gesture goes back in the history.
@@ -350,16 +403,15 @@ test("a laptop is a laptop, and a member can correct it for the device", async (
   await logInAs(page, "ana@example.com");
   expect(await deviceType(page)).toBe("Laptop");
 
-  await page.getByRole("menuitemradio", { name: "Tablet" }).click();
+  await page.getByRole("radio", { name: "Tablet" }).click();
   await page.reload();
-  await page.getByRole("button", { name: "Ana", exact: true }).click();
-  await expect(page.getByRole("menuitemradio", { checked: true })).toHaveText(
-    "Tablet",
-  );
-  // Choosing it didn't log out.
   await expect(
-    page.getByRole("menuitem", { name: "My account" }),
-  ).toBeVisible();
+    page
+      .getByRole("radiogroup", { name: "This device is a" })
+      .getByRole("radio", { checked: true }),
+  ).toHaveText("Tablet");
+  // Choosing it didn't log out.
+  await expect(page.getByRole("tab", { name: "Logins" })).toBeVisible();
 });
 
 test("musicians and vocalists are dark unless the member chooses light, and keep a text size", async ({
@@ -368,7 +420,7 @@ test("musicians and vocalists are dark unless the member chooses light, and keep
   // The system is dark, so a light layout is a light area inside a dark page.
   await page.emulateMedia({ colorScheme: "dark" });
   await logInAs(page, "ioana@example.com");
-  await page.goto("/unu-unu/vocalists");
+  await page.goto("/unu-unu/vocals");
   // The layout's root: the toolbar's parent.
   const view = page
     .getByRole("link", { name: "The playlist" })
@@ -396,7 +448,7 @@ test("musicians and vocalists are dark unless the member chooses light, and keep
   await expect(panel).toBeHidden();
 
   // Kept for this member's laptops, on the musicians layouts too.
-  await page.goto("/unu-unu/musicians");
+  await page.goto("/unu-unu/instruments");
   await expect(view).toHaveClass(/\blight\b/);
   await expect(content).toHaveCSS("zoom", "1.1");
   await page.getByRole("button", { name: "Display" }).click();
@@ -409,6 +461,30 @@ test("musicians and vocalists are dark unless the member chooses light, and keep
 test.describe("feels like an app on a phone", () => {
   const { viewport, isMobile, hasTouch, userAgent } = devices["Pixel 7"];
   test.use({ viewport, isMobile, hasTouch, userAgent });
+  test("a dialog opens where the visible area is, when Android's keyboard moved it down", async ({
+    page,
+  }) => {
+    await logInAs(page, "ioana@example.com");
+    await page.goto("/account/logins");
+    // Android, with its keyboard open, shows 400 pixels from 300 down: it panned the
+    // visible area to the focused field instead of resizing the page.
+    await page.evaluate(() => {
+      const view = window.visualViewport;
+      if (!view) return;
+      Object.defineProperty(view, "offsetTop", { get: () => 300 });
+      Object.defineProperty(view, "height", { get: () => 400 });
+      view.dispatchEvent(new Event("resize"));
+    });
+    await page
+      .getByRole("button", { name: "Log out", exact: true })
+      .evaluate((button: HTMLElement) => button.click());
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const backdrop = await page
+      .locator(".modal__backdrop")
+      .evaluate((element) => element.getBoundingClientRect().toJSON());
+    expect(backdrop).toMatchObject({ top: 300, height: 400 });
+  });
+
   test("no page bounce or input zoom, 44-point targets, and only lyrics selectable", async ({
     page,
   }) => {

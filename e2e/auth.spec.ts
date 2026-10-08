@@ -19,24 +19,24 @@ test("a member logs in, stays logged in, and logs out", async ({ page }) => {
   // Back where they started, logged in.
   await expect(page).toHaveURL("/unu-unu/playlists/steady");
   await expect(
-    page.getByRole("button", { name: "Ana", exact: true }),
+    page.getByRole("link", { name: "Ana", exact: true }),
   ).toBeVisible();
   await expect(
     page.getByText("Ask your community for an invitation"),
   ).toBeHidden();
   await page.reload();
   await expect(
-    page.getByRole("button", { name: "Ana", exact: true }),
+    page.getByRole("link", { name: "Ana", exact: true }),
   ).toBeVisible();
 
-  // Logging out is on My account, and asks first.
-  await page.getByRole("button", { name: "Ana", exact: true }).click();
-  await page.getByRole("menuitem", { name: "My account" }).click();
-  await page.getByRole("button", { name: "Log out" }).click();
+  // Logging out is on My account's Logins, and asks first.
+  await page.getByRole("link", { name: "Ana", exact: true }).click();
+  await page.getByRole("tab", { name: "Logins" }).click();
+  await page.getByRole("button", { name: "Log out", exact: true }).click();
   const confirm = page.getByRole("dialog", { name: "Log out of Norless?" });
   await confirm.getByRole("button", { name: "Cancel" }).click();
   await expect(confirm).toBeHidden();
-  await page.getByRole("button", { name: "Log out" }).click();
+  await page.getByRole("button", { name: "Log out", exact: true }).click();
   await confirm.getByRole("button", { name: "Log out" }).click();
   await expect(
     page.getByRole("link", { name: "Log in" }).first(),
@@ -49,7 +49,7 @@ test("someone who isn't a member is asked to get an invitation", async ({
   await page.goto("/unu-unu");
   await logIn(page, "stranger@example.com");
 
-  await expect(page.getByRole("button", { name: "stranger" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "stranger" })).toBeVisible();
   await expect(
     page.getByText("Ask your community for an invitation to edit or control."),
   ).toBeVisible();
@@ -85,8 +85,8 @@ test("logging out can end the sessions on the other devices too", async ({
   // Its own person: logging out everywhere would end other tests' sessions.
   for (const page of [phone, laptop])
     await logInAs(page, "two-devices@example.com");
-  await laptop.goto("/account");
-  await laptop.getByRole("button", { name: "Log out" }).click();
+  await laptop.goto("/account/logins");
+  await laptop.getByRole("button", { name: "Log out", exact: true }).click();
   const confirm = laptop.getByRole("dialog", { name: "Log out of Norless?" });
   await confirm.getByText("Also on my other devices").click();
   await confirm.getByRole("button", { name: "Log out" }).click();
@@ -215,7 +215,7 @@ test("a photo uploaded on My account shows on the account button; initials take 
   page,
 }) => {
   await logInAs(page, "eva@example.com");
-  await page.goto("/account");
+  await page.goto("/account/profile");
   await expect(
     page.getByText("A Google login brings your Google photo"),
   ).toBeVisible();
@@ -240,4 +240,41 @@ test("a photo uploaded on My account shows on the account button; initials take 
   await expect(
     page.getByRole("button", { name: "Use my Google photo" }),
   ).toHaveCount(0);
+});
+
+test("a member sees where they're logged in, and logs out another place from here", async ({
+  page,
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    userAgent:
+      "Mozilla/5.0 (Android 14; Mobile; rv:131.0) Gecko/131.0 Firefox/131.0",
+  });
+  const phone = await context.newPage();
+  await logInAs(phone, "luca@example.com");
+  await phone.goto("/unu-unu");
+
+  await logInAs(page, "luca@example.com");
+  await page.goto("/account/logins");
+  const places = page.getByRole("region", { name: "Where you're logged in" });
+  // This device first; the phone by its browser, last used today.
+  await expect(places.getByRole("listitem").first()).toContainText(
+    "this device",
+  );
+  const android = places
+    .getByRole("listitem")
+    .filter({ hasText: "Firefox on Android" });
+  await expect(android).toContainText("used today");
+  await android
+    .getByRole("button", { name: "Log out of Firefox on Android" })
+    .click();
+  await expect(android).toHaveCount(0);
+  // The phone is logged out.
+  await phone.reload();
+  await expect(
+    phone.getByRole("link", { name: "Log in" }).first(),
+  ).toBeVisible();
+  await context.close();
 });

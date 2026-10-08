@@ -1,4 +1,5 @@
 import {
+  Bell,
   CalendarDays,
   CalendarX,
   Check,
@@ -18,13 +19,12 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import { useEffect, useEffectEvent, useState } from "react";
-import { type TFunction } from "i18next";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "wouter";
 import type { MySchedule } from "../../server/schedule/my-schedule";
-import type { PushResult } from "../../server/schedule/team-notifications";
 import { useChanges } from "../data/changes";
-import { useCommunity, useShows } from "../data/community";
+import { useCommunity } from "../data/community";
 import { send, useJson } from "../data/fetch";
 import {
   ActionButton,
@@ -33,35 +33,15 @@ import {
   usePending,
 } from "../ui/states";
 import { tables, useWhen, slotUrl } from "./schedule";
-import { PushSwitch } from "./PushSwitch";
-
-/** How a notification went by push: per device, or why to none. */
-function pushLine(t: TFunction, push: PushResult) {
-  if ("none" in push)
-    return push.none === "keys" ? t("team.pushKeys") : t("team.pushDevices");
-  return [
-    push.sent > 0 && t("team.pushSent", { count: push.sent }),
-    push.failed > 0 && t("team.pushFailed", { count: push.failed }),
-    push.gone > 0 && t("team.pushGone", { count: push.gone }),
-  ]
-    .filter(Boolean)
-    .join(" · ");
-}
-
-/** What the app told someone, in their language. */
-function told(t: TFunction, kind: string, data: Record<string, string>) {
-  return t(`team.told.${kind}`, { ...data, defaultValue: kind });
-}
 
 /**
  * /<community>/my-schedule: a member's own services with Accept and
- * Decline, open slots for them, away dates, what they were told, and notifications on
- * this device.
+ * Decline, open slots for them and away dates; what they were told is on the
+ * Notifications page, which the bell in the bar opens.
  */
 export function MySchedulePage() {
   const { t } = useTranslation();
   const { slug } = useCommunity();
-  const shows = useShows();
   const when = useWhen();
   const { data, failed, retry } = useJson<MySchedule>(
     `/api/communities/${slug}/my-schedule`,
@@ -71,13 +51,6 @@ export function MySchedulePage() {
     MySchedule["slots"][number] | null
   >(null);
   const [actFailed, setActFailed] = useState(false);
-  // Seen: what was told is read.
-  const unread = data?.unread ?? 0;
-  const markRead = useEffectEvent(() => {
-    if (unread > 0)
-      void send("POST", `/api/communities/${slug}/notifications/read`);
-  });
-  useEffect(() => markRead(), [unread]);
   if (data === undefined)
     return failed ? (
       <ErrorNotice message={t("states.loadFailed")} onRetry={retry} />
@@ -179,29 +152,10 @@ export function MySchedulePage() {
         </section>
       )}
       <AwayDates slug={slug} away={data.away} />
-      {shows("pushNotifications") && <PushSwitch />}
-      <section aria-labelledby="told-title" className="flex flex-col gap-2">
-        <h3 id="told-title" className="text-xl font-semibold">
-          {t("team.notifications")}
-        </h3>
-        {data.notifications.length === 0 ? (
-          <p className="text-sm text-muted">{t("team.noNotifications")}</p>
-        ) : (
-          <ul className="flex flex-col gap-1 text-sm">
-            {data.notifications.map((n) => (
-              <li key={n.id} className={n.readAt ? "" : "font-semibold"}>
-                {told(t, n.kind, n.data)}
-                {n.data.reason ? ` (${n.data.reason})` : ""}
-                {n.push && (
-                  <span className="block text-xs font-normal text-muted">
-                    {pushLine(t, n.push)}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <Link href="/notifications" className="link self-start">
+        <Bell />
+        {t("team.notifications")}
+      </Link>
       {declining && (
         <DeclineDialog
           role={declining.role}

@@ -76,6 +76,8 @@ export function invite(
 export type MemberRow = {
   id: string;
   name: string;
+  /** Their photo's image id, if they have one. */
+  avatar: string | null;
   email: string | null;
   roles: Role[];
   status: "imported" | "invited" | "active";
@@ -91,7 +93,7 @@ export function listMembers(db: Db, communityId: string): MemberRow[] {
   return (
     db
       .prepare(
-        `SELECT m.id, u.display_name AS name, u.email, m.roles, m.status, m.was_admin AS wasAdmin,
+        `SELECT m.id, u.display_name AS name, u.avatar, u.email, m.roles, m.status, m.was_admin AS wasAdmin,
            coalesce(u.legacy_created_at, u.created_at) AS createdAt, u.last_login_at AS lastActiveAt
          FROM members m JOIN users u ON u.id = m.user_id
          WHERE m.community_id = ? AND m.status <> 'removed' AND m.deleted_at IS NULL

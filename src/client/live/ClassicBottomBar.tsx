@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Tip } from "../ui/tip";
 import type { LiveView } from "../../server/live/live-view";
 import type { Screen } from "../../shared/screens";
 import { useCommunity } from "../data/community";
@@ -185,7 +186,7 @@ export function ClassicBottomBar({
       )}
       <div
         className={`flex items-center gap-2 ${phone ? "" : "flex-wrap"} ${
-          phone && live ? "[&>button]:h-12" : ""
+          phone && live ? "[&_button]:h-12" : ""
         }`}
       >
         {phone ? (
@@ -220,24 +221,31 @@ export function ClassicBottomBar({
               labelClassName="max-[749px]:sr-only"
               isDisabled={empty}
             />
-            <Button
-              variant="secondary"
-              className={phone ? "flex-1" : undefined}
-              isDisabled={empty}
-              onPress={() => act({ type: "previous" })}
-            >
-              <ChevronLeft />
-              <span className="max-[749px]:sr-only">{t("live.previous")}</span>
-            </Button>
-            <Button
-              ref={keysHint}
-              className={phone ? "flex-1" : undefined}
-              isDisabled={empty}
-              onPress={() => act({ type: "next" })}
-            >
-              <span className="max-[749px]:sr-only">{t("live.next")}</span>
-              <ChevronRight />
-            </Button>
+            {/* Their names in a tooltip too, which a phone shows on a long press. */}
+            <Tip label={t("live.previous")}>
+              <Button
+                variant="secondary"
+                className={phone ? "flex-1" : undefined}
+                isDisabled={empty}
+                onPress={() => act({ type: "previous" })}
+              >
+                <ChevronLeft />
+                <span className="max-[749px]:sr-only">
+                  {t("live.previous")}
+                </span>
+              </Button>
+            </Tip>
+            <Tip label={t("live.next")}>
+              <Button
+                ref={keysHint}
+                className={phone ? "flex-1" : undefined}
+                isDisabled={empty}
+                onPress={() => act({ type: "next" })}
+              >
+                <span className="max-[749px]:sr-only">{t("live.next")}</span>
+                <ChevronRight />
+              </Button>
+            </Tip>
           </>
         )}
       </div>

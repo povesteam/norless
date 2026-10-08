@@ -7,7 +7,7 @@ Plan a service or rehearsal as one ordered, shared list of songs, Bible referenc
 
 ### Requirement: Create, rename and archive playlists
 
-A team member SHALL be able to create a playlist. A playlist SHALL have a date: its service's date, else the day it was created in the community's time zone. A new playlist SHALL have no title, and SHALL be shown by its date in each viewer's language, day and full month (e.g. "4 octombrie"), with the year only when it isn't the current year. A team member SHALL be able to give a playlist a title, shown first with its date muted after it, or clear it, and archive it, instead of deleting it. An archived playlist SHALL stay readable by its link, can still go live, and SHALL NOT be changed until a team member restores it; it SHALL leave the list of playlists and the home, and be listed with "Show archived" on the Playlists page and in the Classic menu.
+A team member SHALL be able to create a playlist. A playlist SHALL have a date: its service's date, else the day it was created in the community's time zone. A new playlist SHALL have no title, and SHALL be shown by its date in each viewer's language, day and full month (e.g. "4 octombrie"), with the year only when it isn't the current year. A team member SHALL be able to give a playlist a title, shown first with its date muted after it, or clear it, move it to another day from its actions (it then plans that day's service, if any, which no other playlist plans first), and archive it, instead of deleting it. An archived playlist SHALL stay readable by its link, can still go live, and SHALL NOT be changed until a team member restores it; it SHALL leave the list of playlists and the home, and be listed with "Show archived" on the Playlists page and in the Classic menu.
 
 #### Scenario: Last year's Christmas service
 - **WHEN** an operator archives "Crăciun 2025", then ticks "Show archived" and restores it
@@ -24,6 +24,10 @@ A team member SHALL be able to create a playlist. A playlist SHALL have a date: 
 #### Scenario: Two services on the same day
 - **WHEN** an untitled playlist of 30 September exists and the operator creates another one that day
 - **THEN** a second playlist is created
+
+#### Scenario: The service moved
+- **WHEN** the Sunday service moves to Saturday and an operator changes its playlist's date to that Saturday
+- **THEN** the playlist shows the Saturday's date, and plans Saturday's service if the calendar has one
 
 ### Requirement: Current playlist and permalinks
 
@@ -82,7 +86,7 @@ A new entry SHALL be added at the end of the playlist, or where it was asked for
 
 ### Requirement: Reorder entries
 
-A team member SHALL be able to move an entry by dragging the row itself with the mouse, by long-pressing and dragging it on touch screens, with Move up and Move down in its actions, and with a keyboard shortcut. Rows SHALL show no drag handle. While an entry is dragged, the rows on the dragging device SHALL make room where it would land: a gap as tall as the entry opens there, and the rows after it slide down (from the Meteor 3 draft). The new order SHALL appear on every device showing the playlist within one second.
+A team member SHALL be able to move an entry by dragging the row itself with the mouse, by long-pressing and dragging it on touch screens, with Move up and Move down in its actions, and with a keyboard shortcut. Rows SHALL show no drag handle. While an entry is dragged, a copy of it, its icon and title, SHALL follow the pointer or finger, and the entry SHALL leave the list on the dragging device; the rows SHALL make room where it would land: a gap as tall as the entry opens there, and the rows after it slide down (from the Meteor 3 draft), so at first the gap is where the entry was. The new order SHALL appear on every device showing the playlist within one second.
 
 #### Scenario: Reorder on a tablet
 - **WHEN** an operator long-presses an entry on a tablet and drags it two rows up
@@ -90,7 +94,7 @@ A team member SHALL be able to move an entry by dragging the row itself with the
 
 #### Scenario: Rows make room
 - **WHEN** an operator drags the third entry over the first
-- **THEN** a gap as tall as the dragged entry opens above the first entry, until it's dropped there
+- **THEN** a gap as tall as the dragged entry opens above the first entry, until it's dropped there, and the third entry shows only as the copy under the pointer
 
 ### Requirement: Live activity
 
@@ -139,16 +143,17 @@ Each entry SHALL show:
 - its title in the viewer's selected language
 - for songs: key signature, time signature and tags
 - a mark if the song was played in the last hour
+- for songs, while the playlist is being prepared (its day is today or later, and none of its songs was sung in a service from it yet): how long ago the song was last sung in a service, e.g. "2 weeks ago"
 
 Rows SHALL have the old app's fixed heights, roomy for the 6 or 7 songs of a service: a song 72 px, its title on the first line and its key, time signature, tags and played mark on a smaller second line; other entries 48 px. Nothing a row shows SHALL make it taller.
 
-The entry that is currently live SHALL be highlighted on every device, including for visitors who aren't logged in and opened the playlist's link, with a frame in the live color (`app-shell` spec) that doesn't move anything in the row. Dividers SHALL be shown as headings.
+The entry that is currently live SHALL be highlighted on every device, including for visitors who aren't logged in and opened the playlist's link, with a frame in the live color (`app-shell` spec) that doesn't move anything in the row, and "(•) Live" at the end of its title line, whose room every row keeps so a row going live doesn't move its title. Dividers SHALL be shown as headings.
 
-While an entry is live, every entry above it SHALL show as done, its title muted, skipped ones too; while the screens are blank, the live entry SHALL show as done too, without its frame, with a thin line in the live color under it marking where the service is. This SHALL show for everyone, wherever the playlist's entries are listed; the Running order already collapses the entries done.
+While an entry is live, every entry above it SHALL show as done, the whole row half see-through, skipped ones too; while the screens are blank, the live entry SHALL show as done too, without its frame, with a thin line in the live color under it marking where the service is. This SHALL show for everyone, wherever the playlist's entries are listed; the Running order already collapses the entries done.
 
 #### Scenario: Guest musician follows the setlist
 - **WHEN** a visitor without an account opens a shared playlist link while the service runs
-- **THEN** the entry that is live is highlighted, and the highlight moves as the operator moves on
+- **THEN** the entry that is live is highlighted and marked Live, and the highlight moves as the operator moves on
 
 #### Scenario: Title in the viewer's language
 - **WHEN** a song has Romanian and Ukrainian versions and the viewer has chosen Ukrainian
@@ -160,7 +165,11 @@ While an entry is live, every entry above it SHALL show as done, its title muted
 
 #### Scenario: Where the service is
 - **WHEN** the third entry is live and the operator then blanks the screens
-- **THEN** the first two entries are muted, then the third too, without its frame and with a line under it
+- **THEN** the first two entries are faded, then the third too, without its frame and with a line under it
+
+#### Scenario: Preparing Sunday
+- **WHEN** on Friday an operator adds to Sunday's playlist a song last sung in a service two weeks ago
+- **THEN** its row shows "2 weeks ago", until a song of the playlist is sung on Sunday
 
 ### Requirement: Selection per device
 

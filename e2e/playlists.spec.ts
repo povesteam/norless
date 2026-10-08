@@ -277,6 +277,15 @@ test.describe("the team", () => {
     await title.fill("Seara de rugăciune");
     await title.press("Enter");
 
+    // Moved to another day, from its actions: its date follows.
+    await page.getByRole("button", { name: "Playlist actions" }).click();
+    await page.getByRole("menuitem", { name: "Change date" }).click();
+    const dialog = page.getByRole("dialog", { name: "Change date" });
+    await dialog.getByLabel("Date").fill("2027-03-14");
+    await dialog.getByRole("button", { name: "Save the date" }).click();
+    await expect(dialog).toBeHidden();
+    await expect(page.getByText("March 14, 2027")).toBeVisible();
+
     // Archived, it stays readable here, and only Restore changes it.
     await page.getByRole("button", { name: "Playlist actions" }).click();
     await page.getByRole("menuitem", { name: "Archive playlist" }).click();
@@ -467,6 +476,8 @@ test.describe("live activity", () => {
     // On Ioana's screen the rows make room: the gap is as tall as the row.
     const gap = await page.locator("[data-drop-target]").boundingBox();
     expect(gap?.height).toBeGreaterThan(from.height / 2);
+    // The dragged row left the list: only the gap and the copy under the pointer show it.
+    await expect(rows(page).filter({ hasText: "Trei" })).toBeHidden();
 
     await page.mouse.up();
     await expect(rows(maria)).toHaveText([/Trei/, /Unu/, /Doi/]);

@@ -68,10 +68,9 @@ export function OfflineKeeper() {
   return null;
 }
 
-/** The switch in This device, with what's kept. */
-export function OfflineSwitch() {
+/** The switch on My account, for one community's songs, with what's kept. */
+export function OfflineSwitch({ slug, name }: { slug: string; name: string }) {
   const { t, i18n } = useTranslation();
-  const { slug } = useCommunity();
   const [on, set] = useKeepOffline(slug);
   const kept = useKept(slug);
   // Switched off without internet, the kept songs can't come back until it returns
@@ -82,9 +81,10 @@ export function OfflineSwitch() {
     if (!value && !connected && !window.confirm(t("offline.offWithout")))
       return;
     set(value);
+    // Kept at once, not only when the community's pages open next.
+    if (value) void keep(slug);
   };
   return (
-    // Its help wraps inside a narrow panel, as This device in the live bar.
     <Switch
       size="sm"
       isSelected={on}
@@ -95,7 +95,7 @@ export function OfflineSwitch() {
         <Switch.Control>
           <Switch.Thumb />
         </Switch.Control>
-        <Label>{t("offline.keep")}</Label>
+        <Label>{t("offline.keepFrom", { name })}</Label>
       </Switch.Content>
       <Description className="whitespace-normal">
         {on && kept

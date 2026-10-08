@@ -1,5 +1,6 @@
 import { Trash2, UserMinus, UserPlus } from "lucide-react";
 import { RowMenu } from "../ui/RowMenu";
+import { PersonAvatar } from "../ui/NameAvatar";
 import {
   Alert,
   Chip,
@@ -237,7 +238,14 @@ function PersonName({ member }: { member: MemberRow }) {
   return (
     <>
       <div className="flex items-center gap-2">
-        {member.name}
+        <span aria-hidden className="flex shrink-0">
+          <PersonAvatar
+            name={member.name}
+            avatar={member.avatar}
+            className="size-6"
+          />
+        </span>
+        <span>{member.name}</span>
         {member.wasAdmin && (
           <Chip size="sm" variant="secondary">
             {t("members.wasAdmin")}

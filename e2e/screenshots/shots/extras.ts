@@ -241,7 +241,7 @@ export const extras: View[] = [
     // It Is Well with My Soul: every degree, and a chord from outside the key.
     live: "e-8",
     sizes: ["phone", "tablet"],
-    go: open(`/${slug}/musicians`),
+    go: open(`/${slug}/instruments`),
   },
   {
     // What the member plays, asked the first time and from Display
@@ -250,7 +250,7 @@ export const extras: View[] = [
     as: musician,
     sizes: ["phone"],
     go: async (page) => {
-      await page.goto(`/${slug}/musicians`);
+      await page.goto(`/${slug}/instruments`);
       await page.getByRole("button", { name: "Display" }).click();
       await page.getByRole("button", { name: "What I play" }).click();
       await page.getByRole("dialog", { name: "What do you play?" }).waitFor();
@@ -507,7 +507,7 @@ export const extras: View[] = [
         source: "midi",
         chord: "D",
       });
-      await page.goto(`/${slug}/musicians`);
+      await page.goto(`/${slug}/instruments`);
       await pickLayout(page, en.musicians.layouts["live-chord"]);
       await page.getByText("D", { exact: true }).first().waitFor();
     },

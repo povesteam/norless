@@ -33,7 +33,7 @@ Why the musicians' layouts, note names, keys and chord colors work as the spec s
 - **Where colors apply**: chords over the words, chords-only lines, the bars' beats, guitar shapes (by the degree of the chord they stand for) and the Chords mode while editing. The picker's buttons stay plain, since they are choices, not the song. The lines that join chords into a sentence ("ends on … starts on", the next song's chords) stay plain, since a color per word reads badly.
 - **Each chord carries its CSS colors** (letter, suffix, bass) rather than a degree number, so a view paints what it is given.
 - **My account shows a legend** of the degrees and the suffix ramp (mixed with the text color), so the colors can be learned without a chart elsewhere.
-- **Keys on a horizontal wheel**: the keys in a strip that scrolls and snaps under a marker, like a phone's time picker.
+- **Keys on a horizontal wheel**: the keys in a strip that scrolls and snaps under a marker, like a phone's time picker. A tap glides the key under the marker; a swipe, or a drag with a mouse, ends with the nearest key gliding there. The strip scrolls itself (`scrollTo`, never `scrollIntoView`, which also scrolled the dialog), opens on the chosen key at once and hides its scrollbar in every engine; a mouse drag listens in the capture phase, since the keys' presses stop their pointer events, and its release isn't a tap. Both save buttons always show, "Save as the song's key" unavailable for the song's own key, so the dialog keeps its height while keys are tried.
 
 ## Rejected
 
@@ -45,3 +45,4 @@ Why the musicians' layouts, note names, keys and chord colors work as the spec s
 - **The letter H**: nobody in the band reads it.
 - **Colors as a member's opt-in**: nobody found the switch, so nobody saw them.
 - **A − / + stepper or a dial for the key.**
+- A still strip without the marker, the tapped key highlighted where it is: the marker reads like a phone's picker.

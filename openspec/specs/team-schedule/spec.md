@@ -19,7 +19,7 @@ A community SHALL have service roles, who does what in a service, apart from the
 
 ### Requirement: Slots per date, from a template
 
-Each service and rehearsal of the schedule SHALL have slots, a role each, for the next 8 weeks. Each weekly event SHALL have a template, the slots each of its dates starts with (so many of each role), which the team sets. A date SHALL show its template's slots until the team changes it: then it SHALL keep its own slots, which the team fills, empties, adds to and removes (removing from the slot's row menu, ⋯, after a confirmation), and later changes to the template SHALL not reach it. The team member who first changes a date SHALL be its builder. A one-off event SHALL start without slots.
+Each service and rehearsal of the schedule SHALL have slots, a role each, for the next 8 weeks. Each weekly event SHALL have a template, the slots each of its dates starts with (so many of each role), which the team sets. A date SHALL show its template's slots until the team changes it: then it SHALL keep its own slots, which the team fills, empties, adds to and removes (removing from the slot's row menu, ⋯, after a confirmation), and later changes to the template SHALL not reach it. The team member who first changes a date SHALL be its builder. A one-off event SHALL start without slots. The templates SHALL say where the weekly services and rehearsals themselves are set, the community's schedule in Settings, with a link for owners.
 
 #### Scenario: A Sunday from its template
 - **WHEN** the team sets Sunday's template to two vocalists and a guitarist
@@ -39,7 +39,7 @@ The team SHALL put a member in a slot, which asks them: the slot SHALL wait for 
 
 ### Requirement: Sign-ups
 
-A member SHALL be able to take an open slot: at once when marked for its role, else as an offer the team confirms or turns down. The date's builder SHALL be told of each sign-up and offer, and the person of the team's answer.
+A member SHALL be able to take an open slot: at once when marked for its role ("Take it"), else as an offer the team confirms or turns down ("Offer to do it"); each button's tooltip SHALL say why it's the one shown: being among the role's people, or the team choosing them. The date's builder SHALL be told of each sign-up and offer, and the person of the team's answer.
 
 #### Scenario: A guitarist takes an open slot
 - **WHEN** a member marked for guitar takes Sunday's open guitar slot
@@ -49,13 +49,21 @@ A member SHALL be able to take an open slot: at once when marked for its role, e
 - **WHEN** a member not marked for keys offers to play keys on Sunday
 - **THEN** the slot shows the offer, and they're in only once a team member confirms
 
+#### Scenario: Why an offer
+- **WHEN** a member not marked for keys points at "Offer to do it" on an open keys slot
+- **THEN** a tooltip says the team chooses the people for Clape and confirms the offer
+
 ### Requirement: Away dates and two roles
 
-Members SHALL mark the days they're away; the team SHALL see "away" beside them when filling a slot of those days, and MAY still ask them. A member in two slots of one date SHALL be allowed, shown with a note.
+Members SHALL mark the days they're away; the team SHALL see "away" beside them when filling a slot of those days, and MAY still ask them. A member in two slots or more of one date SHALL be allowed, each of their slots noting their other roles that date by name ("Also Chitară, Tobe").
 
 #### Scenario: Asking someone who's away
 - **WHEN** the team puts Eva in a slot on a day she marked away
 - **THEN** the slot shows that she's away, and she's asked anyway
+
+#### Scenario: Three roles
+- **WHEN** the team puts Maria on Voce, Chitară and Tobe on Sunday
+- **THEN** her Voce slot notes "Also Chitară and Tobe", and the other two likewise
 
 ### Requirement: Who sees the schedule
 
@@ -67,27 +75,31 @@ Every member SHALL see the whole team schedule; visitors SHALL see nothing of it
 
 ### Requirement: One's own schedule
 
-A member SHALL see their own: a My schedule page (their slots with Accept and Decline, open slots for their roles within a week, their away days, what they were told), a line at the top of the community's pages with their next slot within a week and how much is new, and on the musicians and vocalists views a badge with their roles that day. There SHALL be no calendar feed.
+A member SHALL see their own: a My schedule page (their slots with Accept and Decline, open slots for their roles within a week, their away days, and a link to their notifications), a Notifications page (what they were told, newest first, the new ones marked until seen there, each leading to what it's about: the playlist, else My schedule; and notifications on this device), a bell in every bar of the community that opens it and shows how many are new, a line at the top of the community's pages with their next slot within a week, and on the musicians and vocalists views a badge with their roles that day. There SHALL be no calendar feed.
 
 #### Scenario: The line at the top
 - **WHEN** a member is asked to sing on Sunday
 - **THEN** every page of the community shows "You're on Voce: Serviciu, Sunday at 10:00" with Accept, until Sunday
 
+#### Scenario: Something new
+- **WHEN** a member is put in a slot while they have Classic open on a phone
+- **THEN** the bell in the bar shows 1, and a tap opens their notifications, where "You're on Voce" leads to My schedule
+
 ### Requirement: Told in the app and by push
 
-A member SHALL be told in the app and, on the devices where they turned notifications on, by push (web-push): when they're put in a slot or taken out of one, 3 hours before each of their slots, when a slot of a role they're marked for is open within a week (once per role and date, and again after a decline), and when the team confirms or turns down their offer; a date's builder SHALL be told of its declines, sign-ups and offers. Each SHALL go once. Without push (an iPhone without Norless installed, notifications refused, or a server without its keys), they SHALL be told in the app, and My schedule SHALL explain how to install Norless to get them. Norless SHALL keep how each notification went by push (sent to how many devices, failed or stopped on how many, or why to none), show it under the notification in My schedule, and log each failed push on the server, so a phone that wasn't told can be looked into.
+A member SHALL be told in the app and, on the devices where they turned notifications on, by push (web-push): when they're put in a slot or taken out of one, 3 hours before each of their slots, when a slot of a role they're marked for is open within a week (once per role and date, and again after a decline), and when the team confirms or turns down their offer; a date's builder SHALL be told of its declines, sign-ups and offers. Each SHALL go once. Without push (an iPhone without Norless installed, notifications refused, or a server without its keys), they SHALL be told in the app, and the Notifications page SHALL explain how to install Norless to get them. Norless SHALL keep how each notification went by push (sent to how many devices, failed or stopped on how many, or why to none), show it under the notification on the Notifications page, and log each failed push on the server, so a phone that wasn't told can be looked into.
 
 #### Scenario: A reminder
 - **WHEN** it's 3 hours before the Sunday service a member accepted a slot in
 - **THEN** they're told once, in the app and on their phone
 
 #### Scenario: An iPhone
-- **WHEN** a member opens My schedule in Safari on an iPhone, without Norless installed
+- **WHEN** a member opens their notifications in Safari on an iPhone, without Norless installed
 - **THEN** it explains how to add Norless to the home screen to get notifications
 
 #### Scenario: Why a phone wasn't told
 - **WHEN** a member assigned to a slot has no device that allowed notifications
-- **THEN** My schedule shows the notification with "Only here: none of your devices allowed notifications"
+- **THEN** the Notifications page shows the notification with "Only here: none of your devices allowed notifications"
 
 ### Requirement: Team features arrive off
 
@@ -132,3 +144,11 @@ The team SHALL be able to tell the people in a playlist's service slots, assigne
 #### Scenario: A key changed on Saturday
 - **WHEN** on Saturday the team sets another key for one of its songs
 - **THEN** Sunday's guitarist and singers are told once that the song changed, and the sound man isn't
+
+### Requirement: People with their photos
+
+Wherever the team schedule names people (a slot's person, the choice of who's in a slot, the people marked for a role and their choice), and where a song's leader is chosen, each person SHALL show with their photo, else their initials, before their name.
+
+#### Scenario: Choosing who sings
+- **WHEN** the team opens the choice of who's in Sunday's vocal slot
+- **THEN** each member is listed with their photo or initials beside their name

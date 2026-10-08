@@ -1,9 +1,9 @@
 import {
   Button,
   Checkbox,
-  Description,
   NumberField,
   CheckboxGroup,
+  Popover,
   Label,
   ListBox,
   Modal,
@@ -12,10 +12,15 @@ import {
   Select,
   Switch,
 } from "@heroui/react";
-import { Check, Save } from "lucide-react";
+import { Check, Info, Save } from "lucide-react";
+import { instrumentIcons } from "../ui/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { legendColor, legendSuffixes } from "../../shared/music/music";
+import {
+  chordName,
+  legendColor,
+  legendSuffixes,
+} from "../../shared/music/music";
 import {
   guitarShapes,
   instruments,
@@ -75,16 +80,20 @@ export function MusicianProfile({
       >
         <Label>{t("instruments.play")}</Label>
         <div className="flex flex-wrap gap-x-4 gap-y-2">
-          {instruments.map((instrument) => (
-            <Checkbox key={instrument} value={instrument}>
-              <Checkbox.Content>
-                <Checkbox.Control>
-                  <Checkbox.Indicator />
-                </Checkbox.Control>
-                {t(`instruments.names.${instrument}`)}
-              </Checkbox.Content>
-            </Checkbox>
-          ))}
+          {instruments.map((instrument) => {
+            const Icon = instrumentIcons[instrument];
+            return (
+              <Checkbox key={instrument} value={instrument}>
+                <Checkbox.Content className="flex items-center gap-1.5">
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Icon aria-hidden className="size-4 text-muted" />
+                  {t(`instruments.names.${instrument}`)}
+                </Checkbox.Content>
+              </Checkbox>
+            );
+          })}
         </div>
       </CheckboxGroup>
       {plays.length > 1 && (
@@ -160,47 +169,39 @@ export function MusicianProfile({
         ))}
       </RadioGroup>
       <Shown feature="chordColors">
-        <Switch
-          isSelected={musician.plainChords ?? false}
-          onChange={(plainChords) => save({ plainChords })}
-        >
-          <Switch.Content>
-            <Switch.Control>
-              <Switch.Thumb />
-            </Switch.Control>
-            <Label>{t("instruments.plainChords")}</Label>
-          </Switch.Content>
-          <Description>{t("instruments.chordColorsHelp")}</Description>
-        </Switch>
-        {/* Each degree and suffix in its color, so the colors can be learned. */}
-        {!musician.plainChords && (
-          <div aria-hidden className="flex flex-col gap-1 text-sm text-muted">
-            <span>
-              {t("instruments.degrees")}{" "}
-              <span className="font-bold whitespace-nowrap">
-                {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-                  <span
-                    key={d}
-                    className="me-1.5"
-                    style={{ color: legendColor(d) }}
-                  >
-                    {d}
-                  </span>
-                ))}
-              </span>
-            </span>
-            <span>
-              {t("instruments.suffixes")}{" "}
-              <span className="font-bold whitespace-nowrap">
-                {legendSuffixes.map(({ suffix, color }) => (
-                  <span key={suffix} className="me-1.5" style={{ color }}>
-                    {suffix}
-                  </span>
-                ))}
-              </span>
-            </span>
-          </div>
-        )}
+        <div className="flex items-center gap-1">
+          <Switch
+            isSelected={musician.plainChords ?? false}
+            onChange={(plainChords) => save({ plainChords })}
+          >
+            <Switch.Content>
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+              <Label>{t("instruments.plainChords")}</Label>
+            </Switch.Content>
+          </Switch>
+          {/* What the colors mean, a tap away rather than a paragraph. */}
+          <Popover>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="ghost"
+              aria-label={t("instruments.chordColorsAbout")}
+            >
+              <Info />
+            </Button>
+            <Popover.Content className="max-w-sm">
+              <Popover.Dialog aria-label={t("instruments.chordColorsAbout")}>
+                <p className="text-sm">{t("instruments.chordColorsHelp")}</p>
+              </Popover.Dialog>
+            </Popover.Content>
+          </Popover>
+        </div>
+        <ChordExamples
+          plain={musician.plainChords ?? false}
+          naming={musician.noteNames ?? "letters"}
+        />
       </Shown>
     </section>
   );
@@ -345,6 +346,56 @@ export function MusicSettings() {
     <div className="flex flex-col gap-8">
       <NoteNamesSettings />
       <TempoSettings />
+    </div>
+  );
+}
+
+/** C major's chords by degree, as the examples name and color them. */
+const scale = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
+
+/**
+ * Each degree and suffix as the member reads chords: in their note names, and in their
+ * colors, so the colors can be learned, or in one color with plain chords.
+ */
+function ChordExamples({
+  plain,
+  naming,
+}: {
+  plain: boolean;
+  naming: NoteNaming;
+}) {
+  const { t } = useTranslation();
+  const color = (value: string) => (plain ? undefined : { color: value });
+  return (
+    <div aria-hidden className="flex flex-col gap-1 text-sm text-muted">
+      <span>
+        {t("instruments.degrees")}{" "}
+        <span className="font-bold whitespace-nowrap">
+          {scale.map((chord, i) => (
+            <span
+              key={chord}
+              className={`me-1.5 ${plain ? "text-chord" : ""}`}
+              style={color(legendColor(i + 1))}
+            >
+              {chordName(chord, naming, { tonic: "C", minor: false })}
+            </span>
+          ))}
+        </span>
+      </span>
+      <span>
+        {t("instruments.suffixes")}{" "}
+        <span className="font-bold whitespace-nowrap">
+          {legendSuffixes.map(({ suffix, color: value }) => (
+            <span
+              key={suffix}
+              className={`me-1.5 ${plain ? "text-chord" : ""}`}
+              style={color(value)}
+            >
+              {suffix}
+            </span>
+          ))}
+        </span>
+      </span>
     </div>
   );
 }

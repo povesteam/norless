@@ -15,7 +15,7 @@ import {
   partLabels,
   type Slide,
 } from "../../shared/song-text";
-import { usePartName } from "../stage/parts";
+import { PartMark, usePartName } from "../stage/parts";
 
 /**
  * A song version's slides, with chords above the lyrics and the section notes.
@@ -29,12 +29,15 @@ export function SongText({
   editLabel,
   others,
   locked,
+  marks = false,
 }: {
   text: string;
   onEdit?: (section: number) => void;
   editLabel?: string;
   others?: Map<number, { name: string; draft: string }>;
   locked?: boolean;
+  /** Each part marked by its faint 1, 2, R in the corner instead of its name. */
+  marks?: boolean;
 }) {
   const { t } = useTranslation();
   const partName = usePartName();
@@ -47,6 +50,14 @@ export function SongText({
         const other = others?.get(slide.section);
         const draft = other && parseSong(other.draft).slides[0];
         const name = partName(slide, labels[i] ?? "");
+        if (marks)
+          return (
+            // Room on the right for the mark.
+            <div key={i} className="relative pe-10">
+              <PartMark mark={labels[i] ?? ""} name={name} />
+              <SlideView slide={{ ...slide, name: null }} />
+            </div>
+          );
         return (
           <SlideView
             key={i}

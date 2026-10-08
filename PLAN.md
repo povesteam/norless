@@ -19,7 +19,7 @@ Cutover prep comes first: the server and the cutover steps below, in the open ch
 3. The Saturday-night re-import into production, rehearsed once (3.4); then the shadow Sunday beside the old app (3.2).
 4. Cutover (3.3): rotate the old app's Mailgun credentials; the old app stays writable until two good Sundays, then read-only for 3 months, then redirected; the old repositories get a README line pointing here and are archived read-only. Once the old app is read-only, nothing is imported again: delete the importer (`src/server/import`, `npm run import`, the `bson` dependency, `run-reimport.sh`).
 
-Also before or around cutover: trying the new icon installed on an Android phone and an iPhone (`add-norless-icon` 3.2), the Switzer font uploaded in Unu-Unu's theme settings, and the bible.com extension's side of sending verses (the requirement is in the `bible-com-projection` spec). The training videos' scripts are ready; filming waits until asked again (`add-deployment` 4.1).
+Also before or around cutover: trying the new icon installed on an Android phone and an iPhone (`add-norless-icon` 3.2) and the phone fixes (`fix-phone-review` 5.3; archive it before `add-account-tabs`, which builds on its texts), the Switzer font uploaded in Unu-Unu's theme settings, and the bible.com extension's side of sending verses (the requirement is in the `bible-com-projection` spec). The training videos' scripts are ready; filming waits until asked again (`add-deployment` 4.1).
 
 ## After cutover
 

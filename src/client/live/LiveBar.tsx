@@ -14,13 +14,13 @@ import {
 import { TempoButton } from "../stage/TempoListener";
 import { RecordButton } from "../stage/Recorder";
 import { Button, Chip } from "@heroui/react";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Tip } from "../ui/tip";
 import type { LiveView } from "../../server/live/live-view";
 import { formatReference } from "../../shared/bible";
 import { titleFor } from "../../shared/song-render";
 import { partLabels } from "../../shared/song-text";
-import { OfflineSwitch } from "../app/Offline";
 import { BibleComSync } from "../playlists/BibleCom";
 import { useCommunity, useShows } from "../data/community";
 import { useDeviceType } from "../data/device";
@@ -131,6 +131,7 @@ export function LiveBar({
     return () => clearTimeout(timer);
   }, [notice, changedAt]);
 
+  const titleBar = useOpensBy(phone && !side, opened, toggle);
   if (!view) return null;
   const toggleButton = phone && !side && (
     <Button
@@ -155,23 +156,28 @@ export function LiveBar({
             : ""
       }`}
     >
-      <Button
-        fullWidth
-        variant="secondary"
-        onPress={() => act({ type: "previous" })}
-      >
-        <ChevronLeft />
-        <span className="@max-md:sr-only">{t("live.previous")}</span>
-      </Button>
+      {/* Their names in a tooltip too, where a narrow bar shows only their icons. */}
+      <Tip label={t("live.previous")}>
+        <Button
+          fullWidth
+          variant="secondary"
+          onPress={() => act({ type: "previous" })}
+        >
+          <ChevronLeft />
+          <span className="@max-md:sr-only">{t("live.previous")}</span>
+        </Button>
+      </Tip>
       <BlankButton
         blank={view.blank}
         onPress={() => act({ type: "blank", blank: !view.blank })}
         labelClassName="@max-md:sr-only"
       />
-      <Button fullWidth onPress={() => act({ type: "next" })}>
-        <span className="@max-md:sr-only">{t("live.next")}</span>
-        <ChevronRight />
-      </Button>
+      <Tip label={t("live.next")}>
+        <Button fullWidth onPress={() => act({ type: "next" })}>
+          <span className="@max-md:sr-only">{t("live.next")}</span>
+          <ChevronRight />
+        </Button>
+      </Tip>
     </div>
   );
   const titleText = live ? (
@@ -192,7 +198,10 @@ export function LiveBar({
   if (compact)
     return (
       <div data-bottom-bar className={barClass}>
-        <div className="flex items-center gap-2">
+        <div
+          {...titleBar}
+          className={`flex items-center gap-2 ${titleBar.className ?? ""}`}
+        >
           {toggleButton}
           {/* Projecting here, its window and Stop stay at hand. */}
           {local && project && <LocalProjection {...project} narrow />}
@@ -222,7 +231,10 @@ export function LiveBar({
           : barClass
       }
     >
-      <div className="flex flex-wrap items-center gap-2">
+      <div
+        {...titleBar}
+        className={`flex flex-wrap items-center gap-2 ${titleBar.className ?? ""}`}
+      >
         {toggleButton}
         {/* Wide enough to read: the buttons wrap below it instead. */}
         <span className="min-w-24 flex-1 truncate">{titleText}</span>
@@ -371,12 +383,53 @@ export function LiveExtras({ view }: { view: LiveView | undefined }) {
                 settings={community.tempoCheck}
               />
             )}
-            {shows("offline") && <OfflineSwitch />}
           </>
         )}
       </div>
     </>
   );
+}
+
+/**
+ * A phone's live bar opens and folds by its title too: a tap, or a drag of 24 pixels up
+ * to open and down to fold. The arrow button stays for the keyboard and screen readers,
+ * and the row's other buttons keep their own taps.
+ */
+function useOpensBy(
+  on: boolean,
+  opened: boolean,
+  toggle: () => void,
+): React.HTMLAttributes<HTMLDivElement> {
+  const from = useRef<number | null>(null);
+  // A drag ends with a click, which mustn't toggle again.
+  const dragged = useRef(false);
+  if (!on) return {};
+  const onButton = (target: EventTarget) =>
+    !!(target as Element).closest("button, a, input");
+  return {
+    className: "cursor-pointer touch-none",
+    onClick: (event: React.MouseEvent) => {
+      if (dragged.current) dragged.current = false;
+      else if (!onButton(event.target)) toggle();
+    },
+    onPointerDown: (event: React.PointerEvent) => {
+      if (onButton(event.target)) return;
+      from.current = event.clientY;
+      dragged.current = false;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    },
+    onPointerMove: (event: React.PointerEvent) => {
+      if (from.current === null) return;
+      const by = event.clientY - from.current;
+      if (Math.abs(by) < 24) return;
+      from.current = null;
+      dragged.current = true;
+      if (by < 0 !== opened) toggle();
+    },
+    onPointerUp: () => {
+      from.current = null;
+    },
+  };
 }
 
 // On a phone, one row that scrolls sideways, so the bar keeps its height.
@@ -401,23 +454,26 @@ export function BlankButton({
 }) {
   const { t } = useTranslation();
   return (
-    <Button
-      variant={blank ? "primary" : "secondary"}
-      isDisabled={isDisabled}
-      onPress={onPress}
-    >
-      {blank ? <Eye /> : <EyeOff />}
-      {/* Both labels in one cell, at the icon's side. */}
-      <span
-        className={`grid justify-items-start *:[grid-area:1/1] ${labelClassName}`}
+    // Its name in a tooltip too, where only its icon shows.
+    <Tip label={t(blank ? "live.show" : "live.blank")}>
+      <Button
+        variant={blank ? "primary" : "secondary"}
+        isDisabled={isDisabled}
+        onPress={onPress}
       >
-        <span className={blank ? "invisible" : undefined}>
-          {t("live.blank")}
+        {blank ? <Eye /> : <EyeOff />}
+        {/* Both labels in one cell, at the icon's side. */}
+        <span
+          className={`grid justify-items-start *:[grid-area:1/1] ${labelClassName}`}
+        >
+          <span className={blank ? "invisible" : undefined}>
+            {t("live.blank")}
+          </span>
+          <span className={blank ? undefined : "invisible"}>
+            {t("live.show")}
+          </span>
         </span>
-        <span className={blank ? undefined : "invisible"}>
-          {t("live.show")}
-        </span>
-      </span>
-    </Button>
+      </Button>
+    </Tip>
   );
 }

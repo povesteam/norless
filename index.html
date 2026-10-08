@@ -35,7 +35,7 @@
         };
         const screens =
           /^\/(s\/|pair(\/|$)|[^/]+\/(projector|local)\/|[^/]+\/stage(\/|$))/;
-        const stage = /^\/[^/]+\/(musicians|vocalists)(\/|$)/;
+        const stage = /^\/[^/]+\/(instruments|vocals)(\/|$)/;
         if (screens.test(path)) html.dataset.screen = "";
         if (screens.test(path) || stage.test(path)) {
           const background =

@@ -55,7 +55,7 @@ export function useProfile(community: Community | null | undefined): Profile {
   };
 }
 
-/** /<community>/musicians: the musicians view on a member's own device, in their layout. */
+/** /<community>/instruments: the musicians view on a member's own device, in their layout. */
 export function MusiciansPage({ slug }: { slug: string }) {
   const { t, i18n } = useTranslation();
   const community = useJson<Community>(
@@ -224,7 +224,6 @@ export function MusiciansPage({ slug }: { slug: string }) {
             shows(switchesOf(community), "chords")
           }
           profile={profile}
-          lookAhead
           leader={!!community && shows(switchesOf(community), "serviceRoles")}
           recordings={canControl && !!switches && shows(switches, "recordings")}
         />

@@ -2,6 +2,7 @@ import { type BibleReference, parseReference } from "../../shared/bible.js";
 import { plainLyrics } from "../../shared/song-render.js";
 import { parseSong } from "../../shared/song-text.js";
 import type { Db } from "../db/db.js";
+import { forget, fuzzySongs } from "./fuzzy.js";
 import { likedSongs } from "./song-feedback.js";
 
 export type SongResult = {
@@ -39,7 +40,8 @@ export type Community = { id: string; languages: string[] };
  * One search box's results, in order, leaving out excluded songs:
  * - an empty query: songs worth suggesting, then a random sample, up to 100 in all
  * - a Bible reference: the matching references
- * - anything else: up to 25 songs, title matches first, then a divider and a new song
+ * - anything else: up to 25 songs, title matches first, then sloppy ones (`fuzzy.ts`),
+ *   then a divider and a new song
  */
 export function search(
   db: Db,
@@ -59,8 +61,20 @@ export function search(
   if (references.length > 0)
     return references.map((r) => ({ type: "bible", ...r }));
 
+  const found = matchingSongs(db, community.id, text);
+  // Then the sloppy matches, after every exact one.
+  found.push(
+    ...fuzzySongs(
+      db,
+      community.id,
+      text,
+      new Set(found),
+      SONGS - found.length,
+      indexedLyrics,
+    ),
+  );
   return [
-    ...songResults(db, matchingSongs(db, community.id, text), liked, days),
+    ...songResults(db, found, liked, days),
     { type: "divider", text },
     { type: "new-song", title: text },
   ];
@@ -180,6 +194,7 @@ export function indexSongs(db: Db, songIds?: string[]) {
   const add = db.prepare(
     "INSERT INTO songs_fts (version_id, title, lyrics) VALUES (?, ?, ?)",
   );
+  forget(db, songIds);
   db.transaction(() => {
     if (!songIds) db.prepare("DELETE FROM songs_fts").run();
     for (const v of versions) {
@@ -188,6 +203,9 @@ export function indexSongs(db: Db, songIds?: string[]) {
     }
   })();
 }
+
+/** The most songs a search finds. */
+const SONGS = 25;
 
 /** Ids of up to 25 songs whose title or lyrics contain every word, as a prefix. */
 function matchingSongs(db: Db, communityId: string, text: string): string[] {
@@ -213,7 +231,7 @@ function matchingSongs(db: Db, communityId: string, text: string): string[] {
   rows.sort((a, b) => a.tier - b.tier || a.score - b.score);
   const ids = new Set<string>();
   for (const { id } of rows) {
-    if (ids.size === 25) break;
+    if (ids.size === SONGS) break;
     ids.add(id);
   }
   return [...ids];

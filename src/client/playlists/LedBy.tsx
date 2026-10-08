@@ -7,6 +7,7 @@ import { useCommunity } from "../data/community";
 import { send } from "../data/fetch";
 import { entryTitle } from "../stage/StageMonitor";
 import { ErrorNotice } from "../ui/states";
+import { PersonAvatar } from "../ui/NameAvatar";
 
 export { Star as LedByIcon };
 
@@ -75,11 +76,18 @@ export function LedByDialog({
               </Radio>
               {people.map((person) => (
                 <Radio key={person.id} value={person.id}>
-                  <Radio.Content>
+                  <Radio.Content className="flex items-center gap-2">
                     <Radio.Control>
                       <Radio.Indicator />
                     </Radio.Control>
-                    {person.name}
+                    <span aria-hidden className="flex shrink-0">
+                      <PersonAvatar
+                        name={person.name}
+                        avatar={person.avatar}
+                        className="size-6"
+                      />
+                    </span>
+                    <span>{person.name}</span>
                   </Radio.Content>
                 </Radio>
               ))}

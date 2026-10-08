@@ -119,46 +119,39 @@ test("members see who is online, and on which device", async ({
       "Mozilla/5.0 (iPhone; CPU iPhone OS 19_0 like Mac OS X) Mobile/15E148",
   });
   const phone = await context.newPage();
-  await logInAs(phone, "maria@example.com");
+  await logInAs(phone, "marta@example.com");
   await phone.goto("/unu-unu");
 
   // In a playlist's title row.
   await openSteadyPage(page);
   // Avatars only, the name and devices in a tooltip.
   const online = page.getByRole("group", { name: "Online" });
-  // Other tests may have Maria online on a computer too.
-  const maria = online.getByLabel(/^Maria · (.+, )?phone/);
-  await expect(maria).toBeVisible();
-  await expect(maria).toHaveText(/^[A-Z]{1,2}$/);
+  // Marta, whom no other test logs in.
+  const marta = online.getByLabel(/^Marta · phone/);
+  await expect(marta).toBeVisible();
+  await expect(marta).toHaveText(/^[A-Z]{1,2}$/);
   // Never oneself, even on another computer.
   await expect(online.getByLabel(/^Ana/)).toHaveCount(0);
   // React Aria shows tooltips on hover once a pointer was used on the page.
   await page.mouse.click(0, 0);
-  // Others' tests bring Ana or Ioana online or offline, moving Maria from under the
+  // Others' tests bring Ana or Ioana online or offline, moving Marta from under the
   // mouse before her tooltip opens: hover her again until it does.
   await expect(async () => {
-    await maria.hover();
-    await expect(page.getByRole("tooltip")).toHaveText(
-      /^Maria · (.+, )?phone/,
-      {
-        timeout: 1000,
-      },
-    );
+    await marta.hover();
+    await expect(page.getByRole("tooltip")).toHaveText(/^Marta · phone/, {
+      timeout: 1000,
+    });
   }).toPass();
 
   await context.close();
-  await expect(online.getByLabel(/^Maria/)).toBeHidden();
+  await expect(online.getByLabel(/^Marta/)).toBeHidden();
 });
 
 test("someone deletes their own account from My account", async ({ page }) => {
   await logInAs(page, "leaving@example.com");
   await openSteadyPage(page);
-  await page.getByRole("button", { name: "leaving", exact: true }).click();
-  // Not in the menu itself, where it's easy to hit.
-  await expect(
-    page.getByRole("menuitem", { name: "Delete my account…" }),
-  ).toHaveCount(0);
-  await page.getByRole("menuitem", { name: "My account" }).click();
+  // The photo opens My account, where deleting is apart from the rest.
+  await page.getByRole("link", { name: "leaving", exact: true }).click();
   await expect(page).toHaveURL(/\/account$/);
   page.once("dialog", (dialog) => void dialog.accept());
   await page.getByRole("button", { name: "Delete my account…" }).click();
@@ -190,7 +183,7 @@ test("someone logs in with an email link, once", async ({ page }) => {
   await page.getByRole("button", { name: "Log in" }).click();
   await expect(page).toHaveURL("/unu-unu/playlists");
   await expect(
-    page.getByRole("button", { name: "Ioana", exact: true }),
+    page.getByRole("link", { name: "Ioana", exact: true }),
   ).toBeVisible();
 
   await page.goto(link);

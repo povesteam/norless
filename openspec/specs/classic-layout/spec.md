@@ -27,7 +27,7 @@ On a page at least 750 px wide, the Classic layout SHALL show two columns: the p
 
 ### Requirement: Selecting and sending live
 
-In Classic, a click or tap on an entry SHALL select it and show its slides without sending it live. For the team, the selected entry's header SHALL have a Go live button (the entry is live already: a Live mark instead, plain text with its icon, so it doesn't read as a button), which sends its first slide live, as SHALL a double-click on the entry or Enter with it selected; a click or tap on a slide SHALL send that slide live. Up and Down SHALL move the selection, Page Down and Page Up SHALL go to the next and previous slide (into the next or previous entry at either end, and even while typing in the editor), Escape SHALL blank the screens and never show them again, and Delete SHALL remove the selected entry. A divider SHALL NOT go live. The live slide's card SHALL carry a small Live tag inside it besides its frame, so color isn't the only mark. At the bottom of the page, the team SHALL see the Pages button when the community has pages, and while an entry is live, Blank, Previous and Next, with each button's label beside its icon; they SHALL be disabled while the open playlist is empty. Blank SHALL empty the screens and keep the bar; while blank, it SHALL become Show again, which shows the same slide again, and Previous and Next SHALL keep working. On a narrow screen such as a phone, the bottom bar SHALL keep Blank, Previous and Next on one row and put the other buttons (the projectors, Pages, Project here, Media keys) behind a More button.
+In Classic, a click or tap on an entry SHALL select it and show its slides without sending it live. For the team, the selected entry's header SHALL have a Go live button (the entry is live already: a Live mark instead, plain text with its icon, so it doesn't read as a button), which sends its first slide live, as SHALL a double-click on the entry or Enter with it selected; a click or tap on a slide SHALL send that slide live. Up and Down SHALL move the selection, Page Down and Page Up SHALL go to the next and previous slide (into the next or previous entry at either end, and even while typing in the editor), Escape SHALL blank the screens and never show them again, and Delete SHALL remove the selected entry. A divider SHALL NOT go live. The live slide's card SHALL carry a small Live tag inside it besides its frame, so color isn't the only mark. At the bottom of the page, the team SHALL see the Pages button when the community has pages, and while an entry is live, Blank, Previous and Next, with each button's label beside its icon, and its name in a tooltip too (on hover, and on a long press on a touch screen, which doesn't press it), as a phone shows only their icons; they SHALL be disabled while the open playlist is empty. Blank SHALL empty the screens and keep the bar; while blank, it SHALL become Show again, which shows the same slide again, and Previous and Next SHALL keep working. On a narrow screen such as a phone, the bottom bar SHALL keep Blank, Previous and Next on one row and put the other buttons (the projectors, Pages, Project here, Media keys) behind a More button.
 
 #### Scenario: Look without projecting
 - **WHEN** an operator clicks the next song to check its lyrics during the sermon
@@ -53,6 +53,10 @@ In Classic, a click or tap on an entry SHALL select it and show its slides witho
 - **WHEN** an operator uses Classic on a phone 412 pixels wide while a song is live
 - **THEN** Blank, Previous and Next fit on one row, and Pages is under More
 
+#### Scenario: Which button is which
+- **WHEN** an operator on a phone holds a finger on the bar's left arrow
+- **THEN** a tooltip says Previous, and nothing goes live
+
 ### Requirement: Search and add
 
 For the team, typing a letter or digit anywhere outside a text field SHALL start a search in the search box above the playlist. Focusing the empty search box SHALL offer first Add divider and Add text slide, and a muted hint that a Bible passage is found by its reference, then the songs of the `song-search` spec's browsing without a query. The results SHALL show each song's title, key, time signature, tags and when it was last played in a service, and SHALL offer a divider with the typed text; a divider SHALL also be added with Add divider above in an entry's actions. Up and Down SHALL move through the results, and Enter or a click SHALL add the chosen one to the end of the playlist, select it, and clear the search. Escape SHALL clear the search without adding.
@@ -71,7 +75,7 @@ For the team, typing a letter or digit anywhere outside a text field SHALL start
 
 ### Requirement: Classic entries
 
-Each entry SHALL show what the `playlists` spec lists (type icon, title, key, time signature, tags, played mark, live highlight). Who added the selected entry SHALL show as their avatar beside its title above the slides, to members, with "Added by" and their name in a styled tooltip; no row shows it. The title SHALL take up to two lines before it's cut. The live slide SHALL have the live color's frame, as wide as the other slides' border, and a slide going live SHALL scroll into view, as little as it takes. The team SHALL be able to reorder entries by dragging the row (long-pressing on touch screens), and use the entry actions of the `playlists` spec, plus Add divider above, which asks for the divider's heading.
+Each entry SHALL show what the `playlists` spec lists (type icon, title, key, time signature, tags, played mark, live highlight). Who added the selected entry SHALL show as their avatar beside its title above the slides, to members, with "Added by" and their name in a styled tooltip; no row shows it. The title SHALL take up to two lines before it's cut. The live slide SHALL have the live color's frame, as wide as the other slides' border, and a slide going live SHALL scroll into view, as little as it takes, also when its song's words arrive after it went live. The team SHALL be able to reorder entries by dragging the row (long-pressing on touch screens), and use the entry actions of the `playlists` spec, plus Add divider above, which asks for the divider's heading.
 
 #### Scenario: Who added the song
 - **WHEN** a member selects a song Oti added
@@ -80,6 +84,10 @@ Each entry SHALL show what the `playlists` spec lists (type icon, title, key, ti
 #### Scenario: Divider before the sermon
 - **WHEN** an operator right-clicks the song after the sermon and chooses Add divider above with "Predica"
 - **THEN** a divider "Predica" is put just above that song
+
+#### Scenario: Back into the song before
+- **WHEN** the first slide of a song is live and the operator presses Left
+- **THEN** the last slide of the song before goes live and scrolls into view once its words have loaded
 
 ### Requirement: Classic menu
 
@@ -159,8 +167,12 @@ On a phone, while an entry is live, Classic's bottom bar SHALL show above Previo
 
 ### Requirement: Empty playlist
 
-While the open playlist is empty, Classic's right half SHALL NOT stay blank where the statistics feature is on: it SHALL list up to 8 songs sung often but not lately (the Statistics page's "Not played lately"), each added to the playlist with one tap or click. Without that feature, the playlist's empty message alone SHALL show.
+While no entry of the open playlist is selected, an empty one too, Classic's right half SHALL NOT stay blank where the statistics feature is on: it SHALL list up to 8 songs sung often but not lately (the Statistics page's list, "Bring it back"), leaving out those already in the playlist, each added to the playlist with one tap or click; a song added from it SHALL NOT be selected, so the list stays for the next one. Without that feature, the playlist's empty message alone SHALL show.
 
 #### Scenario: A new Sunday playlist
 - **WHEN** an operator opens the new, empty playlist for Sunday, with statistics switched on
 - **THEN** songs sung in many services but not in the last 6 months are listed beside it, and clicking one adds it
+
+#### Scenario: Adding several
+- **WHEN** the operator clicks two songs of the list, one after the other
+- **THEN** both are added, and the list stays beside the playlist without them

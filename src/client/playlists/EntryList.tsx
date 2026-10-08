@@ -31,7 +31,7 @@ import { HostIcon } from "../ui/icons";
 import { ActionsMenu, type EntryAction } from "./EntryActions";
 import { useGlide } from "../ui/glide";
 import { Empty } from "../ui/states";
-import { entryTitle, EntryRow } from "./EntryRow";
+import { DragPreview, entryTitle, EntryRow } from "./EntryRow";
 import { useSlideActions } from "./SlideFiles";
 import { InsertLine } from "./InsertLine";
 
@@ -46,6 +46,7 @@ export function EntryList({
   movingBy,
   liveEntryId,
   liveBlank,
+  preparing = false,
   problems,
   canChange,
   selected,
@@ -69,6 +70,8 @@ export function EntryList({
   liveEntryId: string | null;
   /** The screens are blank: the live entry is done too. */
   liveBlank: boolean;
+  /** Being prepared: songs say when they were last sung. */
+  preparing?: boolean;
   problems: Problem[];
   canChange: boolean;
   selected: string | null;
@@ -275,6 +278,8 @@ export function EntryList({
     return null;
   };
   const [gap, setGap] = useState(0);
+  // The dragged entry, out of the list: the gap it would land in is its place.
+  const [leaving, setLeaving] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   useGlide(list, quiet);
   const tellOthers = (entry: string, index: number | null) =>
@@ -285,6 +290,9 @@ export function EntryList({
     onDragStart: ({ keys }) => {
       const key = String([...keys][0]);
       setDragging(key);
+      // It leaves the list once the browser has its picture: a row gone before then
+      // ends the drag at once.
+      setTimeout(() => setLeaving(key));
       setGap(
         list.current?.querySelector<HTMLElement>(
           `[data-glide="${CSS.escape(key)}"]`,
@@ -294,6 +302,7 @@ export function EntryList({
     onDragEnd: () => {
       if (dragging) tellOthers(dragging, null);
       setDragging(null);
+      setLeaving(null);
     },
     onReorder: ({ keys, target }) => {
       const [key] = keys;
@@ -301,6 +310,11 @@ export function EntryList({
       const to = landing(key, target);
       if (from >= 0 && to !== null) onMove(from, to);
     },
+    // A copy drawn on its own: the browser's picture of the row took the column's
+    // scrollbar with it.
+    renderDragPreview: ([item]) => (
+      <DragPreview entry={entries.find((e) => e.id === item?.["text/plain"])} />
+    ),
     renderDropIndicator: (target) => (
       <DropIndicator
         target={target}
@@ -363,6 +377,8 @@ export function EntryList({
           JSON.stringify(problems),
           hovering && shownGap,
           insertMenu?.after,
+          leaving,
+          preparing,
         ]}
         selectionMode="single"
         selectionBehavior="replace"
@@ -389,7 +405,9 @@ export function EntryList({
             <GridListItem
               id={entry.id}
               textValue={entryTitle(entry, languages)}
-              className="group rounded-xl outline-none"
+              className={`group rounded-xl outline-none ${
+                entry.id === leaving ? "h-0 overflow-hidden opacity-0" : ""
+              }`}
             >
               {/* What's drawn glides, not the row React Aria measures: it finds the row
                 above by where rows are (useGlide). The live frame and the rings sit
@@ -401,7 +419,7 @@ export function EntryList({
                     ? (event) => pointAt(gapNear(event, index))
                     : undefined
                 }
-                className={`relative rounded-xl border-2 group-data-[dragging]:opacity-50 group-data-[focus-visible]:ring-2 group-data-[focus-visible]:ring-focus group-data-[focus-visible]:ring-inset group-data-[selected]:bg-accent-soft ${
+                className={`relative rounded-xl border-2 group-data-[focus-visible]:ring-2 group-data-[focus-visible]:ring-focus group-data-[focus-visible]:ring-inset group-data-[selected]:bg-accent-soft ${
                   movingBy.has(entry.id)
                     ? "bg-warning-soft ring-2 ring-warning ring-inset"
                     : ""
@@ -446,6 +464,7 @@ export function EntryList({
                   }
                   menuButton={touch}
                   passed={index <= done}
+                  lastPlayed={preparing}
                 />
               </div>
             </GridListItem>

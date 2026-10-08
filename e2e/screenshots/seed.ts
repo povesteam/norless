@@ -443,7 +443,7 @@ copyFileSync("e2e/screenshots/camp.pdf", join(deck, "original-1.pdf"));
 
 db.prepare(
   `INSERT INTO feedback (id, community_id, text, page, device_type, created_by, updated_by, created_at, updated_at)
-   VALUES ('f1', 'c', ?, '/example/vocalists', 'phone', 'elena', 'elena', '${at}', '${at}')`,
+   VALUES ('f1', 'c', ?, '/example/vocals', 'phone', 'elena', 'elena', '${at}', '${at}')`,
 ).run(
   "It would help to see the next song's key on the vocalists' phones, so we can get ready.",
 );

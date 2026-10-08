@@ -115,6 +115,18 @@ export const classic: View[] = [
       await page.getByRole("link", { name: /^Back to / }).waitFor();
     },
   },
+  // Where one is logged in, each other place with Log out.
+  {
+    name: "account-logins",
+    as: team,
+    sizes: ["phone", "laptop"],
+    go: async (page) => {
+      await page.goto("/account/logins");
+      await page
+        .getByRole("region", { name: en.account.sessions.title })
+        .waitFor();
+    },
+  },
   {
     name: "search",
     as: team,
